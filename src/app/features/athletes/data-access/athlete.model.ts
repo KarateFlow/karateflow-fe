@@ -3,8 +3,8 @@ export interface Athlete {
   firstName: string;
   lastName: string;
   birthDate: string;
-  referenceContact?: string;
-  medicalNotes?: string;
+  referenceContact?: string | null;
+  medicalNotes?: string | null;
   createdAt: string;
 }
 
@@ -12,6 +12,6 @@ export interface RecordAthleteRequest {
   firstName: string;
   lastName: string;
   birthDate: string;
-  referenceContact?: string;
-  medicalNotes?: string;
+  referenceContact?: string | null;
+  medicalNotes?: string | null;
 }
