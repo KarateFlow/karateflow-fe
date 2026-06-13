@@ -88,7 +88,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
     .error-banner {
       background-color: #fef2f2;
-      border: 1px solid var(--color-primary-aka);
+      border: 1px solid var(--color-secondary-ao);
       color: #991b1b;
     }
 
