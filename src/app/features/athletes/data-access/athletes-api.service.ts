@@ -12,6 +12,14 @@ export class AthletesApiService {
   private readonly apiUrl = `${environment.apiUrl}/athletes`;
 
   /**
+   * Retrieves the list of all athletes in the system.
+   * @returns An Observable of the list of Athletes.
+   */
+  getAthletes(): Observable<Athlete[]> {
+    return this.http.get<Athlete[]>(this.apiUrl);
+  }
+
+  /**
    * Creates a new athlete in the system.
    * @param request The data required to record a new athlete.
    * @returns An Observable of the created Athlete.

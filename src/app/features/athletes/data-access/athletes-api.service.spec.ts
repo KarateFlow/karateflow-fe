@@ -1,5 +1,5 @@
 import '@angular/compiler';
-import { describe, it, expect, beforeEach, afterEach, fail } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -8,7 +8,11 @@ import { environment } from '../../../../environments/environment';
 import { Athlete, RecordAthleteRequest } from './athlete.model';
 import { AthletesApiService } from './athletes-api.service';
 
-TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+try {
+  TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
+} catch {
+  // Ignora errori di inizializzazione multipla
+}
 
 describe('AthletesApiService', () => {
   let service: AthletesApiService;
@@ -71,7 +75,7 @@ describe('AthletesApiService', () => {
       };
 
       service.createAthlete(mockRequest).subscribe({
-        next: () => fail('should have failed with 500 error'),
+        next: () => { throw new Error('should have failed with 500 error'); },
         error: (error) => {
           expect(error.status).toBe(500);
         },

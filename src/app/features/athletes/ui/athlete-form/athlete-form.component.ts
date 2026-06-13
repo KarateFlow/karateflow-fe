@@ -131,17 +131,17 @@ import { RecordAthleteRequest } from '../../data-access/athlete.model';
 
     input:focus, textarea:focus {
       outline: none;
-      border-color: var(--color-secondary-ao);
+      border-color: var(--color-primary-aka);
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
     input.invalid {
-      border-color: var(--color-primary-aka);
+      border-color: var(--color-secondary-ao);
     }
 
     .error-msg {
       font-size: 0.75rem;
-      color: var(--color-primary-aka);
+      color: var(--color-secondary-ao);
       font-weight: 500;
     }
 
