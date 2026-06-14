@@ -19,4 +19,15 @@ export class TestsApiService {
   createTest(request: CreateTestRequest): Observable<TestResponse> {
     return this.http.post<TestResponse>(this.apiUrl, request);
   }
+
+  /**
+   * Retrieves the test history for a specific athlete.
+   * @param athleteId The unique ID of the athlete.
+   * @returns An Observable of the list of TestResponses.
+   */
+  getTestsByAthlete(athleteId: string): Observable<TestResponse[]> {
+    return this.http.get<TestResponse[]>(this.apiUrl, {
+      params: { athleteId },
+    });
+  }
 }
