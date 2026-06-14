@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { TestsApiService } from './tests-api.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
-import { describe, it, expect, beforeEach, inject } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { CreateTestRequest, MeasurementUnit } from './test.model';
 import { environment } from '../../../../environments/environment';
 
