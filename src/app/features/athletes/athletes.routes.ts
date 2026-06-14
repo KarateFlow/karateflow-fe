@@ -17,6 +17,11 @@ export const ATHLETES_ROUTES: Routes = [
       import('./feature/athlete-detail/athlete-detail.page').then((m) => m.AthleteDetailPage),
   },
   {
+    path: ':id/edit',
+    loadComponent: () =>
+      import('./feature/athlete-edit/athlete-edit.page').then((m) => m.AthleteEditPage),
+  },
+  {
     path: '',
     redirectTo: 'list',
     pathMatch: 'full',

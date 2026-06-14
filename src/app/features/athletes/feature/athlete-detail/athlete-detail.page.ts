@@ -17,6 +17,16 @@ import { DatePipe } from '@angular/common';
           </svg>
           Torna all'elenco
         </button>
+
+        @if (athleteResource.value(); as athlete) {
+          <button [routerLink]="['/athletes', athlete.athleteId, 'edit']" class="btn-edit">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            Modifica Dati
+          </button>
+        }
       </header>
 
       @if (athleteResource.isLoading()) {
@@ -78,6 +88,9 @@ import { DatePipe } from '@angular/common';
 
     .page-header {
       margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .btn-back {
@@ -97,6 +110,28 @@ import { DatePipe } from '@angular/common';
     .btn-back:hover {
       color: var(--color-primary-aka);
       background-color: #f1f5f9;
+    }
+
+    .btn-edit {
+      background-color: white;
+      border: 1px solid #e2e8f0;
+      color: var(--color-text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius-lg);
+      transition: all 0.2s;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-edit:hover {
+      background-color: #f8fafc;
+      border-color: var(--color-primary-aka);
+      color: var(--color-primary-aka);
+      transform: translateY(-1px);
     }
 
     .profile-card {

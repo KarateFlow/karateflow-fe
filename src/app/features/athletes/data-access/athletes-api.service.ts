@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { Athlete, RecordAthleteRequest } from './athlete.model';
+import { Athlete, RecordAthleteRequest, UpdateAthleteRequest } from './athlete.model';
 
 @Injectable({
   providedIn: 'root',
@@ -35,5 +35,15 @@ export class AthletesApiService {
    */
   createAthlete(request: RecordAthleteRequest): Observable<Athlete> {
     return this.http.post<Athlete>(this.apiUrl, request);
+  }
+
+  /**
+   * Updates an existing athlete's contact and medical information.
+   * @param athleteId The unique ID of the athlete to update.
+   * @param request The data to update.
+   * @returns An Observable of the updated Athlete.
+   */
+  updateAthlete(athleteId: string, request: UpdateAthleteRequest): Observable<Athlete> {
+    return this.http.put<Athlete>(`${this.apiUrl}/${athleteId}`, request);
   }
 }
