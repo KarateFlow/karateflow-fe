@@ -1,12 +1,26 @@
 import { ChangeDetectionStrategy, Component, inject, resource, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { AthletesApiService } from '../../../athletes/data-access/athletes-api.service';
 import { TestsApiService } from '../../data-access/tests-api.service';
 import { CreateTestRequest, MeasurementUnit } from '../../data-access/test.model';
 import { ExerciseFormRowComponent } from '../../ui/exercise-form-row/exercise-form-row.component';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
+
+/**
+ * Validator to ensure date is not in the future
+ */
+export function noFutureDateValidator(): ValidatorFn {
+  return (control: AbstractControl): Record<string, unknown> | null => {
+    if (!control.value) {
+      return null;
+    }
+    const selectedDate = new Date(control.value as string);
+    const now = new Date();
+    return selectedDate > now ? { futureDate: true } : null;
+  };
+}
 
 @Component({
   selector: 'app-test-create',
@@ -36,9 +50,16 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
           <div class="form-grid">
             <div class="form-group">
               <label for="executionDate">Data Esecuzione</label>
-              <input id="executionDate" type="datetime-local" formControlName="executionDate" />
+              <input 
+                id="executionDate" 
+                type="datetime-local" 
+                formControlName="executionDate" 
+                [class.invalid]="isInvalid('executionDate')"
+              />
               @if (isInvalid('executionDate')) {
-                <span class="error-msg">La data è obbligatoria e non può essere futura</span>
+                <span class="error-msg">
+                  {{ testForm.get('executionDate')?.hasError('futureDate') ? 'La data non può essere futura' : 'La data è obbligatoria' }}
+                </span>
               }
             </div>
             
@@ -63,7 +84,7 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
           </div>
 
           @if (exercises.controls.length === 0) {
-            <div class="empty-state">
+            <div class="empty-state" [class.error]="exercises.touched && exercises.invalid">
               <p>Nessun esercizio aggiunto. Clicca sul tasto sopra per iniziare.</p>
             </div>
           }
@@ -79,13 +100,13 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
             }
           </div>
           
-          @if (isInvalid('exercises')) {
-            <div class="error-banner">Inserire almeno un esercizio con dati validi.</div>
+          @if (exercises.touched && exercises.hasError('minlength')) {
+            <div class="error-banner">Inserire almeno un esercizio per poter salvare la sessione.</div>
           }
         </section>
 
         <footer class="form-actions">
-          <button type="submit" [disabled]="testForm.invalid || isSubmitting()" class="btn-save">
+          <button type="submit" [disabled]="isSubmitting()" class="btn-save">
             @if (isSubmitting()) {
               Registrazione in corso...
             } @else {
@@ -182,6 +203,12 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
       border: 1px solid #cbd5e1;
       border-radius: var(--radius-lg);
       font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    input.invalid {
+      border-color: #ef4444;
+      background-color: #fff1f2;
     }
 
     .exercises-section {
@@ -225,6 +252,13 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
       border: 2px dashed #e2e8f0;
       border-radius: var(--radius-xl);
       color: var(--color-text-muted);
+      transition: all 0.2s;
+    }
+
+    .empty-state.error {
+      border-color: #fca5a5;
+      background-color: #fff1f2;
+      color: #b91c1c;
     }
 
     .form-actions {
@@ -292,7 +326,7 @@ export class TestCreatePage {
 
   protected readonly testForm = new FormGroup({
     athleteId: new FormControl(this.athleteId(), { nonNullable: true, validators: [Validators.required] }),
-    executionDate: new FormControl(this.getCurrentDateTime(), { nonNullable: true, validators: [Validators.required] }),
+    executionDate: new FormControl(this.getCurrentDateTime(), { nonNullable: true, validators: [Validators.required, noFutureDateValidator()] }),
     type: new FormControl(''),
     coachNotes: new FormControl(''),
     exercises: new FormArray([], { validators: [Validators.required, Validators.minLength(1)] }),
@@ -310,21 +344,24 @@ export class TestCreatePage {
       greaterIsBetter: new FormControl(true, { nonNullable: true, validators: [Validators.required] }),
     });
     this.exercises.push(exerciseGroup);
+    this.exercises.markAsDirty();
   }
 
   protected duplicateExercise(index: number): void {
     const source = this.exercises.at(index) as FormGroup;
     const duplicate = new FormGroup({
-      exerciseTitle: new FormControl(`${source.value.exerciseTitle} #2`, { nonNullable: true, validators: [Validators.required] }),
-      result: new FormControl(source.value.result, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
-      unit: new FormControl(source.value.unit, { nonNullable: true, validators: [Validators.required] }),
-      greaterIsBetter: new FormControl(source.value.greaterIsBetter, { nonNullable: true, validators: [Validators.required] }),
+      exerciseTitle: new FormControl(`${source.value.exerciseTitle as string} #2`, { nonNullable: true, validators: [Validators.required] }),
+      result: new FormControl(source.value.result as number, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
+      unit: new FormControl(source.value.unit as MeasurementUnit, { nonNullable: true, validators: [Validators.required] }),
+      greaterIsBetter: new FormControl(source.value.greaterIsBetter as boolean, { nonNullable: true, validators: [Validators.required] }),
     });
     this.exercises.push(duplicate);
+    this.exercises.markAsDirty();
   }
 
   protected removeExercise(index: number): void {
     this.exercises.removeAt(index);
+    this.exercises.markAsDirty();
   }
 
   protected asFormGroup(ctrl: AbstractControl): FormGroup {
@@ -341,6 +378,8 @@ export class TestCreatePage {
       this.showConfirm.set(true);
     } else {
       this.testForm.markAllAsTouched();
+      // Mark FormArray and all its groups as touched
+      this.exercises.markAllAsTouched();
     }
   }
 

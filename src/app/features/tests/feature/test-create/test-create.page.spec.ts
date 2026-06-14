@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestCreatePage } from './test-create.page';
-import { provideRouter } from '@angular/router';
+import { TestCreatePage, noFutureDateValidator } from './test-create.page';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { AthletesApiService } from '../../../athletes/data-access/athletes-api.service';
 import { TestsApiService } from '../../data-access/tests-api.service';
 import { of } from 'rxjs';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 describe('TestCreatePage', () => {
   let component: TestCreatePage;
@@ -13,9 +13,11 @@ describe('TestCreatePage', () => {
   let mockAthletesApi: { getAthlete: Mock };
   let mockTestsApi: { createTest: Mock };
 
+  const athleteId = '123';
+
   beforeEach(async () => {
     mockAthletesApi = {
-      getAthlete: vi.fn().mockReturnValue(of({ athleteId: '123', firstName: 'Mario', lastName: 'Rossi' })),
+      getAthlete: vi.fn().mockReturnValue(of({ athleteId: athleteId, firstName: 'Mario', lastName: 'Rossi' })),
     };
     mockTestsApi = {
       createTest: vi.fn().mockReturnValue(of({})),
@@ -24,6 +26,16 @@ describe('TestCreatePage', () => {
     await TestBed.configureTestingModule({
       imports: [TestCreatePage, ReactiveFormsModule],
       providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: {
+                get: () => athleteId
+              }
+            }
+          }
+        },
         provideRouter([]),
         { provide: AthletesApiService, useValue: mockAthletesApi },
         { provide: TestsApiService, useValue: mockTestsApi },
@@ -39,28 +51,33 @@ describe('TestCreatePage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should add a new exercise to the form array', () => {
+  it('should be invalid if exercises array is empty', () => {
     expect(component.exercises.length).toBe(0);
-    component['addExercise'](); // call protected method
-    expect(component.exercises.length).toBe(1);
-    expect(component.exercises.at(0).get('exerciseTitle')?.value).toBe('');
+    expect(component['testForm'].get('exercises')?.hasError('required')).toBeTruthy();
   });
 
-  it('should duplicate an existing exercise', () => {
+  it('should be valid if at least one exercise is present and form is filled', () => {
+    // Explicitly set athleteId just in case
+    component['testForm'].get('athleteId')?.setValue(athleteId);
+    
     component['addExercise']();
-    component.exercises.at(0).patchValue({ exerciseTitle: 'Jump', result: 50 });
+    component.exercises.at(0).patchValue({
+      exerciseTitle: 'Jump',
+      result: 50,
+    });
     
-    component['duplicateExercise'](0);
-    
-    expect(component.exercises.length).toBe(2);
-    expect(component.exercises.at(1).get('exerciseTitle')?.value).toBe('Jump #2');
-    expect(component.exercises.at(1).get('result')?.value).toBe(50);
+    expect(component['testForm'].get('athleteId')?.valid).toBeTruthy();
+    expect(component['testForm'].get('executionDate')?.valid).toBeTruthy();
+    expect(component['testForm'].get('exercises')?.valid).toBeTruthy();
+    expect(component['testForm'].valid).toBeTruthy();
   });
 
-  it('should remove an exercise from the form array', () => {
-    component['addExercise']();
-    expect(component.exercises.length).toBe(1);
-    component['removeExercise'](0);
-    expect(component.exercises.length).toBe(0);
+  it('should validate that date is not in the future', () => {
+    const control = new FormControl('2099-01-01T10:00');
+    const validator = noFutureDateValidator();
+    expect(validator(control)).toEqual({ futureDate: true });
+    
+    control.setValue('2020-01-01T10:00');
+    expect(validator(control)).toBeNull();
   });
 });

@@ -10,12 +10,31 @@ import { MeasurementUnit } from '../../data-access/test.model';
     <div [formGroup]="formGroup()" class="exercise-row">
       <div class="field title-field">
         <label [for]="'title-'+index()">Esercizio</label>
-        <input [id]="'title-'+index()" type="text" formControlName="exerciseTitle" placeholder="Titolo" />
+        <input 
+          [id]="'title-'+index()" 
+          type="text" 
+          formControlName="exerciseTitle" 
+          placeholder="Titolo" 
+          [class.invalid]="isInvalid('exerciseTitle')"
+        />
+        @if (isInvalid('exerciseTitle')) {
+          <span class="error-text">Obbligatorio</span>
+        }
       </div>
       
       <div class="field result-field">
         <label [for]="'result-'+index()">Risultato</label>
-        <input [id]="'result-'+index()" type="number" formControlName="result" step="0.01" placeholder="0.00" />
+        <input 
+          [id]="'result-'+index()" 
+          type="number" 
+          formControlName="result" 
+          step="0.01" 
+          placeholder="0.00" 
+          [class.invalid]="isInvalid('result')"
+        />
+        @if (isInvalid('result')) {
+          <span class="error-text">Valore non valido</span>
+        }
       </div>
       
       <div class="field unit-field">
@@ -93,6 +112,25 @@ import { MeasurementUnit } from '../../data-access/test.model';
       border: 1px solid #cbd5e1;
       border-radius: var(--radius-md);
       font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    input.invalid, select.invalid {
+      border-color: #ef4444;
+      background-color: #fff1f2;
+    }
+
+    .error-text {
+      font-size: 0.7rem;
+      color: #ef4444;
+      font-weight: 600;
+      margin-top: 0.1rem;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--color-primary-aka);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
     .toggle-container {
@@ -145,4 +183,9 @@ export class ExerciseFormRowComponent {
   remove = output<void>();
 
   protected readonly units = Object.values(MeasurementUnit);
+
+  protected isInvalid(controlName: string): boolean {
+    const control = this.formGroup().get(controlName);
+    return !!(control && control.invalid && (control.touched || control.dirty));
+  }
 }
