@@ -15,3 +15,8 @@ export interface RecordAthleteRequest {
   referenceContact?: string | null;
   medicalNotes?: string | null;
 }
+
+export interface UpdateAthleteRequest {
+  referenceContact?: string | null;
+  medicalNotes?: string | null;
+}
