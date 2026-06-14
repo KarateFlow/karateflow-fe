@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, resource } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
@@ -205,13 +205,14 @@ import { Athlete } from '../../data-access/athlete.model';
 })
 export class AthleteListPage {
   private readonly athletesApi = inject(AthletesApiService);
+  private readonly router = inject(Router);
 
   protected readonly athletesResource = resource({
     loader: () => firstValueFrom(this.athletesApi.getAthletes()),
   });
 
   protected onViewAthlete(athlete: Athlete): void {
-    console.log('Visualizzazione atleta:', athlete);
+    this.router.navigate(['/athletes', athlete.athleteId]);
   }
 
   protected getErrorTitle(error: unknown): string {
