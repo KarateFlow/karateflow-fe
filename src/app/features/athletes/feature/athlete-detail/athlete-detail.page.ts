@@ -2,12 +2,14 @@ import { ChangeDetectionStrategy, Component, inject, resource } from '@angular/c
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
+import { TestsApiService } from '../../../tests/data-access/tests-api.service';
+import { AthleteTestsListComponent } from '../../../tests/ui/athlete-tests-list/athlete-tests-list.component';
 import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-athlete-detail',
   standalone: true,
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, AthleteTestsListComponent],
   template: `
     <div class="page-container">
       <header class="page-header">
@@ -88,6 +90,17 @@ import { DatePipe } from '@angular/common';
             </div>
           }
         </article>
+
+        <section class="performance-section">
+          @if (testsResource.isLoading()) {
+            <div class="loading-state mini">
+              <div class="spinner small"></div>
+              <p>Caricamento storico test...</p>
+            </div>
+          } @else {
+            <app-athlete-tests-list [tests]="testsResource.value() ?? []" />
+          }
+        </section>
       }
     </div>
   `,
@@ -264,6 +277,11 @@ import { DatePipe } from '@angular/common';
       color: var(--color-text-muted);
     }
 
+    .loading-state.mini {
+      padding: 2rem 0;
+      gap: 1rem;
+    }
+
     .spinner {
       width: 40px;
       height: 40px;
@@ -271,6 +289,12 @@ import { DatePipe } from '@angular/common';
       border-top: 3px solid var(--color-primary-aka);
       border-radius: 50%;
       animation: spin 1s linear infinite;
+    }
+
+    .spinner.small {
+      width: 24px;
+      height: 24px;
+      border-width: 2px;
     }
 
     @keyframes spin {
@@ -295,18 +319,31 @@ import { DatePipe } from '@angular/common';
       color: #9f1239;
       cursor: pointer;
     }
+
+    .performance-section {
+      margin-top: 2rem;
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AthleteDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly athletesApi = inject(AthletesApiService);
+  private readonly testsApi = inject(TestsApiService);
 
   protected readonly athleteResource = resource({
     loader: () => {
       const id = this.route.snapshot.paramMap.get('id');
       if (!id) throw new Error('Athlete ID not found');
       return firstValueFrom(this.athletesApi.getAthlete(id));
+    },
+  });
+
+  protected readonly testsResource = resource({
+    loader: () => {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (!id) throw new Error('Athlete ID not found');
+      return firstValueFrom(this.testsApi.getTestsByAthlete(id));
     },
   });
 }
