@@ -4,12 +4,12 @@ import { provideRouter } from '@angular/router';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
 import { of } from 'rxjs';
 import { Athlete } from '../../data-access/athlete.model';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 
 describe('AthleteDetailPage', () => {
   let component: AthleteDetailPage;
   let fixture: ComponentFixture<AthleteDetailPage>;
-  let mockAthletesApi: any;
+  let mockAthletesApi: { getAthlete: Mock };
 
   const mockAthlete: Athlete = {
     athleteId: '123',
