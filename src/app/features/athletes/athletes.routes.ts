@@ -12,6 +12,11 @@ export const ATHLETES_ROUTES: Routes = [
       import('./feature/athlete-create/athlete-create.page').then((m) => m.AthleteCreatePage),
   },
   {
+    path: ':id',
+    loadComponent: () =>
+      import('./feature/athlete-detail/athlete-detail.page').then((m) => m.AthleteDetailPage),
+  },
+  {
     path: '',
     redirectTo: 'list',
     pathMatch: 'full',

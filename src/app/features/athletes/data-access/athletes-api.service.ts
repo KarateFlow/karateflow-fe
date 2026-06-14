@@ -20,6 +20,15 @@ export class AthletesApiService {
   }
 
   /**
+   * Retrieves a single athlete by their unique identifier.
+   * @param athleteId The unique ID of the athlete to retrieve.
+   * @returns An Observable of the retrieved Athlete.
+   */
+  getAthlete(athleteId: string): Observable<Athlete> {
+    return this.http.get<Athlete>(`${this.apiUrl}/${athleteId}`);
+  }
+
+  /**
    * Creates a new athlete in the system.
    * @param request The data required to record a new athlete.
    * @returns An Observable of the created Athlete.

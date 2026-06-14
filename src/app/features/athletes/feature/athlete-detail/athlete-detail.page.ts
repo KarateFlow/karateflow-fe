@@ -1,0 +1,239 @@
+import { ChangeDetectionStrategy, Component, inject, resource } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { AthletesApiService } from '../../data-access/athletes-api.service';
+import { DatePipe } from '@angular/common';
+
+@Component({
+  selector: 'app-athlete-detail',
+  imports: [RouterLink, DatePipe],
+  template: `
+    <div class="page-container">
+      <header class="page-header">
+        <button routerLink="/athletes" class="btn-back">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Torna all'elenco
+        </button>
+      </header>
+
+      @if (athleteResource.isLoading()) {
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Caricamento profilo atleta...</p>
+        </div>
+      } @else if (athleteResource.error()) {
+        <div class="error-banner">
+          <strong>Errore nel caricamento</strong>
+          <p>Impossibile recuperare i dettagli dell'atleta. Riprova più tardi.</p>
+          <button (click)="athleteResource.reload()" class="btn-retry">Riprova</button>
+        </div>
+      } @else if (athleteResource.value(); as athlete) {
+        <article class="profile-card">
+          <div class="profile-header">
+            <div class="avatar-placeholder">
+              {{ athlete.firstName[0] }}{{ athlete.lastName[0] }}
+            </div>
+            <div class="profile-info">
+              <h1>{{ athlete.firstName }} {{ athlete.lastName }}</h1>
+              <p class="id-tag">ID: {{ athlete.athleteId }}</p>
+            </div>
+          </div>
+
+          <div class="profile-grid">
+            <div class="info-group">
+              <span class="label">Data di Nascita</span>
+              <p>{{ athlete.birthDate | date:'dd/MM/yyyy' }}</p>
+            </div>
+            <div class="info-group">
+              <span class="label">Contatto di Riferimento</span>
+              <p>{{ athlete.referenceContact || 'Non specificato' }}</p>
+            </div>
+            <div class="info-group">
+              <span class="label">Data Registrazione</span>
+              <p>{{ athlete.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+          </div>
+
+          @if (athlete.medicalNotes) {
+            <div class="notes-section">
+              <span class="label">Note Mediche</span>
+              <div class="notes-content">
+                {{ athlete.medicalNotes }}
+              </div>
+            </div>
+          }
+        </article>
+      }
+    </div>
+  `,
+  styles: `
+    .page-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: var(--radius-md);
+      transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+      color: var(--color-primary-aka);
+      background-color: #f1f5f9;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      padding: 2.5rem;
+      border: 1px solid #f1f5f9;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .avatar-placeholder {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--color-primary-aka), var(--color-secondary-ao));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 800;
+      box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+    }
+
+    .profile-info h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--color-text-main);
+      margin: 0;
+    }
+
+    .id-tag {
+      color: var(--color-text-muted);
+      font-family: monospace;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .info-group p {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--color-text-main);
+      margin: 0;
+    }
+
+    .notes-section .label {
+      margin-bottom: 0.75rem;
+    }
+
+    .notes-content {
+      background-color: #fef2f2;
+      border-left: 4px solid var(--color-secondary-ao);
+      padding: 1.5rem;
+      border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+      color: #991b1b;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4rem 0;
+      gap: 1.5rem;
+      color: var(--color-text-muted);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #f1f5f9;
+      border-top: 3px solid var(--color-primary-aka);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-banner {
+      background-color: #fff1f2;
+      border: 1px solid #fecdd3;
+      padding: 2rem;
+      border-radius: var(--radius-xl);
+      text-align: center;
+    }
+
+    .btn-retry {
+      margin-top: 1rem;
+      background: white;
+      border: 1px solid #fda4af;
+      padding: 0.5rem 1.5rem;
+      border-radius: var(--radius-lg);
+      font-weight: 700;
+      color: #9f1239;
+      cursor: pointer;
+    }
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class AthleteDetailPage {
+  private readonly route = inject(ActivatedRoute);
+  private readonly athletesApi = inject(AthletesApiService);
+
+  protected readonly athleteResource = resource({
+    loader: () => {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (!id) throw new Error('Athlete ID not found');
+      return firstValueFrom(this.athletesApi.getAthlete(id));
+    },
+  });
+}
