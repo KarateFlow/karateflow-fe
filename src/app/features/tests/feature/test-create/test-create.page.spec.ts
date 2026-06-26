@@ -72,6 +72,26 @@ describe('TestCreatePage', () => {
     expect(component['testForm'].valid).toBeTruthy();
   });
 
+  it('should duplicate an exercise and increment its suffix number correctly', () => {
+    component['addExercise']();
+    component.exercises.at(0).patchValue({
+      exerciseTitle: 'Pushup',
+      result: 25,
+    });
+
+    expect(component.exercises.length).toBe(1);
+
+    // Duplicate once
+    component['duplicateExercise'](0);
+    expect(component.exercises.length).toBe(2);
+    expect(component.exercises.at(1).value.exerciseTitle).toBe('Pushup #2');
+
+    // Duplicate the duplicate
+    component['duplicateExercise'](1);
+    expect(component.exercises.length).toBe(3);
+    expect(component.exercises.at(2).value.exerciseTitle).toBe('Pushup #3');
+  });
+
   it('should validate that date is not in the future', () => {
     const control = new FormControl('2099-01-01T10:00');
     const validator = noFutureDateValidator();
