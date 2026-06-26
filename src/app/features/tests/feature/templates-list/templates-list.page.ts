@@ -1129,7 +1129,7 @@ export class TemplatesListPage {
           id: this.templateIdToEdit,
           name: payload.name,
           description: payload.description || undefined,
-          exercises: (payload.exercises as any[]).map(ex => ({
+          exercises: (payload.exercises as { exerciseTitle: string; unit: MeasurementUnit; greaterIsBetter: boolean }[]).map(ex => ({
             exerciseTitle: ex.exerciseTitle,
             unit: ex.unit,
             greaterIsBetter: ex.greaterIsBetter
