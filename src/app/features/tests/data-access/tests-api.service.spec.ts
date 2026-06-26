@@ -42,4 +42,43 @@ describe('TestsApiService', () => {
     expect(req.request.body).toEqual(mockRequest);
     req.flush({});
   });
+
+  it('should send GET request to retrieve tests by athlete id', () => {
+    service.getTestsByAthlete('123').subscribe();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/tests?athleteId=123`);
+    expect(req.request.method).toBe('GET');
+    req.flush([]);
+  });
+
+  it('should send GET request to retrieve single test by id', () => {
+    service.getTest('456').subscribe();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/tests/456`);
+    expect(req.request.method).toBe('GET');
+    req.flush({});
+  });
+
+  it('should send PUT request to update test', () => {
+    const mockRequest = {
+      type: 'Updated Test',
+      coachNotes: 'Notes',
+      exercises: []
+    };
+
+    service.updateTest('456', mockRequest).subscribe();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/tests/456`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual(mockRequest);
+    req.flush({});
+  });
+
+  it('should send DELETE request to remove test', () => {
+    service.deleteTest('456').subscribe();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/tests/456`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush({});
+  });
 });

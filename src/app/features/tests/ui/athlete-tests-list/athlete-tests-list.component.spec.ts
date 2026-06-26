@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AthleteTestsListComponent } from './athlete-tests-list.component';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MeasurementUnit } from '../../data-access/test.model';
+import { provideRouter } from '@angular/router';
 
 describe('AthleteTestsListComponent', () => {
   let component: AthleteTestsListComponent;
@@ -10,6 +11,7 @@ describe('AthleteTestsListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AthleteTestsListComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AthleteTestsListComponent);
@@ -75,5 +77,41 @@ describe('AthleteTestsListComponent', () => {
     summary.click();
     fixture.detectChanges();
     expect(component['expandedId']()).toBeNull();
+  });
+
+  it('should only render up to 5 exercises and show hint if exercises length > 5', () => {
+    const exercises = Array.from({ length: 7 }, (_, i) => ({
+      exerciseTitle: `Exercise ${i + 1}`,
+      result: 10 + i,
+      unit: MeasurementUnit.COUNT,
+      greaterIsBetter: true
+    }));
+
+    fixture.componentRef.setInput('tests', [
+      {
+        id: '1',
+        athleteId: 'a1',
+        executionDate: '2023-01-01T10:00:00Z',
+        type: 'Test Forza',
+        exercises,
+        createdAt: '2023-01-01T11:00:00Z'
+      }
+    ]);
+    fixture.detectChanges();
+
+    // Expand card
+    const summary = fixture.nativeElement.querySelector('.session-summary') as HTMLElement;
+    summary.click();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    // Should render only 5 rows
+    const rows = compiled.querySelectorAll('.exercises-table tbody tr');
+    expect(rows.length).toBe(5);
+
+    // Should show hint
+    const hint = compiled.querySelector('.more-exercises-hint');
+    expect(hint).toBeTruthy();
+    expect(hint?.textContent).toContain('e altri 2 esercizi');
   });
 });
