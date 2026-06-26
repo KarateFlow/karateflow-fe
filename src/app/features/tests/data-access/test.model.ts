@@ -41,3 +41,34 @@ export interface UpdateTestRequest {
   exercises: PerformedExerciseRequest[];
 }
 
+export interface TemplateExerciseRequest {
+  exerciseTitle: string;
+  unit: MeasurementUnit;
+  greaterIsBetter: boolean;
+}
+
+export interface CreateTestTemplateRequest {
+  name: string;
+  description?: string;
+  exercises: TemplateExerciseRequest[];
+}
+
+export interface UpdateTestTemplateRequest {
+  name: string;
+  description?: string;
+  exercises: TemplateExerciseRequest[];
+}
+
+export interface TestTemplateResponse {
+  id: string;
+  name: string;
+  description?: string;
+  exercises: {
+    exerciseTitle: string;
+    unit: MeasurementUnit;
+    greaterIsBetter: boolean;
+  }[];
+  createdAt: string;
+}
+
+
