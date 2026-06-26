@@ -6,7 +6,7 @@ import { TestsApiService } from '../../data-access/tests-api.service';
 import { of, throwError, Subject } from 'rxjs';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MeasurementUnit } from '../../data-access/test.model';
+import { MeasurementUnit, TestResponse } from '../../data-access/test.model';
 
 describe('TestDetailPage', () => {
   let component: TestDetailPage;
@@ -74,7 +74,7 @@ describe('TestDetailPage', () => {
   });
 
   it('should display loading state when test data is loading', () => {
-    const loadingSubject = new Subject<any>();
+    const loadingSubject = new Subject<TestResponse>();
     mockTestsApi.getTest.mockReturnValue(loadingSubject);
 
     fixture.detectChanges();
@@ -289,7 +289,7 @@ describe('TestDetailPage', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     mockTestsApi.updateTest.mockReturnValue(throwError(() => new Error('Save Error')));
 
     const testData = testResourceVal();
@@ -308,7 +308,7 @@ describe('TestDetailPage', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     mockTestsApi.deleteTest.mockReturnValue(throwError(() => new Error('Delete Error')));
 
     await component['onConfirmDelete']();
