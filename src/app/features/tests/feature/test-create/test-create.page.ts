@@ -7,6 +7,7 @@ import { TestsApiService } from '../../data-access/tests-api.service';
 import { CreateTestRequest, MeasurementUnit } from '../../data-access/test.model';
 import { ExerciseFormRowComponent } from '../../ui/exercise-form-row/exercise-form-row.component';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /**
  * Validator to ensure date is not in the future
@@ -44,6 +45,17 @@ export function noFutureDateValidator(): ValidatorFn {
           </div>
         }
       </header>
+
+      @if (errorMessage()) {
+        <div class="banner error-banner">
+          <span class="icon">⚠️</span>
+          <div class="content">
+            <strong>Attenzione</strong>
+            <p>{{ errorMessage() }}</p>
+          </div>
+          <button class="close-btn" (click)="errorMessage.set(null)">&times;</button>
+        </div>
+      }
 
       <form [formGroup]="testForm" (ngSubmit)="onPreSubmit()" class="test-form">
         <section class="session-details">
@@ -101,7 +113,7 @@ export function noFutureDateValidator(): ValidatorFn {
           </div>
           
           @if (exercises.touched && exercises.hasError('minlength')) {
-            <div class="error-banner">Inserire almeno un esercizio per poter salvare la sessione.</div>
+            <div class="validation-error-banner">Inserire almeno un esercizio per poter salvare la sessione.</div>
           }
         </section>
 
@@ -297,7 +309,7 @@ export function noFutureDateValidator(): ValidatorFn {
       font-weight: 600;
     }
 
-    .error-banner {
+    .validation-error-banner {
       background: #fef2f2;
       border: 1px solid #fee2e2;
       color: #b91c1c;
@@ -306,6 +318,58 @@ export function noFutureDateValidator(): ValidatorFn {
       margin-top: 1rem;
       font-weight: 600;
       text-align: center;
+    }
+
+    .banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: var(--radius-lg);
+      position: relative;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .error-banner {
+      background-color: #fef2f2;
+      border: 1px solid var(--color-secondary-ao);
+      color: #991b1b;
+    }
+
+    .banner .icon {
+      font-size: 1.25rem;
+    }
+
+    .banner .content strong {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .banner .content p {
+      font-size: 0.875rem;
+      margin: 0;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.5;
+    }
+
+    .close-btn:hover {
+      opacity: 1;
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -319,6 +383,7 @@ export class TestCreatePage {
   protected readonly athleteId = signal(this.route.snapshot.paramMap.get('id')!);
   protected readonly isSubmitting = signal(false);
   protected readonly showConfirm = signal(false);
+  protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly athleteResource = resource({
     loader: () => firstValueFrom(this.athletesApi.getAthlete(this.athleteId())),
@@ -390,15 +455,34 @@ export class TestCreatePage {
   protected async onConfirmSave(): Promise<void> {
     this.showConfirm.set(false);
     this.isSubmitting.set(true);
+    this.errorMessage.set(null);
 
     try {
       const payload = this.testForm.getRawValue();
       await firstValueFrom(this.testsApi.createTest(payload as CreateTestRequest));
       this.router.navigate(['/athletes', this.athleteId()]);
     } catch (error) {
-      console.error('Errore durante il salvataggio del test:', error);
       this.isSubmitting.set(false);
+      if (error instanceof HttpErrorResponse) {
+        this.handleError(error);
+      } else {
+        this.errorMessage.set('Si è verificato un errore inaspettato durante il salvataggio. Riprova più tardi.');
+        console.error('Errore durante il salvataggio del test:', error);
+      }
     }
+  }
+
+  private handleError(err: HttpErrorResponse): void {
+    if (err.status === 0) {
+      this.errorMessage.set('Errore di connessione: il server non risponde. Controlla la tua connessione internet o riprova più tardi.');
+    } else if (err.status === 400) {
+      this.errorMessage.set('I dati inseriti non sono validi. Controlla i campi del form e riprova.');
+    } else if (err.status >= 500) {
+      this.errorMessage.set('Errore del server: si è verificato un problema interno. Il team tecnico è stato avvisato.');
+    } else {
+      this.errorMessage.set('Si è verificato un errore inaspettato durante il salvataggio. Riprova più tardi.');
+    }
+    console.error('Test creation failed', err);
   }
 
   private getCurrentDateTime(): string {
