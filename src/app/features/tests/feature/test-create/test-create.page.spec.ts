@@ -3,6 +3,8 @@ import { TestCreatePage, noFutureDateValidator } from './test-create.page';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { AthletesApiService } from '../../../athletes/data-access/athletes-api.service';
 import { TestsApiService } from '../../data-access/tests-api.service';
+import { TemplatesApiService } from '../../data-access/templates-api.service';
+import { MeasurementUnit } from '../../data-access/test.model';
 import { of, throwError } from 'rxjs';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -13,6 +15,7 @@ describe('TestCreatePage', () => {
   let fixture: ComponentFixture<TestCreatePage>;
   let mockAthletesApi: { getAthlete: Mock };
   let mockTestsApi: { createTest: Mock };
+  let mockTemplatesApi: { getTemplates: Mock };
 
   const athleteId = '123';
 
@@ -22,6 +25,19 @@ describe('TestCreatePage', () => {
     };
     mockTestsApi = {
       createTest: vi.fn().mockReturnValue(of({})),
+    };
+    mockTemplatesApi = {
+      getTemplates: vi.fn().mockReturnValue(of([
+        {
+          id: 'template-123',
+          name: 'Forza Generale',
+          description: 'Descrizione del template',
+          createdAt: '2026-06-26T12:00:00Z',
+          exercises: [
+            { exerciseTitle: 'Bench Press', unit: MeasurementUnit.KG, greaterIsBetter: true }
+          ]
+        }
+      ]))
     };
 
     await TestBed.configureTestingModule({
@@ -40,6 +56,7 @@ describe('TestCreatePage', () => {
         provideRouter([]),
         { provide: AthletesApiService, useValue: mockAthletesApi },
         { provide: TestsApiService, useValue: mockTestsApi },
+        { provide: TemplatesApiService, useValue: mockTemplatesApi },
       ],
     }).compileComponents();
 
@@ -142,5 +159,24 @@ describe('TestCreatePage', () => {
     expect(component['errorMessage']()).toContain('Errore del server');
     
     consoleSpy.mockRestore();
+  });
+
+  it('should populate exercises FormArray when template is selected', () => {
+    const selectEvent = {
+      target: {
+        value: 'template-123'
+      }
+    } as unknown as Event;
+
+    // @ts-expect-error - accessing protected method
+    component.onTemplateSelect(selectEvent);
+
+    expect(component.exercises.length).toBe(1);
+    expect(component.exercises.at(0).value.exerciseTitle).toBe('Bench Press');
+    expect(component.exercises.at(0).value.unit).toBe(MeasurementUnit.KG);
+    expect(component.exercises.at(0).value.result).toBeNull();
+    expect(component.exercises.at(0).value.greaterIsBetter).toBe(true);
+
+    expect(component['testForm'].get('type')?.value).toBe('Forza Generale');
   });
 });
