@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { ReportDashboardComponent } from './report-dashboard.component';
 import { ReportsApiService } from '../../data-access/reports-api.service';
-import { of, throwError, Observable } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { TestResponse } from '../../../tests/data-access/test.model';
 import { ReportPreviewResponse } from '../../data-access/reports.model';
 
@@ -259,7 +259,7 @@ describe('ReportDashboardComponent', () => {
     fixture.componentRef.setInput('tests', mockTests);
     fixture.detectChanges();
 
-    component['reportResult'].set({} as any);
+    component['reportResult'].set({} as ReportPreviewResponse);
     component['errorMsg'].set('Some error');
     component['selectedExerciseForChart'].set('Squats');
 
