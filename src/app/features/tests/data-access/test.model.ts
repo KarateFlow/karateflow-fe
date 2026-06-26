@@ -34,3 +34,10 @@ export interface TestResponse {
   }[];
   createdAt: string;
 }
+
+export interface UpdateTestRequest {
+  type?: string;
+  coachNotes?: string;
+  exercises: PerformedExerciseRequest[];
+}
+

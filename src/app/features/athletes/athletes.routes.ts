@@ -27,6 +27,12 @@ export const ATHLETES_ROUTES: Routes = [
       import('../tests/feature/test-create/test-create.page').then((m) => m.TestCreatePage),
   },
   {
+    path: ':id/tests/:testId',
+    loadComponent: () =>
+      import('../tests/feature/test-detail/test-detail.page').then((m) => m.TestDetailPage),
+  },
+
+  {
     path: '',
     redirectTo: 'list',
     pathMatch: 'full',

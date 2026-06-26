@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AthleteTestsListComponent } from './athlete-tests-list.component';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MeasurementUnit } from '../../data-access/test.model';
+import { provideRouter } from '@angular/router';
 
 describe('AthleteTestsListComponent', () => {
   let component: AthleteTestsListComponent;
@@ -10,6 +11,7 @@ describe('AthleteTestsListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AthleteTestsListComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AthleteTestsListComponent);

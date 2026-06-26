@@ -349,8 +349,12 @@ export class TestCreatePage {
 
   protected duplicateExercise(index: number): void {
     const source = this.exercises.at(index) as FormGroup;
+    const title = source.value.exerciseTitle as string;
+    const match = title.match(/(.*?)\s*#(\d+)$/);
+    const newTitle = match ? `${match[1]} #${parseInt(match[2], 10) + 1}` : `${title} #2`;
+
     const duplicate = new FormGroup({
-      exerciseTitle: new FormControl(`${source.value.exerciseTitle as string} #2`, { nonNullable: true, validators: [Validators.required] }),
+      exerciseTitle: new FormControl(newTitle, { nonNullable: true, validators: [Validators.required] }),
       result: new FormControl(source.value.result as number, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
       unit: new FormControl(source.value.unit as MeasurementUnit, { nonNullable: true, validators: [Validators.required] }),
       greaterIsBetter: new FormControl(source.value.greaterIsBetter as boolean, { nonNullable: true, validators: [Validators.required] }),

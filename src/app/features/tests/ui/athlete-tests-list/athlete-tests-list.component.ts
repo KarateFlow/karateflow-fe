@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { TestResponse } from '../../data-access/test.model';
 
 @Component({
   selector: 'app-athlete-tests-list',
   standalone: true,
-  imports: [DatePipe, DecimalPipe],
+  imports: [DatePipe, DecimalPipe, RouterLink],
   template: `
     <div class="tests-history">
       <div class="history-header">
@@ -74,7 +75,7 @@ import { TestResponse } from '../../data-access/test.model';
                         </tr>
                       </thead>
                       <tbody>
-                        @for (ex of test.exercises; track $index) {
+                        @for (ex of test.exercises.slice(0, 5); track $index) {
                           <tr>
                             <td class="font-bold">{{ ex.exerciseTitle }}</td>
                             <td class="text-right result-val">{{ ex.result | number:'1.1-2' }}</td>
@@ -88,6 +89,22 @@ import { TestResponse } from '../../data-access/test.model';
                         }
                       </tbody>
                     </table>
+                  </div>
+                  
+                  @if (test.exercises.length > 5) {
+                    <div class="more-exercises-hint">
+                      ...e altri {{ test.exercises.length - 5 }} esercizi. Clicca su "Gestisci / Dettagli" per visualizzare la sessione completa.
+                    </div>
+                  }
+
+                  <div class="session-actions">
+                    <a [routerLink]="['tests', test.id]" class="btn-manage-test">
+                      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                      </svg>
+                      Gestisci / Dettagli
+                    </a>
                   </div>
                 </div>
               }
@@ -309,6 +326,42 @@ import { TestResponse } from '../../data-access/test.model';
       .exercises-table td:nth-child(4) {
         display: none;
       }
+    }
+
+    .session-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    .more-exercises-hint {
+      margin-top: 0.75rem;
+      text-align: center;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    .btn-manage-test {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--color-primary-aka);
+      color: white;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      transition: all 0.2s;
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-manage-test:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
