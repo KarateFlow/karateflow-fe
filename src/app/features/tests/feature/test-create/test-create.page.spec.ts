@@ -3,9 +3,10 @@ import { TestCreatePage, noFutureDateValidator } from './test-create.page';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { AthletesApiService } from '../../../athletes/data-access/athletes-api.service';
 import { TestsApiService } from '../../data-access/tests-api.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('TestCreatePage', () => {
   let component: TestCreatePage;
@@ -99,5 +100,47 @@ describe('TestCreatePage', () => {
     
     control.setValue('2020-01-01T10:00');
     expect(validator(control)).toBeNull();
+  });
+
+  it('should handle connection error (status 0) during save', async () => {
+    const error = new HttpErrorResponse({ status: 0 });
+    mockTestsApi.createTest.mockReturnValue(throwError(() => error));
+
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    await component['onConfirmSave']();
+
+    expect(component['isSubmitting']()).toBe(false);
+    expect(component['errorMessage']()).toContain('server non risponde');
+    
+    consoleSpy.mockRestore();
+  });
+
+  it('should handle bad request error (status 400) during save', async () => {
+    const error = new HttpErrorResponse({ status: 400 });
+    mockTestsApi.createTest.mockReturnValue(throwError(() => error));
+
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    await component['onConfirmSave']();
+
+    expect(component['isSubmitting']()).toBe(false);
+    expect(component['errorMessage']()).toContain('non sono validi');
+    
+    consoleSpy.mockRestore();
+  });
+
+  it('should handle server error (status 500) during save', async () => {
+    const error = new HttpErrorResponse({ status: 500 });
+    mockTestsApi.createTest.mockReturnValue(throwError(() => error));
+
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    await component['onConfirmSave']();
+
+    expect(component['isSubmitting']()).toBe(false);
+    expect(component['errorMessage']()).toContain('Errore del server');
+    
+    consoleSpy.mockRestore();
   });
 });
