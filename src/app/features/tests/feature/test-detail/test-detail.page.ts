@@ -130,8 +130,8 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
             <section class="session-details">
               <div class="form-grid">
                 <div class="form-group">
-                  <label>Data Esecuzione (Non Modificabile)</label>
-                  <input type="text" [value]="test.executionDate | date:'dd/MM/yyyy HH:mm'" disabled class="input-disabled" />
+                  <label for="executionDateReadOnly">Data Esecuzione (Non Modificabile)</label>
+                  <input id="executionDateReadOnly" type="text" [value]="test.executionDate | date:'dd/MM/yyyy HH:mm'" disabled class="input-disabled" />
                 </div>
                 
                 <div class="form-group">
