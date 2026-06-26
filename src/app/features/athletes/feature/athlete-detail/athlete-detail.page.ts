@@ -1,17 +1,18 @@
-import { ChangeDetectionStrategy, Component, inject, resource } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, resource, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
 import { TestsApiService } from '../../../tests/data-access/tests-api.service';
 import { AthleteTestsListComponent } from '../../../tests/ui/athlete-tests-list/athlete-tests-list.component';
+import { ReportDashboardComponent } from '../../../reports/feature/report-dashboard/report-dashboard.component';
 import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-athlete-detail',
   standalone: true,
-  imports: [RouterLink, DatePipe, AthleteTestsListComponent],
+  imports: [RouterLink, DatePipe, AthleteTestsListComponent, ReportDashboardComponent],
   template: `
-    <div class="page-container">
+    <div class="page-container" [class.wide]="activeSection() === 'reports'">
       <header class="page-header">
         <button routerLink="/athletes" class="btn-back">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -91,14 +92,47 @@ import { DatePipe } from '@angular/common';
           }
         </article>
 
+        <div class="section-tabs">
+          <button 
+            type="button" 
+            class="section-tab-btn" 
+            [class.active]="activeSection() === 'history'"
+            (click)="activeSection.set('history')"
+          >
+            Storico Test
+          </button>
+          <button 
+            type="button" 
+            class="section-tab-btn" 
+            [class.active]="activeSection() === 'reports'"
+            (click)="activeSection.set('reports')"
+          >
+            Analisi & Confronti
+          </button>
+        </div>
+
         <section class="performance-section">
-          @if (testsResource.isLoading()) {
-            <div class="loading-state mini">
-              <div class="spinner small"></div>
-              <p>Caricamento storico test...</p>
-            </div>
+          @if (activeSection() === 'history') {
+            @if (testsResource.isLoading()) {
+              <div class="loading-state mini">
+                <div class="spinner small"></div>
+                <p>Caricamento storico test...</p>
+              </div>
+            } @else {
+              <app-athlete-tests-list [tests]="testsResource.value() ?? []" />
+            }
           } @else {
-            <app-athlete-tests-list [tests]="testsResource.value() ?? []" />
+            @if (testsResource.isLoading()) {
+              <div class="loading-state mini">
+                <div class="spinner small"></div>
+                <p>Caricamento storico test...</p>
+              </div>
+            } @else {
+              <app-report-dashboard 
+                [athleteId]="athlete.athleteId" 
+                [tests]="testsResource.value() ?? []" 
+              />
+            }
           }
         </section>
       }
@@ -109,6 +143,11 @@ import { DatePipe } from '@angular/common';
       max-width: 800px;
       margin: 2rem auto;
       padding: 0 1.5rem;
+      transition: max-width 0.3s ease;
+    }
+
+    .page-container.wide {
+      max-width: 1200px;
     }
 
     .page-header {
@@ -321,7 +360,37 @@ import { DatePipe } from '@angular/common';
     }
 
     .performance-section {
-      margin-top: 2rem;
+      margin-top: 1rem;
+    }
+
+    .section-tabs {
+      display: flex;
+      gap: 1.5rem;
+      border-bottom: 2px solid #e2e8f0;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-tab-btn {
+      background: none;
+      border: none;
+      padding: 0.75rem 0.25rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+
+    .section-tab-btn:hover {
+      color: var(--color-primary-aka);
+    }
+
+    .section-tab-btn.active {
+      color: var(--color-primary-aka);
+      border-bottom-color: var(--color-primary-aka);
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -330,6 +399,8 @@ export class AthleteDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly athletesApi = inject(AthletesApiService);
   private readonly testsApi = inject(TestsApiService);
+
+  protected readonly activeSection = signal<'history' | 'reports'>('history');
 
   protected readonly athleteResource = resource({
     loader: () => {
