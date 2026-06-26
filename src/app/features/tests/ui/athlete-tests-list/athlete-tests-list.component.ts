@@ -295,7 +295,7 @@ import { TestResponse } from '../../data-access/test.model';
       border-bottom: none;
     }
 
-    .text-right { text-align: right; }
+    .text-right { text-align: right !important; }
     .font-bold { font-weight: 700; color: var(--color-text-main); }
     .result-val { font-size: 1.1rem; font-weight: 800; color: var(--color-primary-aka); }
     .unit { color: var(--color-text-muted); font-weight: 600; }
