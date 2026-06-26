@@ -4,6 +4,7 @@ import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule
 import { firstValueFrom } from 'rxjs';
 import { AthletesApiService } from '../../../athletes/data-access/athletes-api.service';
 import { TestsApiService } from '../../data-access/tests-api.service';
+import { TemplatesApiService } from '../../data-access/templates-api.service';
 import { CreateTestRequest, MeasurementUnit } from '../../data-access/test.model';
 import { ExerciseFormRowComponent } from '../../ui/exercise-form-row/exercise-form-row.component';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
@@ -61,6 +62,21 @@ export function noFutureDateValidator(): ValidatorFn {
         <section class="session-details">
           <div class="form-grid">
             <div class="form-group">
+              <label for="templateSelect">Seleziona Template</label>
+              <select id="templateSelect" (change)="onTemplateSelect($event)">
+                <option value="">-- Nessun template (Inserimento manuale) --</option>
+                @for (tpl of templatesResource.value() ?? []; track tpl.id) {
+                  <option [value]="tpl.id">{{ tpl.name }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="type">Tipologia Sessione</label>
+              <input id="type" type="text" formControlName="type" placeholder="Es. Screening stagionale, Test Forza..." />
+            </div>
+
+            <div class="form-group">
               <label for="executionDate">Data Esecuzione</label>
               <input 
                 id="executionDate" 
@@ -73,11 +89,6 @@ export function noFutureDateValidator(): ValidatorFn {
                   {{ testForm.get('executionDate')?.hasError('futureDate') ? 'La data non può essere futura' : 'La data è obbligatoria' }}
                 </span>
               }
-            </div>
-            
-            <div class="form-group">
-              <label for="type">Tipologia Sessione</label>
-              <input id="type" type="text" formControlName="type" placeholder="Es. Screening stagionale, Test Forza..." />
             </div>
           </div>
 
@@ -210,11 +221,12 @@ export function noFutureDateValidator(): ValidatorFn {
       color: var(--color-text-main);
     }
 
-    input, textarea {
+    input, textarea, select {
       padding: 0.75rem;
       border: 1px solid #cbd5e1;
       border-radius: var(--radius-lg);
       font-family: inherit;
+      background-color: white;
       transition: border-color 0.2s;
     }
 
@@ -379,6 +391,7 @@ export class TestCreatePage {
   private readonly router = inject(Router);
   private readonly athletesApi = inject(AthletesApiService);
   private readonly testsApi = inject(TestsApiService);
+  private readonly templatesApi = inject(TemplatesApiService);
 
   protected readonly athleteId = signal(this.route.snapshot.paramMap.get('id')!);
   protected readonly isSubmitting = signal(false);
@@ -387,6 +400,10 @@ export class TestCreatePage {
 
   protected readonly athleteResource = resource({
     loader: () => firstValueFrom(this.athletesApi.getAthlete(this.athleteId())),
+  });
+
+  protected readonly templatesResource = resource({
+    loader: () => firstValueFrom(this.templatesApi.getTemplates()),
   });
 
   protected readonly testForm = new FormGroup({
@@ -431,6 +448,32 @@ export class TestCreatePage {
   protected removeExercise(index: number): void {
     this.exercises.removeAt(index);
     this.exercises.markAsDirty();
+  }
+
+  protected onTemplateSelect(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    const templateId = select.value;
+    if (!templateId) return;
+
+    const templates = this.templatesResource.value() ?? [];
+    const selected = templates.find(t => t.id === templateId);
+    if (selected) {
+      this.exercises.clear();
+      selected.exercises.forEach(ex => {
+        this.exercises.push(new FormGroup({
+          exerciseTitle: new FormControl(ex.exerciseTitle, { nonNullable: true, validators: [Validators.required] }),
+          result: new FormControl<number | null>(null, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
+          unit: new FormControl(ex.unit, { nonNullable: true, validators: [Validators.required] }),
+          greaterIsBetter: new FormControl(ex.greaterIsBetter, { nonNullable: true, validators: [Validators.required] }),
+        }));
+      });
+      this.exercises.markAsDirty();
+
+      const typeControl = this.testForm.get('type');
+      if (typeControl && !typeControl.value) {
+        typeControl.setValue(selected.name);
+      }
+    }
   }
 
   protected asFormGroup(ctrl: AbstractControl): FormGroup {
