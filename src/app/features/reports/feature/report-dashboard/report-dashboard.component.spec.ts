@@ -8,6 +8,35 @@ import { of, Observable } from 'rxjs';
 import { TestResponse } from '../../../tests/data-access/test.model';
 import { ReportPreviewResponse, ReportResponse } from '../../data-access/reports.model';
 
+vi.mock('jspdf', () => {
+  const mJsPDF = {
+    setFillColor: vi.fn(),
+    rect: vi.fn(),
+    setDrawColor: vi.fn(),
+    setFont: vi.fn(),
+    setFontSize: vi.fn(),
+    setTextColor: vi.fn(),
+    text: vi.fn(),
+    setLineWidth: vi.fn(),
+    line: vi.fn(),
+    circle: vi.fn(),
+    addPage: vi.fn(),
+    save: vi.fn(),
+    getStringUnitWidth: vi.fn().mockReturnValue(5),
+    internal: {
+      scaleFactor: 2.83
+    }
+  };
+  return {
+    jsPDF: vi.fn().mockImplementation(class {
+      constructor() {
+        return mJsPDF;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any)
+  };
+});
+
 try {
   TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
 } catch {
@@ -515,5 +544,192 @@ describe('ReportDashboardComponent', () => {
     });
     expect(component['reportIsSaved']()).toBe(true);
     expect(emitted).toBe(true);
+  });
+
+  describe('PDF Export', () => {
+    it('should export COMPARISON report successfully', async () => {
+      const fixture = TestBed.createComponent(ReportDashboardComponent);
+      const component = fixture.componentInstance;
+
+      fixture.componentRef.setInput('athleteId', 'athlete-123');
+      fixture.componentRef.setInput('tests', mockTests);
+      fixture.componentRef.setInput('athlete', {
+        firstName: 'Mario',
+        lastName: 'Rossi',
+        birthDate: '1995-03-15',
+        referenceContact: 'Mamma'
+      });
+      fixture.detectChanges();
+
+      const mockPreview: ReportPreviewResponse = {
+        athleteId: 'athlete-123',
+        analysisType: 'COMPARISON',
+        testIdA: 'test-oldest',
+        testIdB: 'test-newest',
+        lowOverlap: false,
+        comparisonResults: [
+          {
+            exerciseTitle: 'Pushups',
+            resultA: 20,
+            resultB: 25,
+            delta: '5.00',
+            percentageChange: '25.00',
+            unit: 'Rep',
+            greaterIsBetter: true
+          },
+          {
+            exerciseTitle: 'Plank',
+            resultA: 60,
+            resultB: 60,
+            delta: '0.00',
+            percentageChange: '0.00',
+            unit: 'Sec',
+            greaterIsBetter: true
+          },
+          {
+            exerciseTitle: 'Run',
+            resultA: 100,
+            resultB: 120,
+            delta: '20.00',
+            percentageChange: '20.00',
+            unit: 'Sec',
+            greaterIsBetter: false
+          },
+          {
+            exerciseTitle: 'Squats',
+            resultA: null,
+            resultB: null,
+            delta: 'N/A',
+            percentageChange: 'N/A',
+            unit: 'Rep',
+            greaterIsBetter: true
+          }
+        ]
+      };
+      component['reportResult'].set(mockPreview);
+
+      component['onExportPDF']();
+      expect(component['isExportingPDF']()).toBe(true);
+
+      // Wait for setTimeout (150ms) and dynamic import to complete
+      await new Promise(resolve => setTimeout(resolve, 250));
+
+      expect(component['isExportingPDF']()).toBe(false);
+    });
+
+    it('should export TREND report successfully with overallImprovement > 0', async () => {
+      const fixture = TestBed.createComponent(ReportDashboardComponent);
+      const component = fixture.componentInstance;
+
+      fixture.componentRef.setInput('athleteId', 'athlete-123');
+      fixture.componentRef.setInput('tests', mockTests);
+      fixture.detectChanges();
+
+      const mockPreview: ReportPreviewResponse = {
+        athleteId: 'athlete-123',
+        analysisType: 'TREND',
+        startDate: '2026-06-01',
+        endDate: '2026-06-30',
+        exerciseTrends: [
+          {
+            exerciseTitle: 'Pushups',
+            unit: 'Rep',
+            greaterIsBetter: true,
+            dataPoints: [
+              { date: '2026-06-01', result: 20 },
+              { date: '2026-06-15', result: 22 },
+              { date: '2026-06-30', result: 25 }
+            ]
+          },
+          {
+            exerciseTitle: 'Plank',
+            unit: 'Sec',
+            greaterIsBetter: true,
+            dataPoints: [
+              { date: '2026-06-01', result: 60 },
+              { date: '2026-06-30', result: 60 }
+            ]
+          },
+          {
+            exerciseTitle: 'Squats',
+            unit: 'Rep',
+            greaterIsBetter: true,
+            dataPoints: [
+              { date: '2026-06-01', result: 30 }
+            ]
+          }
+        ]
+      };
+      component['reportResult'].set(mockPreview);
+
+      component['onExportPDF']();
+      expect(component['isExportingPDF']()).toBe(true);
+
+      await new Promise(resolve => setTimeout(resolve, 250));
+
+      expect(component['isExportingPDF']()).toBe(false);
+    });
+
+    it('should export TREND report successfully with overallImprovement < 0', async () => {
+      const fixture = TestBed.createComponent(ReportDashboardComponent);
+      const component = fixture.componentInstance;
+
+      fixture.componentRef.setInput('athleteId', 'athlete-123');
+      fixture.componentRef.setInput('tests', mockTests);
+      fixture.detectChanges();
+
+      const mockPreview: ReportPreviewResponse = {
+        athleteId: 'athlete-123',
+        analysisType: 'TREND',
+        exerciseTrends: [
+          {
+            exerciseTitle: 'Pushups',
+            unit: 'Rep',
+            greaterIsBetter: true,
+            dataPoints: [
+              { date: '2026-06-01', result: 20 },
+              { date: '2026-06-30', result: 15 }
+            ]
+          }
+        ]
+      };
+      component['reportResult'].set(mockPreview);
+
+      component['onExportPDF']();
+      await new Promise(resolve => setTimeout(resolve, 250));
+
+      expect(component['isExportingPDF']()).toBe(false);
+    });
+
+    it('should export TREND report successfully with overallImprovement = 0', async () => {
+      const fixture = TestBed.createComponent(ReportDashboardComponent);
+      const component = fixture.componentInstance;
+
+      fixture.componentRef.setInput('athleteId', 'athlete-123');
+      fixture.componentRef.setInput('tests', mockTests);
+      fixture.detectChanges();
+
+      const mockPreview: ReportPreviewResponse = {
+        athleteId: 'athlete-123',
+        analysisType: 'TREND',
+        exerciseTrends: [
+          {
+            exerciseTitle: 'Pushups',
+            unit: 'Rep',
+            greaterIsBetter: true,
+            dataPoints: [
+              { date: '2026-06-01', result: 20 },
+              { date: '2026-06-30', result: 20 }
+            ]
+          }
+        ]
+      };
+      component['reportResult'].set(mockPreview);
+
+      component['onExportPDF']();
+      await new Promise(resolve => setTimeout(resolve, 250));
+
+      expect(component['isExportingPDF']()).toBe(false);
+    });
   });
 });

@@ -324,4 +324,80 @@ describe('TemplatesListPage', () => {
     // @ts-expect-error - accessing protected field
     expect(component.errorMessage()).toBe('Errore di connessione: il server non risponde. Controlla la tua connessione internet.');
   });
+
+  it('should handle generic error and other HTTP errors', async () => {
+    // Test other HTTP status code
+    const otherHttpError = new HttpErrorResponse({
+      status: 404,
+      statusText: 'Not Found'
+    });
+    templatesApi.createTemplate.mockReturnValue(throwError(() => otherHttpError));
+
+    // @ts-expect-error - accessing protected method
+    component.startCreate();
+    // @ts-expect-error - accessing protected field
+    component.templateForm.patchValue({ name: 'Other Error' });
+    component.exercises.at(0).patchValue({ exerciseTitle: 'A' });
+
+    // @ts-expect-error - accessing protected method
+    await component.onConfirmSave();
+
+    // @ts-expect-error - accessing protected field
+    expect(component.errorMessage()).toBe('Si è verificato un errore inaspettato. Riprova più tardi.');
+
+    // Test non-HttpErrorResponse error
+    templatesApi.createTemplate.mockReturnValue(throwError(() => new Error('Generic Error')));
+    // @ts-expect-error - accessing protected method
+    await component.onConfirmSave();
+    // @ts-expect-error - accessing protected field
+    expect(component.errorMessage()).toBe('Si è verificato un errore inaspettato. Riprova più tardi.');
+  });
+
+  it('should handle delete template failure', async () => {
+    templatesApi.deleteTemplate.mockReturnValue(throwError(() => new Error('Delete Fail')));
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    // @ts-expect-error - accessing protected method
+    component.confirmDelete('t-1');
+    // @ts-expect-error - accessing protected method
+    await component.onConfirmDelete();
+
+    expect(consoleErrorSpy).toHaveBeenCalled();
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('should reset form and flags when cancel is called', () => {
+    // @ts-expect-error - accessing protected method
+    component.startCreate();
+    // @ts-expect-error - accessing protected method
+    component.cancel();
+
+    // @ts-expect-error - accessing protected field
+    expect(component.isCreating()).toBe(false);
+    // @ts-expect-error - accessing protected field
+    expect(component.isEditing()).toBe(false);
+  });
+
+  it('should check if controls and form are invalid using isInvalid and isControlInvalid', () => {
+    // @ts-expect-error - accessing protected method
+    component.startCreate();
+    
+    // @ts-expect-error - accessing protected field
+    const nameControl = component.templateForm.get('name');
+    nameControl?.markAsDirty();
+    nameControl?.setValue(''); // Empty makes it invalid
+
+    // @ts-expect-error - accessing protected method
+    expect(component.isInvalid('name')).toBe(true);
+
+    const exerciseGroup = component.exercises.at(0);
+    exerciseGroup.get('exerciseTitle')?.markAsDirty();
+    exerciseGroup.get('exerciseTitle')?.setValue('');
+
+    // @ts-expect-error - accessing protected method
+    expect(component.isControlInvalid(exerciseGroup, 'exerciseTitle')).toBe(true);
+
+    // @ts-expect-error - accessing protected method
+    expect(component.asFormGroup(exerciseGroup)).toBe(exerciseGroup);
+  });
 });
