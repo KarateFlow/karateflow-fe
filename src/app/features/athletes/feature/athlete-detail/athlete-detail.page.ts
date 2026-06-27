@@ -24,7 +24,8 @@ import { DatePipe } from '@angular/common';
           Torna all'elenco
         </button>
 
-        @if (athleteResource.value(); as athlete) {
+        @if (athleteResource.status() === 'resolved') {
+          @let athlete = athleteResource.value()!;
           <div class="header-actions">
             <button [routerLink]="['/athletes', athlete.athleteId, 'tests', 'new']" class="btn-test">
               <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
