@@ -140,6 +140,7 @@ import { DatePipe } from '@angular/common';
             } @else {
               <app-report-dashboard 
                 [athleteId]="athlete.athleteId" 
+                [athlete]="athlete"
                 [tests]="testsResource.value() ?? []"
                 (reportSaved)="onReportSaved()"
               />
@@ -161,6 +162,7 @@ import { DatePipe } from '@angular/common';
                   </button>
                   <app-report-dashboard
                     [athleteId]="athlete.athleteId"
+                    [athlete]="athlete"
                     [tests]="testsResource.value() ?? []"
                     [savedReport]="saved"
                   />

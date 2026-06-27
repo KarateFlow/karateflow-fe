@@ -516,4 +516,24 @@ describe('ReportDashboardComponent', () => {
     expect(component['reportIsSaved']()).toBe(true);
     expect(emitted).toBe(true);
   });
+
+  it('should set isExportingPDF to true when onExportPDF is called', () => {
+    const fixture = TestBed.createComponent(ReportDashboardComponent);
+    const component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('athleteId', 'athlete-123');
+    fixture.componentRef.setInput('tests', mockTests);
+    fixture.detectChanges();
+
+    const mockPreview: ReportPreviewResponse = {
+      athleteId: 'athlete-123',
+      analysisType: 'COMPARISON',
+      lowOverlap: false,
+      comparisonResults: []
+    };
+    component['reportResult'].set(mockPreview);
+
+    component['onExportPDF']();
+    expect(component['isExportingPDF']()).toBe(true);
+  });
 });
