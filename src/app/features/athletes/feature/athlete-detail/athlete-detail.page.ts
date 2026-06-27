@@ -1,18 +1,20 @@
-import { ChangeDetectionStrategy, Component, inject, resource, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, resource, signal, viewChild } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
 import { TestsApiService } from '../../../tests/data-access/tests-api.service';
 import { AthleteTestsListComponent } from '../../../tests/ui/athlete-tests-list/athlete-tests-list.component';
 import { ReportDashboardComponent } from '../../../reports/feature/report-dashboard/report-dashboard.component';
+import { SavedReportsListComponent } from '../../../reports/ui/saved-reports-list/saved-reports-list.component';
+import { ReportResponse } from '../../../reports/data-access/reports.model';
 import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-athlete-detail',
   standalone: true,
-  imports: [RouterLink, DatePipe, AthleteTestsListComponent, ReportDashboardComponent],
+  imports: [RouterLink, DatePipe, AthleteTestsListComponent, ReportDashboardComponent, SavedReportsListComponent],
   template: `
-    <div class="page-container" [class.wide]="activeSection() === 'reports'">
+    <div class="page-container" [class.wide]="activeSection() !== 'history'">
       <header class="page-header">
         <button routerLink="/athletes" class="btn-back">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -109,6 +111,14 @@ import { DatePipe } from '@angular/common';
           >
             Analisi & Confronti
           </button>
+          <button 
+            type="button" 
+            class="section-tab-btn" 
+            [class.active]="activeSection() === 'saved-reports'"
+            (click)="activeSection.set('saved-reports'); selectedSavedReport.set(null)"
+          >
+            Report Salvati
+          </button>
         </div>
 
         <section class="performance-section">
@@ -121,7 +131,7 @@ import { DatePipe } from '@angular/common';
             } @else {
               <app-athlete-tests-list [tests]="testsResource.value() ?? []" />
             }
-          } @else {
+          } @else if (activeSection() === 'reports') {
             @if (testsResource.isLoading()) {
               <div class="loading-state mini">
                 <div class="spinner small"></div>
@@ -130,8 +140,39 @@ import { DatePipe } from '@angular/common';
             } @else {
               <app-report-dashboard 
                 [athleteId]="athlete.athleteId" 
-                [tests]="testsResource.value() ?? []" 
+                [tests]="testsResource.value() ?? []"
+                (reportSaved)="onReportSaved()"
               />
+            }
+          } @else {
+            @if (testsResource.isLoading()) {
+              <div class="loading-state mini">
+                <div class="spinner small"></div>
+                <p>Caricamento storico test...</p>
+              </div>
+            } @else {
+              @if (selectedSavedReport(); as saved) {
+                <div class="saved-report-viewer">
+                  <button type="button" class="btn-back-to-list" (click)="selectedSavedReport.set(null)">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    Torna all'elenco dei report salvati
+                  </button>
+                  <app-report-dashboard
+                    [athleteId]="athlete.athleteId"
+                    [tests]="testsResource.value() ?? []"
+                    [savedReport]="saved"
+                  />
+                </div>
+              } @else {
+                <app-saved-reports-list
+                  #savedReportsList
+                  [athleteId]="athlete.athleteId"
+                  [tests]="testsResource.value() ?? []"
+                  (viewReport)="selectedSavedReport.set($event)"
+                />
+              }
             }
           }
         </section>
@@ -392,6 +433,30 @@ import { DatePipe } from '@angular/common';
       color: var(--color-primary-aka);
       border-bottom-color: var(--color-primary-aka);
     }
+
+    .btn-back-to-list {
+      background: none;
+      border: 1px solid #cbd5e1;
+      color: var(--color-text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--radius-lg);
+      transition: all 0.2s;
+      margin-bottom: 1.5rem;
+      background-color: white;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-back-to-list:hover {
+      background-color: #f8fafc;
+      border-color: var(--color-primary-aka);
+      color: var(--color-primary-aka);
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -400,7 +465,10 @@ export class AthleteDetailPage {
   private readonly athletesApi = inject(AthletesApiService);
   private readonly testsApi = inject(TestsApiService);
 
-  protected readonly activeSection = signal<'history' | 'reports'>('history');
+  protected readonly activeSection = signal<'history' | 'reports' | 'saved-reports'>('history');
+  protected readonly selectedSavedReport = signal<ReportResponse | null>(null);
+
+  protected readonly savedReportsList = viewChild<SavedReportsListComponent>('savedReportsList');
 
   protected readonly athleteResource = resource({
     loader: () => {
@@ -417,4 +485,11 @@ export class AthleteDetailPage {
       return firstValueFrom(this.testsApi.getTestsByAthlete(id));
     },
   });
+
+  protected onReportSaved(): void {
+    const list = this.savedReportsList();
+    if (list) {
+      list.reload();
+    }
+  }
 }
