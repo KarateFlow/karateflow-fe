@@ -45,3 +45,20 @@ export interface ReportPreviewResponse {
   endDate?: string;
   exerciseTrends?: ExerciseTrend[];
 }
+
+export interface ReportSaveRequest {
+  athleteId: string;
+  analysisType: 'COMPARISON' | 'TREND';
+  testIdA?: string;
+  testIdB?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface ReportResponse {
+  reportId: string;
+  athleteId: string;
+  createdAt: string;
+  testIds: string[];
+  payload: ReportPreviewResponse;
+}

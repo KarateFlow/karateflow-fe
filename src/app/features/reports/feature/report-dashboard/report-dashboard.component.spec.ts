@@ -6,7 +6,7 @@ import { ReportDashboardComponent } from './report-dashboard.component';
 import { ReportsApiService } from '../../data-access/reports-api.service';
 import { of, Observable } from 'rxjs';
 import { TestResponse } from '../../../tests/data-access/test.model';
-import { ReportPreviewResponse } from '../../data-access/reports.model';
+import { ReportPreviewResponse, ReportResponse } from '../../data-access/reports.model';
 
 try {
   TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
@@ -17,11 +17,13 @@ try {
 describe('ReportDashboardComponent', () => {
   let reportsApiServiceMock: {
     generatePreview: ReturnType<typeof vi.fn>;
+    saveReport: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
     reportsApiServiceMock = {
       generatePreview: vi.fn(),
+      saveReport: vi.fn(),
     };
 
     TestBed.resetTestingModule();
@@ -441,5 +443,77 @@ describe('ReportDashboardComponent', () => {
     expect(component['formatPctSign']('12.50')).toBe('+12.50%');
     expect(component['formatPctSign']('-6.00')).toBe('-6.00%');
     expect(component['formatPctSign']('abc')).toBe('abc');
+  });
+
+  it('should load pre-calculated snapshot when savedReport is passed as input', () => {
+    const fixture = TestBed.createComponent(ReportDashboardComponent);
+    const component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('athleteId', 'athlete-123');
+    fixture.componentRef.setInput('tests', mockTests);
+
+    const mockSaved: ReportResponse = {
+      reportId: 'report-999',
+      athleteId: 'athlete-123',
+      createdAt: '2026-06-26T10:00:00Z',
+      testIds: ['test-oldest', 'test-newest'],
+      payload: {
+        athleteId: 'athlete-123',
+        analysisType: 'COMPARISON',
+        testIdA: 'test-oldest',
+        testIdB: 'test-newest',
+        comparisonResults: [
+          {
+            exerciseTitle: 'Pushups',
+            resultA: 10,
+            resultB: 15,
+            delta: '5.00',
+            percentageChange: '50.00',
+            unit: 'COUNT',
+            greaterIsBetter: true
+          }
+        ]
+      }
+    };
+
+    fixture.componentRef.setInput('savedReport', mockSaved);
+    fixture.detectChanges();
+
+    expect(component['reportResult']()).toEqual(mockSaved.payload);
+    expect(component['analysisType']()).toBe('COMPARISON');
+    expect(component['testIdA']()).toBe('test-oldest');
+    expect(component['testIdB']()).toBe('test-newest');
+    expect(component['selectedExerciseForChart']()).toBe('Pushups');
+  });
+
+  it('should call saveReport api when onSaveReport is called', () => {
+    const fixture = TestBed.createComponent(ReportDashboardComponent);
+    const component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('athleteId', 'athlete-123');
+    fixture.componentRef.setInput('tests', mockTests);
+    fixture.detectChanges();
+
+    reportsApiServiceMock.saveReport.mockReturnValue(of({}));
+
+    component['analysisType'].set('COMPARISON');
+    component['testIdA'].set('test-oldest');
+    component['testIdB'].set('test-newest');
+
+    let emitted = false;
+    component.reportSaved.subscribe(() => emitted = true);
+
+    component['onSaveReport']();
+
+    expect(reportsApiServiceMock.saveReport).toHaveBeenCalledWith({
+      analysisType: 'COMPARISON',
+      athleteId: 'athlete-123',
+      testIdA: 'test-oldest',
+      testIdB: 'test-newest',
+      startDate: undefined,
+      endDate: undefined,
+    });
+    expect(component['reportIsSaved']()).toBe(true);
+    expect(emitted).toBe(true);
   });
 });

@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TestResponse } from '../../../tests/data-access/test.model';
 import { ReportsApiService } from '../../data-access/reports-api.service';
-import { ReportPreviewResponse } from '../../data-access/reports.model';
+import { ReportPreviewResponse, ReportResponse } from '../../data-access/reports.model';
 import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/report-chart.component';
 
 @Component({
@@ -12,94 +12,112 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
   imports: [DatePipe, DecimalPipe, FormsModule, ReportChartComponent],
   template: `
     <div class="dashboard-wrapper">
-      <div class="control-panel">
-        <div class="tabs-navigation">
-          <button 
-            type="button" 
-            class="tab-btn" 
-            [class.active]="analysisType() === 'COMPARISON'" 
-            (click)="setAnalysisType('COMPARISON')"
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
-              <line x1="18" y1="20" x2="18" y2="10"></line>
-              <line x1="12" y1="20" x2="12" y2="4"></line>
-              <line x1="6" y1="20" x2="6" y2="14"></line>
+      @if (savedReport(); as saved) {
+        <div class="saved-report-header">
+          <div class="header-info">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
             </svg>
-            Confronto A vs B
-          </button>
-          <button 
-            type="button" 
-            class="tab-btn" 
-            [class.active]="analysisType() === 'TREND'" 
-            (click)="setAnalysisType('TREND')"
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-            </svg>
-            Trend Temporale
-          </button>
+            <span>
+              Report storico salvato il <strong>{{ saved.createdAt | date:'dd/MM/yyyy HH:mm' }}</strong>
+            </span>
+          </div>
+          <span class="report-type-badge">
+            {{ saved.payload.analysisType === 'COMPARISON' ? 'Confronto A vs B' : 'Trend Temporale' }}
+          </span>
         </div>
+      } @else {
+        <div class="control-panel">
+          <div class="tabs-navigation">
+            <button 
+              type="button" 
+              class="tab-btn" 
+              [class.active]="analysisType() === 'COMPARISON'" 
+              (click)="setAnalysisType('COMPARISON')"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+              Confronto A vs B
+            </button>
+            <button 
+              type="button" 
+              class="tab-btn" 
+              [class.active]="analysisType() === 'TREND'" 
+              (click)="setAnalysisType('TREND')"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              Trend Temporale
+            </button>
+          </div>
 
-        <div class="form-container">
-          @if (analysisType() === 'COMPARISON') {
-            <div class="comparison-selectors">
-              <div class="form-group">
-                <label class="input-label" for="testIdASelect">Test Baseline (Meno recente / A)</label>
-                <select id="testIdASelect" [ngModel]="testIdA()" (ngModelChange)="testIdA.set($event)" class="form-select">
-                  <option value="">-- Seleziona Test A --</option>
-                  @for (test of tests(); track test.id) {
-                    <option [value]="test.id">
-                      {{ test.executionDate | date:'dd/MM/yyyy HH:mm' }} - {{ test.type || 'Sessione Standard' }} ({{ test.exercises.length }} es)
-                    </option>
-                  }
-                </select>
+          <div class="form-container">
+            @if (analysisType() === 'COMPARISON') {
+              <div class="comparison-selectors">
+                <div class="form-group">
+                  <label class="input-label" for="testIdASelect">Test Baseline (Meno recente / A)</label>
+                  <select id="testIdASelect" [ngModel]="testIdA()" (ngModelChange)="testIdA.set($event)" class="form-select">
+                    <option value="">-- Seleziona Test A --</option>
+                    @for (test of tests(); track test.id) {
+                      <option [value]="test.id">
+                        {{ test.executionDate | date:'dd/MM/yyyy HH:mm' }} - {{ test.type || 'Sessione Standard' }} ({{ test.exercises.length }} es)
+                      </option>
+                    }
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="input-label" for="testIdBSelect">Test di Confronto (Più recente / B)</label>
+                  <select id="testIdBSelect" [ngModel]="testIdB()" (ngModelChange)="testIdB.set($event)" class="form-select">
+                    <option value="">-- Seleziona Test B --</option>
+                    @for (test of tests(); track test.id) {
+                      <option [value]="test.id" [disabled]="test.id === testIdA()">
+                        {{ test.executionDate | date:'dd/MM/yyyy HH:mm' }} - {{ test.type || 'Sessione Standard' }} ({{ test.exercises.length }} es)
+                      </option>
+                    }
+                  </select>
+                </div>
+
+                <button 
+                  type="button" 
+                  class="btn-submit" 
+                  [disabled]="isLoading() || !testIdA() || !testIdB()" 
+                  (click)="onGenerate()"
+                >
+                  Genera Confronto
+                </button>
               </div>
+            } @else {
+              <div class="trend-selectors">
+                <div class="form-group">
+                  <label class="input-label" for="startDateInput">Data Inizio (Opzionale)</label>
+                  <input id="startDateInput" type="date" [ngModel]="startDate()" (ngModelChange)="startDate.set($event)" class="form-input" />
+                </div>
 
-              <div class="form-group">
-                <label class="input-label" for="testIdBSelect">Test di Confronto (Più recente / B)</label>
-                <select id="testIdBSelect" [ngModel]="testIdB()" (ngModelChange)="testIdB.set($event)" class="form-select">
-                  <option value="">-- Seleziona Test B --</option>
-                  @for (test of tests(); track test.id) {
-                    <option [value]="test.id" [disabled]="test.id === testIdA()">
-                      {{ test.executionDate | date:'dd/MM/yyyy HH:mm' }} - {{ test.type || 'Sessione Standard' }} ({{ test.exercises.length }} es)
-                    </option>
-                  }
-                </select>
+                <div class="form-group">
+                  <label class="input-label" for="endDateInput">Data Fine (Opzionale)</label>
+                  <input id="endDateInput" type="date" [ngModel]="endDate()" (ngModelChange)="endDate.set($event)" class="form-input" />
+                </div>
+
+                <button 
+                  type="button" 
+                  class="btn-submit" 
+                  [disabled]="isLoading()" 
+                  (click)="onGenerate()"
+                >
+                  Genera Trend Storico
+                </button>
               </div>
-
-              <button 
-                type="button" 
-                class="btn-submit" 
-                [disabled]="isLoading() || !testIdA() || !testIdB()" 
-                (click)="onGenerate()"
-              >
-                Genera Confronto
-              </button>
-            </div>
-          } @else {
-            <div class="trend-selectors">
-              <div class="form-group">
-                <label class="input-label" for="startDateInput">Data Inizio (Opzionale)</label>
-                <input id="startDateInput" type="date" [ngModel]="startDate()" (ngModelChange)="startDate.set($event)" class="form-input" />
-              </div>
-
-              <div class="form-group">
-                <label class="input-label" for="endDateInput">Data Fine (Opzionale)</label>
-                <input id="endDateInput" type="date" [ngModel]="endDate()" (ngModelChange)="endDate.set($event)" class="form-input" />
-              </div>
-
-              <button 
-                type="button" 
-                class="btn-submit" 
-                [disabled]="isLoading()" 
-                (click)="onGenerate()"
-              >
-                Genera Trend Storico
-              </button>
-            </div>
-          }
+            }
+          </div>
         </div>
-      </div>
+      }
 
       <!-- State Visualizers -->
       @if (isLoading()) {
@@ -126,6 +144,35 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       <!-- Report Results Display -->
       @if (reportResult(); as report) {
         <div class="report-content">
+          <div class="report-header-actions">
+            <h2 class="report-title">
+              {{ report.analysisType === 'COMPARISON' ? 'Report di Confronto' : 'Report di Trend' }}
+            </h2>
+            <div class="actions-group">
+              @if (!savedReport() && !reportIsSaved() && !isSaving()) {
+                <button type="button" class="btn-save-report" (click)="onSaveReport()">
+                  <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    <polyline points="7 3 7 8 15 8"></polyline>
+                  </svg>
+                  Salva Report
+                </button>
+              } @else if (isSaving()) {
+                <span class="saving-loader">
+                  <div class="spinner small"></div>
+                  Salvataggio in corso...
+                </span>
+              } @else if (savedReport() || reportIsSaved()) {
+                <span class="badge-saved">
+                  <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Report Salvato
+                </span>
+              }
+            </div>
+          </div>
           <!-- Riepilogo di Confronto -->
           @if (reportSummaryStats(); as stats) {
             <div class="summary-panel">
@@ -1040,6 +1087,100 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       border: 1px solid #e2e8f0;
     }
 
+    .report-header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .report-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--color-text-main);
+      margin: 0;
+    }
+
+    .actions-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-save-report {
+      background-color: var(--color-primary-aka);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius-lg);
+      transition: all 0.2s;
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn-save-report:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .saving-loader {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+
+    .badge-saved {
+      background-color: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius-lg);
+      font-size: 0.875rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .saved-report-header {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius-xl);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .saved-report-header .header-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #1e3a8a;
+    }
+
+    .report-type-badge {
+      background-color: #3b82f6;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
     .text-primary {
       color: var(--color-primary-aka);
     }
@@ -1049,6 +1190,9 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
 export class ReportDashboardComponent {
   athleteId = input.required<string>();
   tests = input.required<TestResponse[]>();
+  savedReport = input<ReportResponse | null>(null);
+
+  reportSaved = output<void>();
 
   private readonly reportsApi = inject(ReportsApiService);
 
@@ -1059,6 +1203,8 @@ export class ReportDashboardComponent {
   protected readonly endDate = signal<string>('');
 
   protected readonly isLoading = signal<boolean>(false);
+  protected readonly isSaving = signal<boolean>(false);
+  protected readonly reportIsSaved = signal<boolean>(false);
   protected readonly errorMsg = signal<string | null>(null);
   protected readonly reportResult = signal<ReportPreviewResponse | null>(null);
 
@@ -1163,6 +1309,35 @@ export class ReportDashboardComponent {
         this.testIdA.set(list[0].id);
       }
     });
+
+    effect(() => {
+      const saved = this.savedReport();
+      if (saved) {
+        this.reportResult.set(saved.payload);
+        this.analysisType.set(saved.payload.analysisType);
+        if (saved.payload.analysisType === 'COMPARISON') {
+          this.testIdA.set(saved.payload.testIdA || '');
+          this.testIdB.set(saved.payload.testIdB || '');
+        } else {
+          this.startDate.set(saved.payload.startDate || '');
+          this.endDate.set(saved.payload.endDate || '');
+        }
+
+        // Auto select first available exercise for the chart
+        const isComparison = saved.payload.analysisType === 'COMPARISON';
+        const res = saved.payload;
+        if (isComparison && res.comparisonResults && res.comparisonResults.length > 0) {
+          const chartable = res.comparisonResults.find(c => c.resultA !== null && c.resultB !== null);
+          if (chartable) {
+            this.selectedExerciseForChart.set(chartable.exerciseTitle);
+          } else {
+            this.selectedExerciseForChart.set(res.comparisonResults[0].exerciseTitle);
+          }
+        } else if (!isComparison && res.exerciseTrends && res.exerciseTrends.length > 0) {
+          this.selectedExerciseForChart.set(res.exerciseTrends[0].exerciseTitle);
+        }
+      }
+    });
   }
 
   protected setAnalysisType(type: 'COMPARISON' | 'TREND'): void {
@@ -1170,6 +1345,39 @@ export class ReportDashboardComponent {
     this.reportResult.set(null);
     this.errorMsg.set(null);
     this.selectedExerciseForChart.set('');
+    this.reportIsSaved.set(false);
+  }
+
+  protected onSaveReport(): void {
+    this.isSaving.set(true);
+    this.errorMsg.set(null);
+
+    const isComparison = this.analysisType() === 'COMPARISON';
+    
+    const requestPayload = {
+      analysisType: this.analysisType(),
+      athleteId: this.athleteId(),
+      testIdA: isComparison ? this.testIdA() : undefined,
+      testIdB: isComparison ? this.testIdB() : undefined,
+      startDate: !isComparison && this.startDate() ? new Date(this.startDate()).toISOString() : undefined,
+      endDate: !isComparison && this.endDate() ? new Date(this.endDate()).toISOString() : undefined,
+    };
+
+    this.reportsApi.saveReport(requestPayload).subscribe({
+      next: () => {
+        this.isSaving.set(false);
+        this.reportIsSaved.set(true);
+        this.reportSaved.emit();
+      },
+      error: (err) => {
+        console.error('Failed to save report', err);
+        this.isSaving.set(false);
+        this.errorMsg.set(
+          err?.error?.message || 
+          'Impossibile salvare il report. Riprova più tardi.'
+        );
+      }
+    });
   }
 
   protected onGenerate(): void {
@@ -1177,6 +1385,7 @@ export class ReportDashboardComponent {
     this.errorMsg.set(null);
     this.reportResult.set(null);
     this.selectedExerciseForChart.set('');
+    this.reportIsSaved.set(false);
 
     const isComparison = this.analysisType() === 'COMPARISON';
     
