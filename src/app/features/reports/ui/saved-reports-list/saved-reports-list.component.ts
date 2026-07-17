@@ -415,6 +415,7 @@ export class SavedReportsListComponent {
       this.isConfirmOpen.set(false);
       this.reportsApi.deleteReport(reportId).subscribe({
         next: () => {
+          this.toastService.success('Report eliminato con successo!');
           this.reportsResource.reload();
           this.reportToDelete.set(null);
         },

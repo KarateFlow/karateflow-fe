@@ -1434,6 +1434,7 @@ export class ReportDashboardComponent {
       next: () => {
         this.isSaving.set(false);
         this.reportIsSaved.set(true);
+        this.toastService.success('Report salvato con successo!');
         this.reportSaved.emit();
       },
       error: (err) => {
