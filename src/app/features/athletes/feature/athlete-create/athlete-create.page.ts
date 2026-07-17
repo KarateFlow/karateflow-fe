@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { Router } from '@angular/router';
 import { RecordAthleteRequest } from '../../data-access/athlete.model';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 import { AthleteFormComponent } from '../../ui/athlete-form/athlete-form.component';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -14,28 +15,6 @@ import { HttpErrorResponse } from '@angular/common/http';
         <h1>Registrazione Nuovo Atleta</h1>
         <p>Inserisci i dati anagrafici e medici dell'atleta per inserirlo nel sistema.</p>
       </header>
-
-      @if (successMessage()) {
-        <div class="banner success-banner">
-          <span class="icon">✅</span>
-          <div class="content">
-            <strong>Successo!</strong>
-            <p>{{ successMessage() }}</p>
-          </div>
-          <button class="close-btn" (click)="successMessage.set(null)">&times;</button>
-        </div>
-      }
-
-      @if (errorMessage()) {
-        <div class="banner error-banner">
-          <span class="icon">⚠️</span>
-          <div class="content">
-            <strong>Attenzione</strong>
-            <p>{{ errorMessage() }}</p>
-          </div>
-          <button class="close-btn" (click)="errorMessage.set(null)">&times;</button>
-        </div>
-      }
 
       <section class="form-section">
         <app-athlete-form [isSubmitting]="isSubmitting()" (save)="onSave($event)" />
@@ -155,19 +134,16 @@ export class AthleteCreatePage {
   private readonly athletesApi = inject(AthletesApiService);
   private readonly router = inject(Router);
 
+  private readonly toastService = inject(ToastService);
+
   protected readonly isSubmitting = signal(false);
-  protected readonly errorMessage = signal<string | null>(null);
-  protected readonly successMessage = signal<string | null>(null);
 
   protected onSave(request: RecordAthleteRequest): void {
     this.isSubmitting.set(true);
-    this.errorMessage.set(null);
-    this.successMessage.set(null);
-
     this.athletesApi.createAthlete(request).subscribe({
       next: (athlete) => {
         this.isSubmitting.set(false);
-        this.successMessage.set(`Atleta ${athlete.firstName} ${athlete.lastName} registrato con successo!`);
+        this.toastService.success(`Atleta ${athlete.firstName} ${athlete.lastName} registrato con successo!`);
         
         // Reindirizzamento ritardato per permettere di leggere il messaggio di successo
         setTimeout(() => {
@@ -183,15 +159,15 @@ export class AthleteCreatePage {
 
   private handleError(err: HttpErrorResponse): void {
     if (err.status === 0) {
-      this.errorMessage.set('Errore di connessione: il server non risponde. Controlla la tua connessione internet o riprova più tardi.');
+      this.toastService.error('Errore di connessione: il server non risponde. Controlla la tua connessione internet o riprova più tardi.');
     } else if (err.status === 400) {
-      this.errorMessage.set('I dati inseriti non sono validi. Controlla i campi del form e riprova.');
+      this.toastService.error('I dati inseriti non sono validi. Controlla i campi del form e riprova.');
     } else if (err.status === 409) {
-      this.errorMessage.set('Questo atleta risulta già registrato nel sistema.');
+      this.toastService.error('Questo atleta risulta già registrato nel sistema.');
     } else if (err.status >= 500) {
-      this.errorMessage.set('Errore del server: si è verificato un problema interno. Il team tecnico è stato avvisato.');
+      this.toastService.error('Errore del server: si è verificato un problema interno. Il team tecnico è stato avvisato.');
     } else {
-      this.errorMessage.set('Si è verificato un errore inaspettato durante la registrazione. Riprova più tardi.');
+      this.toastService.error('Si è verificato un errore inaspettato durante la registrazione. Riprova più tardi.');
     }
     console.error('Athlete creation failed', err);
   }

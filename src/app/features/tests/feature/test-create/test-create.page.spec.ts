@@ -9,6 +9,7 @@ import { of, throwError } from 'rxjs';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 
 describe('TestCreatePage', () => {
   let component: TestCreatePage;
@@ -16,6 +17,7 @@ describe('TestCreatePage', () => {
   let mockAthletesApi: { getAthlete: Mock };
   let mockTestsApi: { createTest: Mock };
   let mockTemplatesApi: { getTemplates: Mock };
+  let toastService: { success: Mock, error: Mock, warning: Mock, info: Mock };
 
   const athleteId = '123';
 
@@ -39,6 +41,12 @@ describe('TestCreatePage', () => {
         }
       ]))
     };
+    toastService = {
+      success: vi.fn(),
+      error: vi.fn(),
+      warning: vi.fn(),
+      info: vi.fn()
+    };
 
     await TestBed.configureTestingModule({
       imports: [TestCreatePage, ReactiveFormsModule],
@@ -57,6 +65,7 @@ describe('TestCreatePage', () => {
         { provide: AthletesApiService, useValue: mockAthletesApi },
         { provide: TestsApiService, useValue: mockTestsApi },
         { provide: TemplatesApiService, useValue: mockTemplatesApi },
+        { provide: ToastService, useValue: toastService },
       ],
     }).compileComponents();
 
@@ -128,7 +137,7 @@ describe('TestCreatePage', () => {
     await component['onConfirmSave']();
 
     expect(component['isSubmitting']()).toBe(false);
-    expect(component['errorMessage']()).toContain('server non risponde');
+    expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('server non risponde'));
     
     consoleSpy.mockRestore();
   });
@@ -142,7 +151,7 @@ describe('TestCreatePage', () => {
     await component['onConfirmSave']();
 
     expect(component['isSubmitting']()).toBe(false);
-    expect(component['errorMessage']()).toContain('non sono validi');
+    expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('non sono validi'));
     
     consoleSpy.mockRestore();
   });
@@ -156,7 +165,7 @@ describe('TestCreatePage', () => {
     await component['onConfirmSave']();
 
     expect(component['isSubmitting']()).toBe(false);
-    expect(component['errorMessage']()).toContain('Errore del server');
+    expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('Errore del server'));
     
     consoleSpy.mockRestore();
   });

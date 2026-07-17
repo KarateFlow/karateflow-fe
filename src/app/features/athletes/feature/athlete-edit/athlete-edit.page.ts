@@ -6,6 +6,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { DatePipe } from '@angular/common';
 import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 
 @Component({
   selector: 'app-athlete-edit',
@@ -259,6 +260,7 @@ export class AthleteEditPage {
   private readonly router = inject(Router);
   private readonly athletesApi = inject(AthletesApiService);
   private readonly breadcrumbService = inject(BreadcrumbService);
+  private readonly toastService = inject(ToastService);
 
   protected readonly athleteId = signal(this.route.snapshot.paramMap.get('id')!);
   protected readonly showConfirm = signal(false);
@@ -298,11 +300,12 @@ export class AthleteEditPage {
       };
 
       await firstValueFrom(this.athletesApi.updateAthlete(this.athleteId(), payload));
+      this.toastService.success('Dati aggiornati con successo!');
       this.router.navigate(['/athletes', this.athleteId()]);
     } catch (error) {
       console.error('Errore durante il salvataggio:', error);
       this.isSubmitting.set(false);
-      // Qui si potrebbe aggiungere una notifica di errore UI
+      this.toastService.error('Errore durante il salvataggio dei dati.');
     }
   }
 }
