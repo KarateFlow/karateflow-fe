@@ -11,12 +11,25 @@
   --color-surface: #ffffff;
   --color-text-main: #0f172a;
   --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
+  --color-hover: #f1f5f9;
 
   --radius-xl: 12px;
   --radius-lg: 8px;
 
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Space Mono', monospace;
+}
+
+.dark {
+  --color-primary-aka: #3b82f6;
+  --color-secondary-ao: #f43f5e;
+  --color-bg-canvas: #0f172a;
+  --color-surface: #1e293b;
+  --color-text-main: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+  --color-hover: #1e293b;
 }
 
 * {
