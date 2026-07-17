@@ -20,12 +20,16 @@ export class ThemeService {
       this.initTheme();
 
       // Listen to system preference changes
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      mediaQuery.addEventListener('change', () => {
-        if (this.currentTheme() === 'system') {
-          this.applyTheme('system');
+      if (typeof window !== 'undefined' && window.matchMedia) {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        if (mediaQuery.addEventListener) {
+          mediaQuery.addEventListener('change', () => {
+            if (this.currentTheme() === 'system') {
+              this.applyTheme('system');
+            }
+          });
         }
-      });
+      }
       
       // Effect to sync state to DOM
       effect(() => {
@@ -40,11 +44,19 @@ export class ThemeService {
   }
 
   private initTheme(): void {
-    const savedTheme = localStorage.getItem(this.THEME_KEY) as Theme;
-    if (savedTheme) {
-      this.currentTheme.set(savedTheme);
-      this.applyTheme(savedTheme);
-    } else {
+    try {
+      const savedTheme = typeof window !== 'undefined' && window.localStorage 
+        ? window.localStorage.getItem(this.THEME_KEY) as Theme 
+        : null;
+        
+      if (savedTheme) {
+        this.currentTheme.set(savedTheme);
+        this.applyTheme(savedTheme);
+      } else {
+        this.currentTheme.set('system');
+        this.applyTheme('system');
+      }
+    } catch (e) {
       this.currentTheme.set('system');
       this.applyTheme('system');
     }
@@ -53,14 +65,22 @@ export class ThemeService {
   public setTheme(theme: Theme): void {
     this.currentTheme.set(theme);
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(this.THEME_KEY, theme);
+      try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          window.localStorage.setItem(this.THEME_KEY, theme);
+        }
+      } catch (e) {
+        // Ignore error during tests
+      }
       this.applyTheme(theme);
     }
   }
 
   private applyTheme(theme: Theme): void {
     if (theme === 'system') {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const prefersDark = typeof window !== 'undefined' && window.matchMedia 
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches 
+        : false;
       this.isDarkMode.set(prefersDark);
     } else {
       this.isDarkMode.set(theme === 'dark');
