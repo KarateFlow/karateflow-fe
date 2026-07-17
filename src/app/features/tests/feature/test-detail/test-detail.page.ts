@@ -8,6 +8,7 @@ import { TestsApiService } from '../../data-access/tests-api.service';
 import { MeasurementUnit, TestResponse, UpdateTestRequest } from '../../data-access/test.model';
 import { ExerciseFormRowComponent } from '../../ui/exercise-form-row/exercise-form-row.component';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
+import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
 
 @Component({
   selector: 'app-test-detail',
@@ -560,6 +561,7 @@ export class TestDetailPage {
   private readonly router = inject(Router);
   private readonly athletesApi = inject(AthletesApiService);
   private readonly testsApi = inject(TestsApiService);
+  private readonly breadcrumbService = inject(BreadcrumbService);
 
   protected readonly athleteId = signal(this.route.snapshot.paramMap.get('id')!);
   protected readonly testId = signal(this.route.snapshot.paramMap.get('testId')!);
@@ -569,7 +571,11 @@ export class TestDetailPage {
   protected readonly showDeleteConfirm = signal(false);
 
   protected readonly athleteResource = resource({
-    loader: () => firstValueFrom(this.athletesApi.getAthlete(this.athleteId())),
+    loader: async () => {
+      const athlete = await firstValueFrom(this.athletesApi.getAthlete(this.athleteId()));
+      this.breadcrumbService.setLabel(this.athleteId(), `${athlete.firstName} ${athlete.lastName}`);
+      return athlete;
+    },
   });
 
   protected readonly testResource = resource({
