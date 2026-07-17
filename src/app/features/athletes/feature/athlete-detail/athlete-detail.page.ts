@@ -8,6 +8,7 @@ import { ReportDashboardComponent } from '../../../reports/feature/report-dashbo
 import { SavedReportsListComponent } from '../../../reports/ui/saved-reports-list/saved-reports-list.component';
 import { ReportResponse } from '../../../reports/data-access/reports.model';
 import { DatePipe } from '@angular/common';
+import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
 
 @Component({
   selector: 'app-athlete-detail',
@@ -467,6 +468,7 @@ export class AthleteDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly athletesApi = inject(AthletesApiService);
   private readonly testsApi = inject(TestsApiService);
+  private readonly breadcrumbService = inject(BreadcrumbService);
 
   protected readonly activeSection = signal<'history' | 'reports' | 'saved-reports'>('history');
   protected readonly selectedSavedReport = signal<ReportResponse | null>(null);
@@ -477,7 +479,10 @@ export class AthleteDetailPage {
     loader: () => {
       const id = this.route.snapshot.paramMap.get('id');
       if (!id) throw new Error('Athlete ID not found');
-      return firstValueFrom(this.athletesApi.getAthlete(id));
+      return firstValueFrom(this.athletesApi.getAthlete(id)).then(athlete => {
+        this.breadcrumbService.setLabel(id, `${athlete.firstName} ${athlete.lastName}`);
+        return athlete;
+      });
     },
   });
 

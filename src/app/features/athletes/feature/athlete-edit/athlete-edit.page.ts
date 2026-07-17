@@ -5,6 +5,7 @@ import { AthletesApiService } from '../../data-access/athletes-api.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { DatePipe } from '@angular/common';
+import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
 
 @Component({
   selector: 'app-athlete-edit',
@@ -257,6 +258,7 @@ export class AthleteEditPage {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly athletesApi = inject(AthletesApiService);
+  private readonly breadcrumbService = inject(BreadcrumbService);
 
   protected readonly athleteId = signal(this.route.snapshot.paramMap.get('id')!);
   protected readonly showConfirm = signal(false);
@@ -270,6 +272,7 @@ export class AthleteEditPage {
   protected readonly athleteResource = resource({
     loader: async () => {
       const athlete = await firstValueFrom(this.athletesApi.getAthlete(this.athleteId()));
+      this.breadcrumbService.setLabel(this.athleteId(), `${athlete.firstName} ${athlete.lastName}`);
       this.editForm.patchValue({
         referenceContact: athlete.referenceContact ?? '',
         medicalNotes: athlete.medicalNotes ?? '',

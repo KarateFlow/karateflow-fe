@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, resource, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, resource, signal, OnDestroy, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
@@ -6,6 +7,7 @@ import { TemplatesApiService } from '../../data-access/templates-api.service';
 import { CreateTestTemplateRequest, MeasurementUnit, TestTemplateResponse, UpdateTestTemplateRequest } from '../../data-access/test.model';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
 
 @Component({
   selector: 'app-templates-list',
@@ -950,8 +952,21 @@ import { HttpErrorResponse } from '@angular/common/http';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TemplatesListPage {
+export class TemplatesListPage implements OnDestroy {
   private readonly templatesApi = inject(TemplatesApiService);
+  private readonly breadcrumbService = inject(BreadcrumbService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.breadcrumbService.routeClicked
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(url => {
+        if (url === '/templates') {
+          this.cancel();
+          this.closeDetail();
+        }
+      });
+  }
 
   protected readonly isEditing = signal(false);
   protected readonly isCreating = signal(false);
@@ -1008,11 +1023,13 @@ export class TemplatesListPage {
     this.isViewingDetail.set(true);
     this.isEditing.set(false);
     this.isCreating.set(false);
+    this.breadcrumbService.setExtraCrumbs([{ label: template.name }]);
   }
 
   protected closeDetail(): void {
     this.isViewingDetail.set(false);
     this.selectedTemplate.set(null);
+    this.breadcrumbService.clearExtraCrumbs();
   }
 
   protected startCreate(): void {
@@ -1022,6 +1039,7 @@ export class TemplatesListPage {
     this.isCreating.set(true);
     this.isEditing.set(false);
     this.errorMessage.set(null);
+    this.breadcrumbService.setExtraCrumbs([{ label: 'Nuovo' }]);
   }
 
   protected startEdit(template: TestTemplateResponse): void {
@@ -1043,6 +1061,17 @@ export class TemplatesListPage {
     this.isEditing.set(true);
     this.isCreating.set(false);
     this.errorMessage.set(null);
+    this.breadcrumbService.setExtraCrumbs([
+      { 
+        label: template.name, 
+        action: () => {
+          this.isEditing.set(false);
+          this.isViewingDetail.set(true);
+          this.breadcrumbService.setExtraCrumbs([{ label: template.name }]);
+        }
+      }, 
+      { label: 'Modifica' }
+    ]);
   }
 
   protected addExercise(): void {
@@ -1080,6 +1109,11 @@ export class TemplatesListPage {
     this.isEditing.set(false);
     this.templateIdToEdit = null;
     this.templateForm.reset();
+    if (this.isViewingDetail() && this.selectedTemplate()) {
+      this.breadcrumbService.setExtraCrumbs([{ label: this.selectedTemplate()!.name }]);
+    } else {
+      this.breadcrumbService.clearExtraCrumbs();
+    }
   }
 
   protected confirmDelete(templateId: string): void {
@@ -1099,6 +1133,7 @@ export class TemplatesListPage {
       this.isViewingDetail.set(false);
       this.isEditing.set(false);
       this.templateIdToDelete = null;
+      this.breadcrumbService.clearExtraCrumbs();
     } catch (error) {
       this.handleError(error);
     }
@@ -1138,6 +1173,7 @@ export class TemplatesListPage {
         };
         this.selectedTemplate.set(savedTemplate);
         this.isEditing.set(false);
+        this.breadcrumbService.setExtraCrumbs([{ label: savedTemplate.name }]);
       }
       this.templatesResource.reload();
       this.templateIdToEdit = null;
@@ -1163,5 +1199,9 @@ export class TemplatesListPage {
       this.errorMessage.set('Si è verificato un errore inaspettato. Riprova più tardi.');
     }
     console.error('Template operation failed', error);
+  }
+
+  ngOnDestroy(): void {
+    this.breadcrumbService.clearExtraCrumbs();
   }
 }

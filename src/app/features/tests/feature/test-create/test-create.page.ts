@@ -9,6 +9,7 @@ import { CreateTestRequest, MeasurementUnit } from '../../data-access/test.model
 import { ExerciseFormRowComponent } from '../../ui/exercise-form-row/exercise-form-row.component';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
 
 /**
  * Validator to ensure date is not in the future
@@ -392,6 +393,7 @@ export class TestCreatePage {
   private readonly athletesApi = inject(AthletesApiService);
   private readonly testsApi = inject(TestsApiService);
   private readonly templatesApi = inject(TemplatesApiService);
+  private readonly breadcrumbService = inject(BreadcrumbService);
 
   protected readonly athleteId = signal(this.route.snapshot.paramMap.get('id')!);
   protected readonly isSubmitting = signal(false);
@@ -399,7 +401,11 @@ export class TestCreatePage {
   protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly athleteResource = resource({
-    loader: () => firstValueFrom(this.athletesApi.getAthlete(this.athleteId())),
+    loader: async () => {
+      const athlete = await firstValueFrom(this.athletesApi.getAthlete(this.athleteId()));
+      this.breadcrumbService.setLabel(this.athleteId(), `${athlete.firstName} ${athlete.lastName}`);
+      return athlete;
+    },
   });
 
   protected readonly templatesResource = resource({
