@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add global styles to this file, and also import other style files */
 /* Root variables for KarateFlow Design System */
 :root {
   --color-primary-aka: #2563eb; /* Ora Blu per miglior UX dei pulsanti */
