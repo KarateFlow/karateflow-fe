@@ -56,7 +56,7 @@ export class ThemeService {
         this.currentTheme.set('system');
         this.applyTheme('system');
       }
-    } catch (e) {
+    } catch {
       this.currentTheme.set('system');
       this.applyTheme('system');
     }
@@ -69,7 +69,7 @@ export class ThemeService {
         if (typeof window !== 'undefined' && window.localStorage) {
           window.localStorage.setItem(this.THEME_KEY, theme);
         }
-      } catch (e) {
+      } catch {
         // Ignore error during tests
       }
       this.applyTheme(theme);
