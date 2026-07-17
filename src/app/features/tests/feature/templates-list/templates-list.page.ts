@@ -6,7 +6,6 @@ import { firstValueFrom } from 'rxjs';
 import { TemplatesApiService } from '../../data-access/templates-api.service';
 import { CreateTestTemplateRequest, MeasurementUnit, TestTemplateResponse, UpdateTestTemplateRequest } from '../../data-access/test.model';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
-import { HttpErrorResponse } from '@angular/common/http';
 import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
 import { ToastService } from '../../../../shared/ui/toast/toast.service';
 
@@ -1122,13 +1121,18 @@ export class TemplatesListPage implements OnDestroy {
     }
   }
 
-  private handleError(err: any): void {
-    if (err.status === 0) {
-      this.toastService.error('Errore di connessione: il server non risponde. Controlla la tua connessione internet.');
-    } else if (err.status === 400) {
-      this.toastService.error('I dati inseriti non sono validi. Controlla i campi e riprova.');
-    } else if (err.status >= 500) {
-      this.toastService.error('Errore del server: si è verificato un problema interno.');
+  private handleError(err: unknown): void {
+    if (err && typeof err === 'object' && 'status' in err) {
+      const status = (err as { status: number }).status;
+      if (status === 0) {
+        this.toastService.error('Errore di connessione: il server non risponde. Controlla la tua connessione internet.');
+      } else if (status === 400) {
+        this.toastService.error('I dati inseriti non sono validi. Controlla i campi e riprova.');
+      } else if (status >= 500) {
+        this.toastService.error('Errore del server: si è verificato un problema interno.');
+      } else {
+        this.toastService.error('Si è verificato un errore inaspettato. Riprova più tardi.');
+      }
     } else {
       this.toastService.error('Si è verificato un errore inaspettato. Riprova più tardi.');
     }

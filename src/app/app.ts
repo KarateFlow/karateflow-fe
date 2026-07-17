@@ -20,9 +20,7 @@ export class App {
   private toastService = inject(ToastService);
 
   constructor() {
-    if (typeof window !== 'undefined') {
-      (window as any).toast = this.toastService;
-    }
+    //
   }
 
   toggleMobileMenu() {
