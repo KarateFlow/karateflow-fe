@@ -10,6 +10,7 @@ import { ExerciseFormRowComponent } from '../../ui/exercise-form-row/exercise-fo
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 
 /**
  * Validator to ensure date is not in the future
@@ -47,17 +48,6 @@ export function noFutureDateValidator(): ValidatorFn {
           </div>
         }
       </header>
-
-      @if (errorMessage()) {
-        <div class="banner error-banner">
-          <span class="icon">⚠️</span>
-          <div class="content">
-            <strong>Attenzione</strong>
-            <p>{{ errorMessage() }}</p>
-          </div>
-          <button class="close-btn" (click)="errorMessage.set(null)">&times;</button>
-        </div>
-      }
 
       <form [formGroup]="testForm" (ngSubmit)="onPreSubmit()" class="test-form">
         <section class="session-details">
@@ -394,11 +384,11 @@ export class TestCreatePage {
   private readonly testsApi = inject(TestsApiService);
   private readonly templatesApi = inject(TemplatesApiService);
   private readonly breadcrumbService = inject(BreadcrumbService);
+  private readonly toastService = inject(ToastService);
 
   protected readonly athleteId = signal(this.route.snapshot.paramMap.get('id')!);
   protected readonly isSubmitting = signal(false);
   protected readonly showConfirm = signal(false);
-  protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly athleteResource = resource({
     loader: async () => {
@@ -504,18 +494,18 @@ export class TestCreatePage {
   protected async onConfirmSave(): Promise<void> {
     this.showConfirm.set(false);
     this.isSubmitting.set(true);
-    this.errorMessage.set(null);
 
     try {
       const payload = this.testForm.getRawValue();
       await firstValueFrom(this.testsApi.createTest(payload as CreateTestRequest));
+      this.toastService.success('Test salvato con successo!');
       this.router.navigate(['/athletes', this.athleteId()]);
     } catch (error) {
       this.isSubmitting.set(false);
       if (error instanceof HttpErrorResponse) {
         this.handleError(error);
       } else {
-        this.errorMessage.set('Si è verificato un errore inaspettato durante il salvataggio. Riprova più tardi.');
+        this.toastService.error('Si è verificato un errore inaspettato durante il salvataggio. Riprova più tardi.');
         console.error('Errore durante il salvataggio del test:', error);
       }
     }
@@ -523,13 +513,13 @@ export class TestCreatePage {
 
   private handleError(err: HttpErrorResponse): void {
     if (err.status === 0) {
-      this.errorMessage.set('Errore di connessione: il server non risponde. Controlla la tua connessione internet o riprova più tardi.');
+      this.toastService.error('Errore di connessione: il server non risponde. Controlla la tua connessione internet o riprova più tardi.');
     } else if (err.status === 400) {
-      this.errorMessage.set('I dati inseriti non sono validi. Controlla i campi del form e riprova.');
+      this.toastService.error('I dati inseriti non sono validi. Controlla i campi del form e riprova.');
     } else if (err.status >= 500) {
-      this.errorMessage.set('Errore del server: si è verificato un problema interno. Il team tecnico è stato avvisato.');
+      this.toastService.error('Errore del server: si è verificato un problema interno. Il team tecnico è stato avvisato.');
     } else {
-      this.errorMessage.set('Si è verificato un errore inaspettato durante il salvataggio. Riprova più tardi.');
+      this.toastService.error('Si è verificato un errore inaspettato durante il salvataggio. Riprova più tardi.');
     }
     console.error('Test creation failed', err);
   }

@@ -7,6 +7,7 @@ import { of, throwError, Subject } from 'rxjs';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MeasurementUnit, TestResponse } from '../../data-access/test.model';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 
 describe('TestDetailPage', () => {
   let component: TestDetailPage;
@@ -14,6 +15,7 @@ describe('TestDetailPage', () => {
   let mockAthletesApi: { getAthlete: Mock };
   let mockTestsApi: { getTest: Mock; updateTest: Mock; deleteTest: Mock };
   let router: Router;
+  let toastService: { success: Mock, error: Mock, warning: Mock, info: Mock };
 
   const athleteId = 'ath-123';
   const testId = 'test-456';
@@ -37,6 +39,12 @@ describe('TestDetailPage', () => {
       updateTest: vi.fn().mockReturnValue(of({})),
       deleteTest: vi.fn().mockReturnValue(of({})),
     };
+    toastService = {
+      success: vi.fn(),
+      error: vi.fn(),
+      warning: vi.fn(),
+      info: vi.fn()
+    };
 
     await TestBed.configureTestingModule({
       imports: [TestDetailPage, ReactiveFormsModule],
@@ -58,6 +66,7 @@ describe('TestDetailPage', () => {
         },
         { provide: AthletesApiService, useValue: mockAthletesApi },
         { provide: TestsApiService, useValue: mockTestsApi },
+        { provide: ToastService, useValue: toastService },
       ],
     }).compileComponents();
 

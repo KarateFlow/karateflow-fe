@@ -6,8 +6,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { AthleteCreatePage } from './athlete-create.page';
-import { AthletesApiService } from '../../data-access/athletes-api.service';
 import { AthleteFormComponent } from '../../ui/athlete-form/athlete-form.component';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { AthletesApiService } from '../../data-access/athletes-api.service';
 
 try {
   TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
@@ -20,6 +21,7 @@ describe('AthleteCreatePage', () => {
   let fixture: ComponentFixture<AthleteCreatePage>;
   let athletesApi: { createAthlete: Mock };
   let router: { navigate: Mock };
+  let toastService: { success: Mock, error: Mock, warning: Mock, info: Mock };
 
   beforeEach(async () => {
     vi.useFakeTimers();
@@ -29,13 +31,20 @@ describe('AthleteCreatePage', () => {
     router = {
       navigate: vi.fn()
     };
+    toastService = {
+      success: vi.fn(),
+      error: vi.fn(),
+      warning: vi.fn(),
+      info: vi.fn()
+    };
 
     TestBed.resetTestingModule();
     await TestBed.configureTestingModule({
       imports: [AthleteCreatePage, AthleteFormComponent],
       providers: [
         { provide: AthletesApiService, useValue: athletesApi },
-        { provide: Router, useValue: router }
+        { provide: Router, useValue: router },
+        { provide: ToastService, useValue: toastService }
       ]
     }).compileComponents();
 
@@ -57,8 +66,7 @@ describe('AthleteCreatePage', () => {
 
     // @ts-expect-error - Accesso a segnale protetto per il test
     expect(component.isSubmitting()).toBe(false);
-    // @ts-expect-error - Accesso a segnale protetto per il test
-    expect(component.successMessage()).toContain('registrato con successo');
+    expect(toastService.success).toHaveBeenCalledWith(expect.stringContaining('registrato con successo'));
     
     vi.advanceTimersByTime(2000);
     expect(router.navigate).toHaveBeenCalledWith(['/athletes']);
@@ -73,8 +81,7 @@ describe('AthleteCreatePage', () => {
 
     // @ts-expect-error - Accesso a segnale protetto per il test
     expect(component.isSubmitting()).toBe(false);
-    // @ts-expect-error - Accesso a segnale protetto per il test
-    expect(component.errorMessage()).toContain('server non risponde');
+    expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('server non risponde'));
   });
 
   it('should handle conflict error (status 409)', () => {
@@ -86,8 +93,7 @@ describe('AthleteCreatePage', () => {
 
     // @ts-expect-error - Accesso a segnale protetto per il test
     expect(component.isSubmitting()).toBe(false);
-    // @ts-expect-error - Accesso a segnale protetto per il test
-    expect(component.errorMessage()).toContain('già registrato');
+    expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('già registrato'));
   });
 
   it('should handle server error (status 500)', () => {
@@ -99,7 +105,6 @@ describe('AthleteCreatePage', () => {
 
     // @ts-expect-error - Accesso a segnale protetto per il test
     expect(component.isSubmitting()).toBe(false);
-    // @ts-expect-error - Accesso a segnale protetto per il test
-    expect(component.errorMessage()).toContain('Errore del server');
+    expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('Errore del server'));
   });
 });

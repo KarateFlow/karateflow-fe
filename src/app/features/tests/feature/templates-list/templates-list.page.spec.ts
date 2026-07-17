@@ -9,6 +9,7 @@ import { TemplatesListPage } from './templates-list.page';
 import { TemplatesApiService } from '../../data-access/templates-api.service';
 import { MeasurementUnit, TestTemplateResponse } from '../../data-access/test.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 
 try {
   TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
@@ -25,6 +26,7 @@ describe('TemplatesListPage', () => {
     updateTemplate: Mock;
     deleteTemplate: Mock;
   };
+  let toastService: { success: Mock, error: Mock, warning: Mock, info: Mock };
 
   const mockTemplates: TestTemplateResponse[] = [
     {
@@ -56,13 +58,20 @@ describe('TemplatesListPage', () => {
     };
 
     templatesApi.getTemplates.mockReturnValue(of(mockTemplates));
+    toastService = {
+      success: vi.fn(),
+      error: vi.fn(),
+      warning: vi.fn(),
+      info: vi.fn()
+    };
 
     TestBed.resetTestingModule();
     await TestBed.configureTestingModule({
       imports: [TemplatesListPage],
       providers: [
         provideRouter([]),
-        { provide: TemplatesApiService, useValue: templatesApi }
+        { provide: TemplatesApiService, useValue: templatesApi },
+        { provide: ToastService, useValue: toastService }
       ]
     }).compileComponents();
 
@@ -281,8 +290,7 @@ describe('TemplatesListPage', () => {
     // @ts-expect-error - accessing protected method
     await component.onConfirmSave();
 
-    // @ts-expect-error - accessing protected field
-    expect(component.errorMessage()).toBe('I dati inseriti non sono validi. Controlla i campi e riprova.');
+    expect(toastService.error).toHaveBeenCalledWith('I dati inseriti non sono validi. Controlla i campi e riprova.');
   });
 
   it('should handle HTTP error 500 when saving', async () => {
@@ -301,8 +309,7 @@ describe('TemplatesListPage', () => {
     // @ts-expect-error - accessing protected method
     await component.onConfirmSave();
 
-    // @ts-expect-error - accessing protected field
-    expect(component.errorMessage()).toBe('Errore del server: si è verificato un problema interno.');
+    expect(toastService.error).toHaveBeenCalledWith('Errore del server: si è verificato un problema interno.');
   });
 
   it('should handle connection errors (status 0)', async () => {
@@ -321,8 +328,7 @@ describe('TemplatesListPage', () => {
     // @ts-expect-error - accessing protected method
     await component.onConfirmSave();
 
-    // @ts-expect-error - accessing protected field
-    expect(component.errorMessage()).toBe('Errore di connessione: il server non risponde. Controlla la tua connessione internet.');
+    expect(toastService.error).toHaveBeenCalledWith('Errore di connessione: il server non risponde. Controlla la tua connessione internet.');
   });
 
   it('should handle generic error and other HTTP errors', async () => {
@@ -342,15 +348,13 @@ describe('TemplatesListPage', () => {
     // @ts-expect-error - accessing protected method
     await component.onConfirmSave();
 
-    // @ts-expect-error - accessing protected field
-    expect(component.errorMessage()).toBe('Si è verificato un errore inaspettato. Riprova più tardi.');
+    expect(toastService.error).toHaveBeenCalledWith('Si è verificato un errore inaspettato. Riprova più tardi.');
 
     // Test non-HttpErrorResponse error
     templatesApi.createTemplate.mockReturnValue(throwError(() => new Error('Generic Error')));
     // @ts-expect-error - accessing protected method
     await component.onConfirmSave();
-    // @ts-expect-error - accessing protected field
-    expect(component.errorMessage()).toBe('Si è verificato un errore inaspettato. Riprova più tardi.');
+    expect(toastService.error).toHaveBeenCalledWith('Si è verificato un errore inaspettato. Riprova più tardi.');
   });
 
   it('should handle delete template failure', async () => {

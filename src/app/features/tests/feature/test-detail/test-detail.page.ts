@@ -9,6 +9,7 @@ import { MeasurementUnit, TestResponse, UpdateTestRequest } from '../../data-acc
 import { ExerciseFormRowComponent } from '../../ui/exercise-form-row/exercise-form-row.component';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 
 @Component({
   selector: 'app-test-detail',
@@ -546,6 +547,7 @@ export class TestDetailPage {
   private readonly athletesApi = inject(AthletesApiService);
   private readonly testsApi = inject(TestsApiService);
   private readonly breadcrumbService = inject(BreadcrumbService);
+  private readonly toastService = inject(ToastService);
 
   protected readonly athleteId = signal(this.route.snapshot.paramMap.get('id')!);
   protected readonly testId = signal(this.route.snapshot.paramMap.get('testId')!);
@@ -653,10 +655,12 @@ export class TestDetailPage {
     try {
       const payload = this.testForm.getRawValue();
       await firstValueFrom(this.testsApi.updateTest(this.testId(), payload as UpdateTestRequest));
+      this.toastService.success('Test aggiornato con successo!');
       this.testResource.reload();
       this.isEditing.set(false);
     } catch (error) {
       console.error('Errore durante l\'aggiornamento del test:', error);
+      this.toastService.error('Errore durante l\'aggiornamento del test. Riprova più tardi.');
     } finally {
       this.isSaving.set(false);
     }
@@ -666,9 +670,11 @@ export class TestDetailPage {
     this.showDeleteConfirm.set(false);
     try {
       await firstValueFrom(this.testsApi.deleteTest(this.testId()));
+      this.toastService.success('Test eliminato con successo!');
       this.router.navigate(['/athletes', this.athleteId()]);
     } catch (error) {
       console.error('Errore durante l\'eliminazione del test:', error);
+      this.toastService.error('Errore durante l\'eliminazione del test. Riprova più tardi.');
     }
   }
 }

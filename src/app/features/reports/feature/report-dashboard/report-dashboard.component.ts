@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 import { FormsModule } from '@angular/forms';
 import { TestResponse } from '../../../tests/data-access/test.model';
 import { ReportsApiService } from '../../data-access/reports-api.service';
@@ -1259,6 +1260,7 @@ export class ReportDashboardComponent {
   reportSaved = output<void>();
 
   private readonly reportsApi = inject(ReportsApiService);
+  private readonly toastService = inject(ToastService);
 
   protected readonly analysisType = signal<'COMPARISON' | 'TREND'>('COMPARISON');
   protected readonly testIdA = signal<string>('');
@@ -1432,6 +1434,7 @@ export class ReportDashboardComponent {
       next: () => {
         this.isSaving.set(false);
         this.reportIsSaved.set(true);
+        this.toastService.success('Report salvato con successo!');
         this.reportSaved.emit();
       },
       error: (err) => {
@@ -2043,7 +2046,7 @@ export class ReportDashboardComponent {
 
       } catch (err) {
         console.error('Failed to generate PDF', err);
-        alert('Impossibile generare il PDF. Riprova più tardi.');
+        this.toastService.error('Impossibile generare il PDF. Riprova più tardi.');
       } finally {
         this.isExportingPDF.set(false);
       }

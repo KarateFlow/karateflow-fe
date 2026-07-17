@@ -6,8 +6,8 @@ import { firstValueFrom } from 'rxjs';
 import { TemplatesApiService } from '../../data-access/templates-api.service';
 import { CreateTestTemplateRequest, MeasurementUnit, TestTemplateResponse, UpdateTestTemplateRequest } from '../../data-access/test.model';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
-import { HttpErrorResponse } from '@angular/common/http';
 import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 
 @Component({
   selector: 'app-templates-list',
@@ -93,17 +93,6 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
           </div>
         }
       </header>
-
-      @if (errorMessage()) {
-        <div class="banner error-banner">
-          <span class="icon">⚠️</span>
-          <div class="content">
-            <strong>Attenzione</strong>
-            <p>{{ errorMessage() }}</p>
-          </div>
-          <button class="close-btn" (click)="errorMessage.set(null)">&times;</button>
-        </div>
-      }
 
       @if (templatesResource.isLoading()) {
         <div class="loading-state">
@@ -785,58 +774,6 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       to { transform: rotate(360deg); }
     }
 
-    .banner {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      border-radius: var(--radius-xl);
-      position: relative;
-      animation: slideIn 0.3s ease-out;
-    }
-
-    @keyframes slideIn {
-      from { transform: translateY(-10px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .error-banner {
-      background-color: var(--color-error-bg);
-      border: 1px solid var(--color-secondary-ao);
-      color: var(--color-error);
-    }
-
-    .banner .icon {
-      font-size: 1.25rem;
-    }
-
-    .banner .content strong {
-      display: block;
-      margin-bottom: 0.25rem;
-    }
-
-    .banner .content p {
-      font-size: 0.875rem;
-      margin: 0;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      background: none;
-      border: none;
-      font-size: 1.25rem;
-      cursor: pointer;
-      color: inherit;
-      opacity: 0.5;
-    }
-
-    .close-btn:hover {
-      opacity: 1;
-    }
-
     .btn-retry {
       background: var(--color-surface);
       border: 1px solid var(--color-error);
@@ -956,6 +893,7 @@ export class TemplatesListPage implements OnDestroy {
   private readonly templatesApi = inject(TemplatesApiService);
   private readonly breadcrumbService = inject(BreadcrumbService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly toastService = inject(ToastService);
 
   constructor() {
     this.breadcrumbService.routeClicked
@@ -976,7 +914,6 @@ export class TemplatesListPage implements OnDestroy {
   protected readonly selectedTemplate = signal<TestTemplateResponse | null>(null);
   protected readonly showDeleteConfirm = signal(false);
   protected readonly showSaveConfirm = signal(false);
-  protected readonly errorMessage = signal<string | null>(null);
 
   private templateIdToEdit: string | null = null;
   private templateIdToDelete: string | null = null;
@@ -1038,7 +975,6 @@ export class TemplatesListPage implements OnDestroy {
     this.addExercise(); // Start with one empty exercise row
     this.isCreating.set(true);
     this.isEditing.set(false);
-    this.errorMessage.set(null);
     this.breadcrumbService.setExtraCrumbs([{ label: 'Nuovo' }]);
   }
 
@@ -1060,7 +996,6 @@ export class TemplatesListPage implements OnDestroy {
     this.templateIdToEdit = template.id;
     this.isEditing.set(true);
     this.isCreating.set(false);
-    this.errorMessage.set(null);
     this.breadcrumbService.setExtraCrumbs([
       { 
         label: template.name, 
@@ -1127,6 +1062,7 @@ export class TemplatesListPage implements OnDestroy {
 
     try {
       await firstValueFrom(this.templatesApi.deleteTemplate(this.templateIdToDelete));
+      this.toastService.success('Template eliminato con successo!');
       this.templatesResource.reload();
       this.selectedTemplateId.set(null);
       this.selectedTemplate.set(null);
@@ -1151,15 +1087,16 @@ export class TemplatesListPage implements OnDestroy {
   protected async onConfirmSave(): Promise<void> {
     this.showSaveConfirm.set(false);
     this.isSaving.set(true);
-    this.errorMessage.set(null);
 
     try {
       const payload = this.templateForm.getRawValue();
       if (this.isCreating()) {
         await firstValueFrom(this.templatesApi.createTemplate(payload as CreateTestTemplateRequest));
+        this.toastService.success('Template creato con successo!');
         this.isCreating.set(false);
       } else if (this.isEditing() && this.templateIdToEdit) {
         await firstValueFrom(this.templatesApi.updateTemplate(this.templateIdToEdit, payload as UpdateTestTemplateRequest));
+        this.toastService.success('Template aggiornato con successo!');
         const savedTemplate: TestTemplateResponse = {
           id: this.templateIdToEdit,
           name: payload.name,
@@ -1184,21 +1121,22 @@ export class TemplatesListPage implements OnDestroy {
     }
   }
 
-  private handleError(error: unknown): void {
-    if (error instanceof HttpErrorResponse) {
-      if (error.status === 0) {
-        this.errorMessage.set('Errore di connessione: il server non risponde. Controlla la tua connessione internet.');
-      } else if (error.status === 400) {
-        this.errorMessage.set('I dati inseriti non sono validi. Controlla i campi e riprova.');
-      } else if (error.status >= 500) {
-        this.errorMessage.set('Errore del server: si è verificato un problema interno.');
+  private handleError(err: unknown): void {
+    if (err && typeof err === 'object' && 'status' in err) {
+      const status = (err as { status: number }).status;
+      if (status === 0) {
+        this.toastService.error('Errore di connessione: il server non risponde. Controlla la tua connessione internet.');
+      } else if (status === 400) {
+        this.toastService.error('I dati inseriti non sono validi. Controlla i campi e riprova.');
+      } else if (status >= 500) {
+        this.toastService.error('Errore del server: si è verificato un problema interno.');
       } else {
-        this.errorMessage.set('Si è verificato un errore inaspettato. Riprova più tardi.');
+        this.toastService.error('Si è verificato un errore inaspettato. Riprova più tardi.');
       }
     } else {
-      this.errorMessage.set('Si è verificato un errore inaspettato. Riprova più tardi.');
+      this.toastService.error('Si è verificato un errore inaspettato. Riprova più tardi.');
     }
-    console.error('Template operation failed', error);
+    console.error('Template operation failed', err);
   }
 
   ngOnDestroy(): void {
