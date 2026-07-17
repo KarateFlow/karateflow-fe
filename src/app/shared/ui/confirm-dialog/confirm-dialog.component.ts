@@ -51,7 +51,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
     }
 
     .modal-container {
-      background: white;
+      background: var(--color-surface);
       border-radius: var(--radius-xl);
       width: 90%;
       max-width: 400px;
@@ -86,22 +86,22 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
       display: flex;
       justify-content: flex-end;
       gap: 0.75rem;
-      background: #f8fafc;
+      background: var(--color-bg-canvas);
     }
 
     .btn-secondary {
-      background: white;
-      border: 1px solid #e2e8f0;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       color: var(--color-text-main);
       padding: 0.5rem 1.25rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .btn-secondary:hover {
-      background: #f1f5f9;
+      background: var(--color-hover);
     }
 
     .btn-confirm {
@@ -109,7 +109,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
       color: white;
       border: none;
       padding: 0.5rem 1.25rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;

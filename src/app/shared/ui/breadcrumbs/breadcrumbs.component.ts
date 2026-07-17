@@ -11,20 +11,20 @@ import { Breadcrumb, BreadcrumbService } from './breadcrumb.service';
   imports: [RouterLink, CommonModule],
   template: `
     <nav aria-label="Breadcrumb" class="mb-4 flex px-4 md:px-0">
-      <ol class="flex items-center space-x-2 text-sm text-gray-500">
+      <ol class="flex items-center space-x-2 text-sm text-text-muted">
         @for (crumb of breadcrumbs(); track $index; let last = $last) {
           <li class="flex items-center">
             @if (!last) {
               @if (crumb.url) {
-                <a [routerLink]="crumb.url" (click)="onCrumbClick($event, crumb)" class="hover:text-blue-600 transition-colors">{{ crumb.label }}</a>
+                <a [routerLink]="crumb.url" (click)="onCrumbClick($event, crumb)" class="hover:text-primary-aka transition-colors">{{ crumb.label }}</a>
               } @else if (crumb.action) {
-                <a href="javascript:void(0)" (click)="onCrumbClick($event, crumb)" class="hover:text-blue-600 transition-colors">{{ crumb.label }}</a>
+                <a href="javascript:void(0)" (click)="onCrumbClick($event, crumb)" class="hover:text-primary-aka transition-colors">{{ crumb.label }}</a>
               } @else {
-                <span class="text-gray-500">{{ crumb.label }}</span>
+                <span class="text-text-muted">{{ crumb.label }}</span>
               }
-              <svg class="w-4 h-4 mx-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              <svg class="w-4 h-4 mx-2 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             } @else {
-              <span class="text-gray-800 font-medium" aria-current="page">{{ crumb.label }}</span>
+              <span class="text-text-main font-medium" aria-current="page">{{ crumb.label }}</span>
             }
           </li>
         }

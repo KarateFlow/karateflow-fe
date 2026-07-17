@@ -70,7 +70,7 @@ import { HttpErrorResponse } from '@angular/common/http';
       gap: 1rem;
       padding: 1rem;
       margin-bottom: 1.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       position: relative;
       animation: slideIn 0.3s ease-out;
     }
@@ -81,15 +81,15 @@ import { HttpErrorResponse } from '@angular/common/http';
     }
 
     .success-banner {
-      background-color: #ecfdf5;
+      background-color: var(--color-success-bg);
       border: 1px solid #10b981;
       color: #065f46;
     }
 
     .error-banner {
-      background-color: #fef2f2;
+      background-color: var(--color-error-bg);
       border: 1px solid var(--color-secondary-ao);
-      color: #991b1b;
+      color: var(--color-error);
     }
 
     .banner .icon {
@@ -130,10 +130,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 
     .btn-secondary {
       background: none;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--color-border);
       color: var(--color-text-main);
       padding: 0.5rem 1rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-size: 0.875rem;
       font-weight: 500;
       cursor: pointer;
@@ -141,7 +141,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     }
 
     .btn-secondary:hover:not(:disabled) {
-      background-color: #f1f5f9;
+      background-color: var(--color-hover);
     }
 
     .btn-secondary:disabled {

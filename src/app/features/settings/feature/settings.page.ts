@@ -129,7 +129,7 @@ import { ThemeService, Theme } from '../../../core/theme/theme.service';
     .theme-select {
       padding: 0.6rem 2.5rem 0.6rem 1rem;
       border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       background-color: var(--color-surface);
       color: var(--color-text-main);
       font-family: inherit;

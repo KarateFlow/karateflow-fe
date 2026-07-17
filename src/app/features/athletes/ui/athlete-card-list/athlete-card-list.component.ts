@@ -64,7 +64,7 @@ import { Athlete } from '../../data-access/athlete.model';
     .athlete-card {
       background: var(--color-surface);
       border-radius: var(--radius-xl);
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--color-border);
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
@@ -90,12 +90,12 @@ import { Athlete } from '../../data-access/athlete.model';
     .profile-placeholder {
       width: 64px;
       height: 64px;
-      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      background: linear-gradient(135deg, var(--color-hover) 0%, var(--color-border) 100%);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid white;
+      border: 2px solid var(--color-surface);
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
@@ -112,8 +112,8 @@ import { Athlete } from '../../data-access/athlete.model';
       text-transform: uppercase;
       padding: 0.25rem 0.5rem;
       border-radius: 20px;
-      background: #f1f5f9;
-      color: #64748b;
+      background: var(--color-hover);
+      color: var(--color-text-muted);
     }
 
     .status-badge.active {
@@ -152,15 +152,15 @@ import { Athlete } from '../../data-access/athlete.model';
     .card-footer {
       margin-top: auto;
       padding-top: 1rem;
-      border-top: 1px solid #f1f5f9;
+      border-top: 1px solid var(--color-border);
     }
 
     .btn-details {
       width: 100%;
       background: transparent;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--color-border);
       padding: 0.6rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-size: 0.875rem;
       font-weight: 600;
       color: var(--color-text-main);
@@ -190,8 +190,8 @@ import { Athlete } from '../../data-access/athlete.model';
       grid-column: 1 / -1;
       text-align: center;
       padding: 4rem;
-      background: #f8fafc;
-      border: 2px dashed #e2e8f0;
+      background: var(--color-bg-canvas);
+      border: 2px dashed var(--color-border);
       border-radius: var(--radius-xl);
       color: var(--color-text-muted);
     }

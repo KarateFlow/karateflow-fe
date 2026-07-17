@@ -485,18 +485,18 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .control-panel {
-      background: white;
+      background: var(--color-surface);
       border-radius: var(--radius-xl);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
       padding: 1.5rem;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--color-border);
       margin-bottom: 2rem;
     }
 
     .tabs-navigation {
       display: flex;
       gap: 0.5rem;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--color-border);
       padding-bottom: 0.75rem;
       margin-bottom: 1.25rem;
     }
@@ -512,18 +512,18 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       transition: all 0.2s;
     }
 
     .tab-btn:hover {
-      background-color: #f1f5f9;
+      background-color: var(--color-hover);
       color: var(--color-text-main);
     }
 
     .tab-btn.active {
       color: var(--color-primary-aka);
-      background-color: #eff6ff;
+      background-color: var(--color-hover);
     }
 
     .form-container {
@@ -557,12 +557,12 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     .form-select,
     .form-input {
       padding: 0.625rem 0.85rem;
-      border: 1px solid #cbd5e1;
-      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
       font-family: var(--font-sans);
       font-size: 0.95rem;
       color: var(--color-text-main);
-      background-color: white;
+      background-color: var(--color-surface);
       outline: none;
       transition: all 0.2s;
       width: 100%;
@@ -581,7 +581,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       font-weight: 700;
       font-size: 0.95rem;
       padding: 0.65rem 1.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       cursor: pointer;
       transition: all 0.2s;
       box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.15);
@@ -614,7 +614,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     .spinner {
       width: 32px;
       height: 32px;
-      border: 3px solid #e2e8f0;
+      border: 3px solid var(--color-border);
       border-top: 3px solid var(--color-primary-aka);
       border-radius: 50%;
       animation: spin 1s linear infinite;
@@ -625,9 +625,9 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .error-panel {
-      background-color: #fef2f2;
-      border: 1px solid #fecdd3;
-      color: #991b1b;
+      background-color: var(--color-error-bg);
+      border: 1px solid var(--color-error);
+      color: var(--color-error);
       padding: 1rem 1.5rem;
       border-radius: var(--radius-xl);
       margin-bottom: 2rem;
@@ -706,10 +706,10 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .overall-card {
-      background: white;
+      background: var(--color-surface);
       border-radius: var(--radius-xl);
       padding: 1.5rem;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--color-border);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
       display: flex;
       flex-direction: column;
@@ -728,25 +728,25 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .overall-card.positive {
-      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-      border-color: #bbf7d0;
+      background: linear-gradient(135deg, var(--color-success-bg) 0%, #ffffff 100%);
+      border-color: var(--color-success);
     }
     .overall-card.positive::before {
-      background: #22c55e;
+      background: var(--color-success);
     }
     .overall-card.positive .overall-value {
-      color: #15803d;
+      color: var(--color-success);
     }
 
     .overall-card.negative {
-      background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
-      border-color: #fecdd3;
+      background: linear-gradient(135deg, var(--color-error-bg) 0%, #ffffff 100%);
+      border-color: var(--color-error);
     }
     .overall-card.negative::before {
-      background: #ef4444;
+      background: var(--color-error);
     }
     .overall-card.negative .overall-value {
-      color: #b91c1c;
+      color: var(--color-error);
     }
 
     .overall-label {
@@ -783,10 +783,10 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .stat-item {
-      background: white;
+      background: var(--color-surface);
       border-radius: var(--radius-xl);
       padding: 1.25rem;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--color-border);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
       display: flex;
       align-items: center;
@@ -796,7 +796,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     .stat-icon {
       width: 40px;
       height: 40px;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -822,19 +822,19 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .item-improved .stat-icon {
-      background-color: #f0fdf4;
-      color: #22c55e;
+      background-color: var(--color-success-bg);
+      color: var(--color-success);
     }
     .item-worsened .stat-icon {
-      background-color: #fef2f2;
-      color: #ef4444;
+      background-color: var(--color-error-bg);
+      color: var(--color-error);
     }
     .item-stable .stat-icon {
-      background-color: #f8fafc;
-      color: #64748b;
+      background-color: var(--color-bg-canvas);
+      color: var(--color-text-muted);
     }
     .item-na .stat-icon {
-      background-color: #f1f5f9;
+      background-color: var(--color-hover);
       color: #94a3b8;
     }
 
@@ -846,9 +846,9 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .table-container {
-      background: white;
+      background: var(--color-surface);
       border-radius: var(--radius-xl);
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--color-border);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
       overflow: hidden;
     }
@@ -857,9 +857,9 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       font-size: 1.125rem;
       font-weight: 800;
       padding: 1.25rem 1.5rem;
-      background: #f8fafc;
+      background: var(--color-bg-canvas);
       color: var(--color-text-main);
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--color-border);
     }
 
     .subtitle {
@@ -881,19 +881,19 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .report-table th {
-      background: #f8fafc;
+      background: var(--color-bg-canvas);
       text-align: left;
       padding: 0.85rem 1rem;
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--color-text-muted);
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--color-border);
     }
 
     .report-table td {
       padding: 0.9rem 1rem;
-      border-bottom: 1px solid #f1f5f9;
+      border-bottom: 1px solid var(--color-border);
     }
 
     .report-table tr:last-child td {
@@ -907,11 +907,11 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .clickable-row:hover:not(.disabled-row) {
-      background-color: #f8fafc;
+      background-color: var(--color-bg-canvas);
     }
 
     .clickable-row.selected {
-      background-color: #eff6ff;
+      background-color: var(--color-hover);
     }
 
     .clickable-row.disabled-row {
@@ -927,11 +927,11 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     .unit { color: var(--color-text-muted); font-size: 0.85rem; font-weight: 500; margin-left: 0.2rem; }
 
     .val-pos {
-      color: #16a34a;
+      color: var(--color-success);
     }
 
     .val-neg {
-      color: #dc2626;
+      color: var(--color-error);
     }
 
     /* Chart Navigation controls with arrows */
@@ -939,8 +939,8 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #f8fafc;
-      border-bottom: 1px solid #e2e8f0;
+      background: var(--color-bg-canvas);
+      border-bottom: 1px solid var(--color-border);
       padding-right: 1.5rem;
       border-top-left-radius: var(--radius-xl);
       border-top-right-radius: var(--radius-xl);
@@ -955,10 +955,10 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       display: flex;
       align-items: center;
       gap: 1rem;
-      background: white;
-      border: 1px solid #cbd5e1;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       padding: 0.35rem 0.75rem;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-xl);
       box-shadow: 0 1px 2px rgba(0,0,0,0.02);
     }
 
@@ -971,12 +971,12 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       align-items: center;
       justify-content: center;
       padding: 0.25rem;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-xl);
       transition: all 0.2s;
     }
 
     .nav-arrow-btn:hover:not(:disabled) {
-      background-color: #f1f5f9;
+      background-color: var(--color-hover);
       color: var(--color-primary-aka);
     }
 
@@ -995,18 +995,18 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .chart-panel {
-      background: white;
+      background: var(--color-surface);
       border-radius: var(--radius-xl);
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--color-border);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
       overflow: hidden;
     }
 
     /* Sidebar selector as bottom grid */
     .sidebar-selector {
-      background: white;
+      background: var(--color-surface);
       border-radius: var(--radius-xl);
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--color-border);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
       overflow: hidden;
       padding-bottom: 1.5rem;
@@ -1020,9 +1020,9 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .trend-select-card {
-      background: white;
-      border: 1px solid #cbd5e1;
-      border-radius: var(--radius-lg);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
       width: 100%;
       text-align: left;
       padding: 1rem;
@@ -1033,11 +1033,11 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
 
     .trend-select-card:hover {
       border-color: var(--color-primary-aka);
-      background-color: #f8fafc;
+      background-color: var(--color-bg-canvas);
     }
 
     .trend-select-card.active {
-      background-color: #eff6ff;
+      background-color: var(--color-hover);
       border-color: var(--color-primary-aka);
       box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1);
     }
@@ -1050,7 +1050,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .badge {
-      background: #e2e8f0;
+      background: var(--color-border);
       color: var(--color-text-muted);
       padding: 0.15rem 0.5rem;
       border-radius: var(--radius-full);
@@ -1067,7 +1067,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     .empty-state {
       text-align: center;
       padding: 4rem 2rem;
-      background: white;
+      background: var(--color-surface);
       border: 2px dashed #cbd5e1;
       border-radius: var(--radius-xl);
       color: var(--color-text-muted);
@@ -1089,9 +1089,9 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
 
     .chart-placeholder {
       height: 250px;
-      background: #f8fafc;
+      background: var(--color-bg-canvas);
       border: 1px dashed #cbd5e1;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1103,8 +1103,8 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
 
     .inline-table {
       margin: 1.5rem;
-      border-radius: var(--radius-lg);
-      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
     }
 
     .report-header-actions {
@@ -1113,7 +1113,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       align-items: center;
       margin-bottom: 1.5rem;
       padding-bottom: 1.5rem;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--color-border);
     }
 
     .report-title {
@@ -1140,7 +1140,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       font-size: 0.875rem;
       cursor: pointer;
       padding: 0.625rem 1.25rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       transition: all 0.2s;
       box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
     }
@@ -1160,11 +1160,11 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .badge-saved {
-      background-color: #ecfdf5;
-      color: #047857;
-      border: 1px solid #a7f3d0;
+      background-color: var(--color-success-bg);
+      color: var(--color-success);
+      border: 1px solid var(--color-success);
       padding: 0.625rem 1.25rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-size: 0.875rem;
       font-weight: 700;
       display: inline-flex;
@@ -1190,9 +1190,9 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .btn-pdf-export {
-      background-color: white;
+      background-color: var(--color-surface);
       color: var(--color-text-main);
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--color-border);
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -1200,13 +1200,13 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       font-size: 0.875rem;
       cursor: pointer;
       padding: 0.625rem 1.25rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       transition: all 0.2s;
       box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
 
     .btn-pdf-export:hover:not(:disabled) {
-      background-color: #f8fafc;
+      background-color: var(--color-bg-canvas);
       border-color: #94a3b8;
     }
 
@@ -1638,10 +1638,10 @@ export class ReportDashboardComponent {
         
         // Colors & Settings
         const primaryColor = [37, 99, 235]; // RGB #2563EB
-        const textColorMain = [30, 41, 59]; // RGB #1E293B
-        const textColorMuted = [100, 116, 139]; // RGB #64748B
-        const lightBg = [248, 250, 252]; // RGB #F8FAFC
-        const borderCol = [226, 232, 240]; // RGB #E2E8F0
+        const textColorMain = [30, 41, 59]; // RGB var(--color-text-main)
+        const textColorMuted = [100, 116, 139]; // RGB var(--color-text-muted)
+        const lightBg = [248, 250, 252]; // RGB var(--color-bg-canvas)
+        const borderCol = [226, 232, 240]; // RGB var(--color-border)
 
         let pageNum = 1;
         const addHeaderAndFooter = () => {
@@ -1730,7 +1730,7 @@ export class ReportDashboardComponent {
           pdf.text(labelText, 19, 65);
 
           if (stats.overallImprovement > 0) {
-            pdf.setTextColor(4, 120, 87); // Green #047857
+            pdf.setTextColor(4, 120, 87); // Green var(--color-success)
           } else if (stats.overallImprovement < 0) {
             pdf.setTextColor(190, 18, 60); // Red #be123c
           } else {
@@ -1956,7 +1956,7 @@ export class ReportDashboardComponent {
             } else if (isStab) {
               pdf.setTextColor(120, 120, 120);
             } else if (isImp) {
-              pdf.setTextColor(4, 120, 87); // Green #047857
+              pdf.setTextColor(4, 120, 87); // Green var(--color-success)
             } else {
               pdf.setTextColor(190, 18, 60); // Red #be123c
             }

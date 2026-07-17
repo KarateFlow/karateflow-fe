@@ -184,20 +184,20 @@ export function noFutureDateValidator(): ValidatorFn {
       font-weight: 600;
       cursor: pointer;
       padding: 0.5rem;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-xl);
       transition: all 0.2s;
     }
 
     .btn-back:hover {
       color: var(--color-primary-aka);
-      background-color: #f1f5f9;
+      background-color: var(--color-hover);
     }
 
     .session-details {
-      background: white;
+      background: var(--color-surface);
       padding: 2rem;
       border-radius: var(--radius-xl);
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--color-border);
       margin-bottom: 2rem;
     }
 
@@ -224,16 +224,16 @@ export function noFutureDateValidator(): ValidatorFn {
 
     input, textarea, select {
       padding: 0.75rem;
-      border: 1px solid #cbd5e1;
-      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
       font-family: inherit;
-      background-color: white;
+      background-color: var(--color-surface);
       transition: border-color 0.2s;
     }
 
     input.invalid {
-      border-color: #ef4444;
-      background-color: #fff1f2;
+      border-color: var(--color-error);
+      background-color: var(--color-error-bg);
     }
 
     .exercises-section {
@@ -259,7 +259,7 @@ export function noFutureDateValidator(): ValidatorFn {
       color: white;
       border: none;
       padding: 0.6rem 1.25rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
@@ -273,24 +273,24 @@ export function noFutureDateValidator(): ValidatorFn {
     .empty-state {
       text-align: center;
       padding: 3rem;
-      background: #f8fafc;
-      border: 2px dashed #e2e8f0;
+      background: var(--color-bg-canvas);
+      border: 2px dashed var(--color-border);
       border-radius: var(--radius-xl);
       color: var(--color-text-muted);
       transition: all 0.2s;
     }
 
     .empty-state.error {
-      border-color: #fca5a5;
-      background-color: #fff1f2;
-      color: #b91c1c;
+      border-color: var(--color-error);
+      background-color: var(--color-error-bg);
+      color: var(--color-error);
     }
 
     .form-actions {
       display: flex;
       justify-content: center;
       padding: 2rem 0;
-      border-top: 1px solid #e2e8f0;
+      border-top: 1px solid var(--color-border);
     }
 
     .btn-save {
@@ -318,16 +318,16 @@ export function noFutureDateValidator(): ValidatorFn {
 
     .error-msg {
       font-size: 0.75rem;
-      color: #ef4444;
+      color: var(--color-error);
       font-weight: 600;
     }
 
     .validation-error-banner {
-      background: #fef2f2;
-      border: 1px solid #fee2e2;
-      color: #b91c1c;
+      background: var(--color-error-bg);
+      border: 1px solid var(--color-error-bg);
+      color: var(--color-error);
       padding: 1rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       margin-top: 1rem;
       font-weight: 600;
       text-align: center;
@@ -339,7 +339,7 @@ export function noFutureDateValidator(): ValidatorFn {
       gap: 1rem;
       padding: 1rem;
       margin-bottom: 1.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       position: relative;
       animation: slideIn 0.3s ease-out;
     }
@@ -350,9 +350,9 @@ export function noFutureDateValidator(): ValidatorFn {
     }
 
     .error-banner {
-      background-color: #fef2f2;
+      background-color: var(--color-error-bg);
       border: 1px solid var(--color-secondary-ao);
-      color: #991b1b;
+      color: var(--color-error);
     }
 
     .banner .icon {

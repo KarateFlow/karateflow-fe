@@ -121,10 +121,10 @@ export interface ChartDataPoint {
     }
 
     .bar-track {
-      background: #f1f5f9;
+      background: var(--color-hover);
       width: 40px;
       height: 130px;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       position: relative;
       overflow: visible;
       margin-bottom: 0.5rem;
@@ -134,7 +134,7 @@ export interface ChartDataPoint {
       width: 100%;
       position: absolute;
       bottom: 0;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       justify-content: center;
@@ -153,10 +153,10 @@ export interface ChartDataPoint {
     .bar-tooltip {
       position: absolute;
       top: -30px;
-      background: #0f172a;
+      background: var(--color-text-main);
       color: white;
       padding: 0.25rem 0.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-size: 0.75rem;
       font-weight: 700;
       white-space: nowrap;
@@ -179,9 +179,9 @@ export interface ChartDataPoint {
       align-items: center;
       justify-content: center;
       padding: 1.5rem;
-      background: #f8fafc;
-      border-radius: var(--radius-lg);
-      border: 1px solid #f1f5f9;
+      background: var(--color-bg-canvas);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
       text-align: center;
     }
 
@@ -192,11 +192,11 @@ export interface ChartDataPoint {
     }
 
     .delta-val.positive {
-      color: #16a34a;
+      color: var(--color-success);
     }
 
     .delta-val.negative {
-      color: #dc2626;
+      color: var(--color-error);
     }
 
     /* Line Chart SVG styling */
@@ -211,7 +211,7 @@ export interface ChartDataPoint {
     }
 
     .grid-line {
-      stroke: #f1f5f9;
+      stroke: var(--color-hover);
       stroke-width: 1;
     }
 
@@ -237,7 +237,7 @@ export interface ChartDataPoint {
     }
 
     .chart-point {
-      fill: white;
+      fill: var(--color-surface);
       stroke: var(--color-primary-aka);
       stroke-width: 3;
       transition: r 0.2s ease;
