@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, resource, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { ToastService } from '../../../../shared/ui/toast/toast.service';
 import { firstValueFrom } from 'rxjs';
 import { ReportsApiService } from '../../data-access/reports-api.service';
 import { ReportResponse } from '../../data-access/reports.model';
@@ -341,6 +342,7 @@ export class SavedReportsListComponent {
   viewReport = output<ReportResponse>();
 
   private readonly reportsApi = inject(ReportsApiService);
+  private readonly toastService = inject(ToastService);
 
   protected readonly reportsResource = resource({
     loader: () => firstValueFrom(this.reportsApi.getReportsByAthlete(this.athleteId())),
@@ -418,7 +420,7 @@ export class SavedReportsListComponent {
         },
         error: (err) => {
           console.error('Failed to delete report', err);
-          alert('Impossibile eliminare il report. Riprova più tardi.');
+          this.toastService.error('Impossibile eliminare il report. Riprova più tardi.');
           this.reportToDelete.set(null);
         }
       });
