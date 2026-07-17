@@ -134,7 +134,7 @@ import { TestResponse } from '../../data-access/test.model';
     }
 
     .count-badge {
-      background: #f1f5f9;
+      background: var(--color-hover);
       color: var(--color-text-muted);
       padding: 0.25rem 0.75rem;
       border-radius: var(--radius-full);
@@ -145,8 +145,8 @@ import { TestResponse } from '../../data-access/test.model';
     .empty-history {
       text-align: center;
       padding: 4rem 2rem;
-      background: #f8fafc;
-      border: 2px dashed #e2e8f0;
+      background: var(--color-bg-canvas);
+      border: 2px dashed var(--color-border);
       border-radius: var(--radius-xl);
       color: var(--color-text-muted);
     }
@@ -163,9 +163,9 @@ import { TestResponse } from '../../data-access/test.model';
     }
 
     .session-card {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: var(--radius-lg);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
       overflow: hidden;
       transition: all 0.2s;
     }
@@ -190,7 +190,7 @@ import { TestResponse } from '../../data-access/test.model';
     }
 
     .session-summary:focus-visible {
-      background: #f1f5f9;
+      background: var(--color-hover);
       box-shadow: inset 0 0 0 2px var(--color-primary-aka);
     }
 
@@ -238,8 +238,8 @@ import { TestResponse } from '../../data-access/test.model';
 
     .session-detail {
       padding: 0 1.5rem 1.5rem;
-      border-top: 1px solid #f1f5f9;
-      background: #fafcfe;
+      border-top: 1px solid var(--color-border);
+      background: var(--color-bg-canvas);
       animation: slideDown 0.3s ease-out;
     }
 
@@ -251,7 +251,7 @@ import { TestResponse } from '../../data-access/test.model';
     .notes {
       margin: 1rem 0;
       padding: 1rem;
-      background: white;
+      background: var(--color-surface);
       border-left: 4px solid var(--color-secondary-ao);
       border-radius: 0 var(--radius-md) var(--radius-md) 0;
       font-size: 0.9rem;
@@ -263,9 +263,9 @@ import { TestResponse } from '../../data-access/test.model';
     }
 
     .exercises-table-container {
-      background: white;
-      border-radius: var(--radius-md);
-      border: 1px solid #e2e8f0;
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
       overflow: hidden;
     }
 
@@ -276,19 +276,19 @@ import { TestResponse } from '../../data-access/test.model';
     }
 
     .exercises-table th {
-      background: #f8fafc;
+      background: var(--color-bg-canvas);
       text-align: left;
       padding: 0.75rem 1rem;
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--color-text-muted);
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--color-border);
     }
 
     .exercises-table td {
       padding: 0.75rem 1rem;
-      border-bottom: 1px solid #f1f5f9;
+      border-bottom: 1px solid var(--color-border);
     }
 
     .exercises-table tr:last-child td {
@@ -305,12 +305,12 @@ import { TestResponse } from '../../data-access/test.model';
       font-weight: 700;
       padding: 0.2rem 0.5rem;
       border-radius: var(--radius-full);
-      background: #fef2f2;
-      color: #991b1b;
+      background: var(--color-error-bg);
+      color: var(--color-error);
     }
 
     .trend-tag.higher {
-      background: #f0fdf4;
+      background: var(--color-success-bg);
       color: #166534;
     }
 
@@ -353,7 +353,7 @@ import { TestResponse } from '../../data-access/test.model';
       font-size: 0.875rem;
       font-weight: 700;
       padding: 0.5rem 1rem;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-xl);
       transition: all 0.2s;
       box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1);
     }

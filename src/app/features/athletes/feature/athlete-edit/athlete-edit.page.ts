@@ -128,21 +128,21 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       font-weight: 600;
       cursor: pointer;
       padding: 0.5rem;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-xl);
       transition: all 0.2s;
     }
 
     .btn-back:hover {
       color: var(--color-primary-aka);
-      background-color: #f1f5f9;
+      background-color: var(--color-hover);
     }
 
     .edit-card {
-      background: white;
+      background: var(--color-surface);
       border-radius: var(--radius-xl);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
       padding: 2rem;
-      border: 1px solid #f1f5f9;
+      border: 1px solid var(--color-border);
     }
 
     .readonly-section {
@@ -163,13 +163,13 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
 
     .info-item p {
       font-weight: 600;
-      color: #64748b;
+      color: var(--color-text-muted);
       margin: 0;
     }
 
     .divider {
       border: 0;
-      border-top: 1px solid #f1f5f9;
+      border-top: 1px solid var(--color-border);
       margin: 2rem 0;
     }
 
@@ -193,8 +193,8 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
 
     input, textarea {
       padding: 0.75rem;
-      border: 1px solid #cbd5e1;
-      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
       font-family: inherit;
       font-size: 1rem;
       transition: all 0.2s;
@@ -217,7 +217,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       color: white;
       border: none;
       padding: 0.75rem 2rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
@@ -241,7 +241,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     .spinner {
       width: 40px;
       height: 40px;
-      border: 3px solid #f1f5f9;
+      border: 3px solid var(--color-hover);
       border-top: 3px solid var(--color-primary-aka);
       border-radius: 50%;
       animation: spin 1s linear infinite;

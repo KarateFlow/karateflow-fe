@@ -135,8 +135,8 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
     }
 
     .btn-refresh {
-      background-color: white;
-      border: 1px solid #e2e8f0;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
       color: var(--color-text-main);
       display: flex;
       align-items: center;
@@ -145,13 +145,13 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
       font-size: 0.875rem;
       cursor: pointer;
       padding: 0.5rem 1rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       transition: all 0.2s;
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     }
 
     .btn-refresh:hover {
-      background-color: #f8fafc;
+      background-color: var(--color-bg-canvas);
       border-color: var(--color-primary-aka);
       color: var(--color-primary-aka);
     }
@@ -163,21 +163,15 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
     }
 
     .report-card {
-      background: white;
+      background: var(--color-surface);
       border-radius: var(--radius-xl);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
       padding: 1.25rem;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--color-border);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       transition: all 0.2s;
-    }
-
-    .report-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
-      border-color: #cbd5e1;
     }
 
     .card-header {
@@ -188,11 +182,11 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
     }
 
     .report-badge {
-      background-color: #eff6ff;
+      background-color: var(--color-hover);
       color: #1e40af;
       border: 1px solid #bfdbfe;
       padding: 0.25rem 0.5rem;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-xl);
       font-size: 0.75rem;
       font-weight: 700;
     }
@@ -209,9 +203,9 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
     }
 
     .report-details {
-      background-color: #f8fafc;
+      background-color: var(--color-bg-canvas);
       padding: 0.85rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
@@ -239,7 +233,7 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
     .card-actions {
       display: flex;
       gap: 0.75rem;
-      border-top: 1px solid #f1f5f9;
+      border-top: 1px solid var(--color-border);
       padding-top: 1rem;
     }
 
@@ -251,7 +245,7 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
       justify-content: center;
       gap: 0.35rem;
       padding: 0.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-size: 0.825rem;
       font-weight: 700;
       cursor: pointer;
@@ -259,7 +253,7 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
     }
 
     .btn-view {
-      background-color: #eff6ff;
+      background-color: var(--color-hover);
       color: var(--color-primary-aka);
     }
 
@@ -268,15 +262,9 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
       color: white;
     }
 
-    .btn-delete {
-      background-color: #fff1f2;
-      color: #be123c;
-    }
+    .btn-delete { background-color: transparent; border: 1px solid var(--color-error); color: var(--color-error); display: flex; align-items: center; gap: 0.5rem; font-weight: 700; cursor: pointer; padding: 0.75rem 2rem; border-radius: var(--radius-xl); transition: all 0.2s; }
 
-    .btn-delete:hover {
-      background-color: #be123c;
-      color: white;
-    }
+    .btn-delete:hover { background-color: var(--color-error); color: white; transform: translateY(-1px); }
 
     .loading-state {
       display: flex;
@@ -290,7 +278,7 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
     .spinner {
       width: 40px;
       height: 40px;
-      border: 3px solid #f1f5f9;
+      border: 3px solid var(--color-hover);
       border-top: 3px solid var(--color-primary-aka);
       border-radius: 50%;
       animation: spin 1s linear infinite;
@@ -301,27 +289,27 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
     }
 
     .error-banner {
-      background-color: #fff1f2;
-      border: 1px solid #fecdd3;
+      background-color: var(--color-error-bg);
+      border: 1px solid var(--color-error);
       padding: 2rem;
       border-radius: var(--radius-xl);
       text-align: center;
-      color: #9f1239;
+      color: var(--color-error);
     }
 
     .btn-retry {
       margin-top: 1rem;
-      background: white;
-      border: 1px solid #fda4af;
+      background: var(--color-surface);
+      border: 1px solid var(--color-error);
       padding: 0.5rem 1.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
-      color: #9f1239;
+      color: var(--color-error);
       cursor: pointer;
     }
 
     .empty-state {
-      background-color: white;
+      background-color: var(--color-surface);
       border: 2px dashed #cbd5e1;
       border-radius: var(--radius-xl);
       padding: 3rem 2rem;

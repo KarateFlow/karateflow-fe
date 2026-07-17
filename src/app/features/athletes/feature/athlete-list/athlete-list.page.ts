@@ -103,7 +103,7 @@ import { Athlete } from '../../data-access/athlete.model';
       color: white;
       padding: 0.875rem 1.5rem;
       border: none;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
       font-size: 0.9rem;
       cursor: pointer;
@@ -140,7 +140,7 @@ import { Athlete } from '../../data-access/athlete.model';
       position: absolute;
       width: 100%;
       height: 100%;
-      border: 4px solid #f1f5f9;
+      border: 4px solid var(--color-hover);
       border-top: 4px solid var(--color-primary-aka);
       border-radius: 50%;
       animation: spin 1s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
@@ -173,9 +173,9 @@ import { Athlete } from '../../data-access/athlete.model';
     }
 
     .error-banner {
-      background-color: #fff1f2;
-      border: 1px solid #fecdd3;
-      color: #9f1239;
+      background-color: var(--color-error-bg);
+      border: 1px solid var(--color-error);
+      color: var(--color-error);
     }
 
     .error-icon {
@@ -185,13 +185,13 @@ import { Athlete } from '../../data-access/athlete.model';
 
     .retry-btn {
       margin-left: auto;
-      background: white;
-      border: 1px solid #fda4af;
+      background: var(--color-surface);
+      border: 1px solid var(--color-error);
       padding: 0.5rem 1rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-size: 0.875rem;
       font-weight: 700;
-      color: #9f1239;
+      color: var(--color-error);
       cursor: pointer;
       transition: all 0.2s;
     }

@@ -89,7 +89,7 @@ import { RecordAthleteRequest } from '../../data-access/athlete.model';
       background: var(--color-surface);
       padding: 1.5rem;
       border-radius: var(--radius-xl);
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--color-border);
     }
 
     .form-grid {
@@ -122,8 +122,8 @@ import { RecordAthleteRequest } from '../../data-access/athlete.model';
 
     input, textarea {
       padding: 0.625rem;
-      border: 1px solid #cbd5e1;
-      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
       font-family: inherit;
       font-size: 0.875rem;
       transition: border-color 0.2s ease;
@@ -156,7 +156,7 @@ import { RecordAthleteRequest } from '../../data-access/athlete.model';
       color: white;
       padding: 0.75rem 1.5rem;
       border: none;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;

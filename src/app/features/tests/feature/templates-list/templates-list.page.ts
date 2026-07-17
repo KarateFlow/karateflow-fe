@@ -340,14 +340,14 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       font-weight: 600;
       cursor: pointer;
       padding: 0.5rem;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-xl);
       transition: all 0.2s;
       margin-bottom: 1rem;
     }
 
     .btn-back:hover {
       color: var(--color-primary-aka);
-      background-color: #f1f5f9;
+      background-color: var(--color-hover);
     }
 
     .header-main {
@@ -385,7 +385,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       color: white;
       padding: 0.75rem 1.5rem;
       border: none;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
       font-size: 0.9rem;
       cursor: pointer;
@@ -410,8 +410,8 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     }
 
     .template-card {
-      background: white;
-      border: 1px solid #e2e8f0;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       border-radius: var(--radius-xl);
       overflow: hidden;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -450,12 +450,12 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     }
 
     .badge {
-      background-color: #f1f5f9;
+      background-color: var(--color-hover);
       color: var(--color-text-muted);
       font-size: 0.75rem;
       font-weight: 700;
       padding: 0.2rem 0.6rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       white-space: nowrap;
     }
 
@@ -469,8 +469,8 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
 
     /* Form Styles */
     .template-form {
-      background: white;
-      border: 1px solid #e2e8f0;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       border-radius: var(--radius-xl);
       padding: 2rem;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -500,8 +500,8 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
 
     input[type="text"], textarea, select {
       padding: 0.75rem;
-      border: 1px solid #cbd5e1;
-      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
       font-family: inherit;
       font-size: 0.95rem;
       transition: border-color 0.2s;
@@ -513,12 +513,12 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     }
 
     input.invalid {
-      border-color: #ef4444;
-      background-color: #fff1f2;
+      border-color: var(--color-error);
+      background-color: var(--color-error-bg);
     }
 
     .exercises-section {
-      border-top: 1px solid #f1f5f9;
+      border-top: 1px solid var(--color-border);
       padding-top: 2rem;
       margin-bottom: 2rem;
     }
@@ -542,7 +542,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       color: white;
       border: none;
       padding: 0.6rem 1.25rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
@@ -556,16 +556,16 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     .empty-exercises-state {
       text-align: center;
       padding: 2rem;
-      background: #f8fafc;
-      border: 2px dashed #e2e8f0;
-      border-radius: var(--radius-lg);
+      background: var(--color-bg-canvas);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-xl);
       color: var(--color-text-muted);
     }
 
     .empty-exercises-state.error {
-      border-color: #fca5a5;
-      background-color: #fff1f2;
-      color: #b91c1c;
+      border-color: var(--color-error);
+      background-color: var(--color-error-bg);
+      color: var(--color-error);
     }
 
     /* Inline Exercise Row */
@@ -575,9 +575,9 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       gap: 1rem;
       align-items: flex-end;
       padding: 1rem;
-      background: #f8fafc;
-      border-radius: var(--radius-lg);
-      border: 1px solid #e2e8f0;
+      background: var(--color-bg-canvas);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
       margin-bottom: 0.75rem;
     }
 
@@ -622,10 +622,10 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     }
 
     .btn-icon {
-      background: white;
-      border: 1px solid #e2e8f0;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       padding: 0.5rem;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-xl);
       cursor: pointer;
       color: var(--color-text-muted);
       transition: all 0.2s;
@@ -637,9 +637,9 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     }
 
     .btn-icon.delete:hover {
-      border-color: #ef4444;
-      color: #ef4444;
-      background: #fef2f2;
+      border-color: var(--color-error);
+      color: var(--color-error);
+      background: var(--color-error-bg);
     }
 
     .form-actions {
@@ -647,7 +647,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
-      border-top: 1px solid #f1f5f9;
+      border-top: 1px solid var(--color-border);
       padding-top: 1.5rem;
       margin-top: 2rem;
     }
@@ -659,19 +659,19 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     }
 
     .btn-delete-form {
-      background: white;
-      border: 1px solid #fee2e2;
-      color: #ef4444;
+      background: var(--color-surface);
+      border: 1px solid var(--color-error-bg);
+      color: var(--color-error);
       padding: 0.75rem 1.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .btn-delete-form:hover {
-      background: #fef2f2;
-      border-color: #fca5a5;
+      background: var(--color-error-bg);
+      border-color: var(--color-error);
     }
 
     .btn-save {
@@ -679,7 +679,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       color: white;
       border: none;
       padding: 0.75rem 2rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
@@ -695,27 +695,27 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     }
 
     .btn-cancel {
-      background: white;
-      border: 1px solid #cbd5e1;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       color: var(--color-text-muted);
       padding: 0.75rem 2rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .btn-cancel:hover {
-      background: #f8fafc;
+      background: var(--color-bg-canvas);
       color: var(--color-text-main);
     }
 
     .validation-error-banner {
-      background: #fef2f2;
-      border: 1px solid #fee2e2;
-      color: #b91c1c;
+      background: var(--color-error-bg);
+      border: 1px solid var(--color-error-bg);
+      color: var(--color-error);
       padding: 1rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       margin-top: 1rem;
       font-weight: 600;
       text-align: center;
@@ -723,7 +723,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
 
     .error-msg {
       font-size: 0.75rem;
-      color: #ef4444;
+      color: var(--color-error);
       font-weight: 600;
     }
 
@@ -734,8 +734,8 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       align-items: center;
       justify-content: center;
       padding: 4rem 2rem;
-      background: white;
-      border: 1px solid #e2e8f0;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       border-radius: var(--radius-xl);
       text-align: center;
     }
@@ -757,11 +757,11 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     }
 
     .btn-secondary {
-      background: white;
+      background: var(--color-surface);
       border: 1px solid var(--color-primary-aka);
       color: var(--color-primary-aka);
       padding: 0.75rem 1.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
@@ -774,7 +774,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     .spinner {
       width: 40px;
       height: 40px;
-      border: 3px solid #f1f5f9;
+      border: 3px solid var(--color-hover);
       border-top: 3px solid var(--color-primary-aka);
       border-radius: 50%;
       animation: spin 1s linear infinite;
@@ -791,7 +791,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       gap: 1rem;
       padding: 1rem;
       margin-bottom: 1.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       position: relative;
       animation: slideIn 0.3s ease-out;
     }
@@ -802,9 +802,9 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     }
 
     .error-banner {
-      background-color: #fef2f2;
+      background-color: var(--color-error-bg);
       border: 1px solid var(--color-secondary-ao);
-      color: #991b1b;
+      color: var(--color-error);
     }
 
     .banner .icon {
@@ -838,20 +838,20 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     }
 
     .btn-retry {
-      background: white;
-      border: 1px solid #fda4af;
+      background: var(--color-surface);
+      border: 1px solid var(--color-error);
       padding: 0.5rem 1.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
-      color: #9f1239;
+      color: var(--color-error);
       cursor: pointer;
       margin-top: 1rem;
     }
 
     /* Detail View Styles */
     .detail-exercises-section {
-      background: white;
-      border: 1px solid #e2e8f0;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       border-radius: var(--radius-xl);
       padding: 2rem;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -863,7 +863,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       font-weight: 700;
       color: var(--color-text-main);
       margin-bottom: 1.5rem;
-      border-bottom: 1px solid #f1f5f9;
+      border-bottom: 1px solid var(--color-border);
       padding-bottom: 1rem;
     }
 
@@ -878,9 +878,9 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
       justify-content: space-between;
       align-items: center;
       padding: 1rem;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: var(--radius-lg);
+      background: var(--color-bg-canvas);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
     }
 
     .ex-info {
@@ -913,19 +913,19 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     .spec-badge {
       font-size: 0.8rem;
       font-weight: 700;
-      background: #e2e8f0;
+      background: var(--color-border);
       color: var(--color-text-muted);
       padding: 0.3rem 0.75rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
     }
 
     .spec-badge.trend {
-      background: #fef2f2;
-      color: #991b1b;
+      background: var(--color-error-bg);
+      color: var(--color-error);
     }
 
     .spec-badge.trend.higher {
-      background: #f0fdf4;
+      background: var(--color-success-bg);
       color: #166534;
     }
 
@@ -935,19 +935,19 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
     }
 
     .btn-secondary.danger {
-      border-color: #fee2e2;
-      color: #ef4444;
-      background: white;
+      border-color: var(--color-error-bg);
+      color: var(--color-error);
+      background: var(--color-surface);
       padding: 0.75rem 1.5rem;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .btn-secondary.danger:hover {
-      background: #fef2f2;
-      border-color: #fca5a5;
+      background: var(--color-error-bg);
+      border-color: var(--color-error);
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

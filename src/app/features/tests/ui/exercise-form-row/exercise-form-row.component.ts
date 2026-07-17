@@ -79,9 +79,9 @@ import { MeasurementUnit } from '../../data-access/test.model';
       gap: 1rem;
       align-items: flex-end;
       padding: 1rem;
-      background: #f8fafc;
-      border-radius: var(--radius-lg);
-      border: 1px solid #e2e8f0;
+      background: var(--color-bg-canvas);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
       margin-bottom: 0.75rem;
     }
 
@@ -109,20 +109,20 @@ import { MeasurementUnit } from '../../data-access/test.model';
 
     input, select {
       padding: 0.5rem;
-      border: 1px solid #cbd5e1;
-      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
       font-size: 0.875rem;
       transition: all 0.2s;
     }
 
     input.invalid, select.invalid {
-      border-color: #ef4444;
-      background-color: #fff1f2;
+      border-color: var(--color-error);
+      background-color: var(--color-error-bg);
     }
 
     .error-text {
       font-size: 0.7rem;
-      color: #ef4444;
+      color: var(--color-error);
       font-weight: 600;
       margin-top: 0.1rem;
     }
@@ -153,10 +153,10 @@ import { MeasurementUnit } from '../../data-access/test.model';
     }
 
     .btn-icon {
-      background: white;
-      border: 1px solid #e2e8f0;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
       padding: 0.4rem;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-xl);
       cursor: pointer;
       color: var(--color-text-muted);
       transition: all 0.2s;
@@ -168,9 +168,9 @@ import { MeasurementUnit } from '../../data-access/test.model';
     }
 
     .btn-icon.delete:hover {
-      border-color: #ef4444;
-      color: #ef4444;
-      background: #fef2f2;
+      border-color: var(--color-error);
+      color: var(--color-error);
+      background: var(--color-error-bg);
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
