@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, resource } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, resource, signal, computed } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -64,9 +64,20 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state.c
           <button actions routerLink="../new" class="btn-primary">Aggiungi Atleta</button>
         </app-empty-state>
       } @else {
+        <section class="list-actions">
+          <div class="search-container">
+            <span class="search-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <input type="text" placeholder="Cerca atleta..." [value]="searchTerm()" (input)="onSearch($event)" class="search-input" />
+          </div>
+        </section>
         <section class="list-section">
           <app-athlete-card-list 
-            [athletes]="athletesResource.value() ?? []" 
+            [athletes]="filteredAthletes()" 
             (view)="onViewAthlete($event)"
           />
         </section>
@@ -96,6 +107,53 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state.c
       .btn-primary {
         width: 100%;
         justify-content: center;
+      }
+    }
+
+    .list-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 2rem;
+    }
+
+    .search-container {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-muted);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="text"].search-input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      background-color: var(--color-surface);
+      color: var(--color-text-main);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    input[type="text"].search-input:focus {
+      outline: none;
+      border-color: var(--color-primary-aka);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    @media (max-width: 640px) {
+      .search-container {
+        max-width: 100%;
       }
     }
 
@@ -223,6 +281,23 @@ export class AthleteListPage {
   protected readonly athletesResource = resource({
     loader: () => firstValueFrom(this.athletesApi.getAthletes()),
   });
+
+  protected readonly searchTerm = signal<string>('');
+
+  protected readonly filteredAthletes = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+    const athletes = this.athletesResource.value() ?? [];
+    if (!term) return athletes;
+    return athletes.filter(a => {
+      const name = `${a.firstName} ${a.lastName}`.toLowerCase();
+      return name.includes(term);
+    });
+  });
+
+  protected onSearch(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.searchTerm.set(target.value);
+  }
 
   protected onViewAthlete(athlete: Athlete): void {
     this.router.navigate(['/athletes', athlete.athleteId]);

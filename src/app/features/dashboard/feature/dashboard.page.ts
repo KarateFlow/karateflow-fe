@@ -392,7 +392,7 @@ export class DashboardPage {
 
             resolve({ ...data, comparisonDates });
           });
-        }, 600);
+        }, 100);
       });
     }
   });
