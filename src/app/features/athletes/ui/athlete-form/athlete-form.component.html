@@ -1,0 +1,88 @@
+<form [formGroup]="athleteForm" (ngSubmit)="onSubmit()" class="athlete-form">
+      <div class="avatar-section">
+        <label for="avatarUpload" class="avatar-upload-label">
+          @if (avatarPreview()) {
+            <img [src]="avatarPreview()" alt="Avatar Preview" class="avatar-image" />
+            <div class="hover-overlay">
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+            </div>
+          } @else {
+            <div class="avatar-placeholder">
+              <span class="initials">{{ getInitials() }}</span>
+              <div class="hover-overlay">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+              </div>
+            </div>
+          }
+          <input type="file" id="avatarUpload" accept="image/*" class="hidden-input" (change)="onFileSelected($event)" />
+        </label>
+        <div class="avatar-hint">
+          <p class="font-bold">Foto Profilo</p>
+          <p class="text-sm">Clicca per caricare un'immagine. (Anteprima locale)</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <app-ui-input
+          formControlName="firstName"
+          id="firstName"
+          label="Nome"
+          placeholder="Es. Gichin"
+          [invalid]="isInvalid('firstName')"
+          errorMessage="Il nome è obbligatorio"
+        />
+
+        <app-ui-input
+          formControlName="lastName"
+          id="lastName"
+          label="Cognome"
+          placeholder="Es. Funakoshi"
+          [invalid]="isInvalid('lastName')"
+          errorMessage="Il cognome è obbligatorio"
+        />
+
+        <app-ui-input
+          formControlName="birthDate"
+          id="birthDate"
+          type="date"
+          label="Data di Nascita"
+          [invalid]="isInvalid('birthDate')"
+          errorMessage="La data di nascita è obbligatoria"
+        />
+
+        <app-ui-input
+          formControlName="referenceContact"
+          id="referenceContact"
+          label="Contatto di Riferimento (Opzionale)"
+          placeholder="Es. Genitore, Email o Telefono"
+        />
+      </div>
+
+      <div class="form-group full-width">
+        <label for="medicalNotes">Note Mediche (Opzionale)</label>
+        <textarea
+          id="medicalNotes"
+          formControlName="medicalNotes"
+          rows="3"
+          placeholder="Es. Allergie, infortuni pregressi..."
+        ></textarea>
+      </div>
+
+      <div class="form-actions">
+        <app-ui-button 
+          type="submit" 
+          variant="primary"
+          [disabled]="athleteForm.invalid || isSubmitting()"
+          [loading]="isSubmitting()"
+          loadingText="Caricamento..."
+        >
+          Registra Atleta
+        </app-ui-button>
+      </div>
+    </form>

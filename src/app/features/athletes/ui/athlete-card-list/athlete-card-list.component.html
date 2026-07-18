@@ -1,0 +1,46 @@
+<div class="card-grid">
+      @for (athlete of athletes(); track athlete.athleteId) {
+        <article 
+          class="athlete-card" 
+          (click)="view.emit(athlete)"
+          (keydown.enter)="view.emit(athlete)"
+          (keydown.space)="view.emit(athlete)"
+          role="button"
+          tabindex="0"
+        >
+          <div class="card-header">
+            <div class="profile-placeholder">
+              <span class="initials">{{ getInitials(athlete) }}</span>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <h3 class="athlete-name">{{ athlete.firstName }} {{ athlete.lastName }}</h3>
+            <div class="athlete-info">
+              <div class="info-item">
+                <span class="label">Nascita:</span>
+                <span class="value">{{ athlete.birthDate | date }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Contatto:</span>
+                <span class="value">{{ athlete.referenceContact || 'Non specificato' }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card-footer">
+            <button class="btn-details">
+              Vedi Profilo
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="arrow-icon">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+        </article>
+      } @empty {
+        <div class="empty-state">
+          <p>Nessun atleta registrato nel sistema.</p>
+        </div>
+      }
+    </div>

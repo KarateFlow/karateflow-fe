@@ -1,0 +1,264 @@
+.page-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .page-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .athlete-info h1 {
+      margin: 1rem 0 0.25rem;
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--color-text-main);
+    }
+
+    .athlete-info p {
+      color: var(--color-text-muted);
+      font-size: 1.1rem;
+    }
+
+
+
+    .session-info-card, .session-details {
+      background: var(--color-surface);
+      padding: 2rem;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
+      margin-bottom: 2rem;
+    }
+
+    .info-grid, .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .info-grid, .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+
+    .info-group p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--color-text-main);
+      margin: 0;
+    }
+
+    .notes-section {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .notes-section .label {
+      margin-bottom: 0.75rem;
+    }
+
+    .notes-content {
+      background-color: #fafcfe;
+      border-left: 4px solid var(--color-secondary-ao);
+      padding: 1.25rem 1.5rem;
+      border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+      color: var(--color-text-main);
+      line-height: 1.6;
+    }
+
+    .exercises-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-text-main);
+      margin: 0;
+    }
+
+    .count-badge {
+      background: var(--color-hover);
+      color: var(--color-text-muted);
+      padding: 0.4rem 1rem;
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-width: 2.5rem;
+    }
+
+    .exercises-table-container {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
+      overflow-x: auto;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .exercises-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .exercises-table th {
+      background: var(--color-bg-canvas);
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .exercises-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .exercises-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .text-right { text-align: right !important; }
+    .font-bold { font-weight: 700; color: var(--color-text-main); }
+    .result-val { font-size: 1.1rem; font-weight: 800; color: var(--color-primary-aka); }
+    .unit { color: var(--color-text-muted); font-weight: 600; }
+
+    .truncate-text {
+      display: inline-block;
+      max-width: 150px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+    }
+
+    .trend-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-full);
+      background: var(--color-error-bg);
+      color: var(--color-error);
+    }
+
+    .trend-tag.higher {
+      background: var(--color-success-bg);
+      color: #166534;
+    }
+
+    .page-actions, .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--color-border);
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .page-actions, .form-actions {
+        flex-direction: column-reverse;
+      }
+      .page-actions button, .form-actions button {
+        width: 100%;
+        justify-content: center;
+      }
+      .exercises-table thead {
+        display: none;
+      }
+      .exercises-table, .exercises-table tbody, .exercises-table tr, .exercises-table td {
+        display: block;
+        width: 100%;
+      }
+      .exercises-table tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 0.5rem 1rem;
+      }
+      .exercises-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right !important;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--color-border);
+      }
+      .exercises-table td:last-child {
+        border-bottom: none;
+      }
+      .exercises-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--color-text-muted);
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        text-align: left;
+      }
+    }
+
+
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      background: var(--color-bg-canvas);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-xl);
+      color: var(--color-text-muted);
+    }
+
+    .empty-state.error {
+      border-color: var(--color-error);
+      background-color: var(--color-error-bg);
+      color: var(--color-error);
+    }
+
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4rem 0;
+      gap: 1.5rem;
+      color: var(--color-text-muted);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--color-hover);
+      border-top: 3px solid var(--color-primary-aka);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-banner {
+      background-color: var(--color-error-bg);
+      border: 1px solid var(--color-error);
+      padding: 2rem;
+      border-radius: var(--radius-xl);
+      text-align: center;
+    }

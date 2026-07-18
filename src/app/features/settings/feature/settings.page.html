@@ -1,0 +1,27 @@
+<div class="page-container">
+      <header class="page-header">
+        <h1>Impostazioni</h1>
+        <p>Gestisci le preferenze del tuo account e dell'applicazione.</p>
+      </header>
+
+      <section class="settings-section">
+        <div class="section-header">
+          <h2>Aspetto</h2>
+          <p>Personalizza l'interfaccia utente</p>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="themeSelect">Tema dell'Applicazione</label>
+            <span class="setting-desc">Scegli tra tema chiaro, scuro o segui le impostazioni di sistema.</span>
+          </div>
+          <div class="setting-control">
+            <app-ui-select id="themeSelect" [ngModel]="themeService.currentTheme()" (ngModelChange)="onThemeChange($event)">
+              <option value="light">Chiaro</option>
+              <option value="dark">Scuro</option>
+              <option value="system">Sistema</option>
+            </app-ui-select>
+          </div>
+        </div>
+      </section>
+    </div>

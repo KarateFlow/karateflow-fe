@@ -1,0 +1,73 @@
+<div class="chart-container">
+      @if (chartType() === 'bar') {
+        <!-- Grouped Bar Chart for A vs B Comparison -->
+        <div class="bar-chart-layout">
+          <div class="bar-wrapper">
+            <div class="bar-col">
+              <div class="bar-track">
+                <div class="bar-fill value-a" [style.height.%]="barHeightA()">
+                  <span class="bar-tooltip">{{ resultA() | number:'1.0-2' }}{{ unit() }}</span>
+                </div>
+              </div>
+              <span class="bar-label font-mono text-xs">Test A</span>
+              <span class="bar-date text-xs text-muted">{{ dateA() | date }}</span>
+            </div>
+
+            <div class="bar-col">
+              <div class="bar-track">
+                <div class="bar-fill value-b" [style.height.%]="barHeightB()">
+                  <span class="bar-tooltip">{{ resultB() | number:'1.0-2' }}{{ unit() }}</span>
+                </div>
+              </div>
+              <span class="bar-label font-mono text-xs">Test B</span>
+              <span class="bar-date text-xs text-muted">{{ dateB() | date }}</span>
+            </div>
+          </div>
+          
+          <div class="delta-summary">
+            <span class="text-xs text-muted uppercase tracking-wider font-bold">Variazione</span>
+            <div class="delta-val" [class.positive]="isPositiveChange()" [class.negative]="!isPositiveChange()">
+              {{ deltaValFormatted() }}
+            </div>
+          </div>
+        </div>
+      } @else {
+        <!-- SVG Line Chart for Trend -->
+        @if (linePoints().length === 0) {
+          <div class="empty-chart">Nessun dato per tracciare il grafico</div>
+        } @else {
+          <div class="svg-wrapper">
+            <svg viewBox="0 0 500 240" class="trend-svg" width="100%" height="100%">
+              <!-- Grid Lines -->
+              @for (yVal of gridYLines(); track $index) {
+                <line x1="40" [attr.y1]="yVal.y" x2="480" [attr.y2]="yVal.y" class="grid-line" />
+                <text x="35" [attr.y]="yVal.y + 4" class="y-axis-label">{{ yVal.value | number:'1.0-1' }}</text>
+              }
+
+              <!-- The Line Path -->
+              <path [attr.d]="svgPath()" fill="none" class="chart-path" stroke-width="3" stroke-linecap="round" />
+              <!-- Area under line -->
+              <path [attr.d]="svgAreaPath()" class="chart-area-fill" />
+
+              <!-- Data Points and Interactive Hover Zones -->
+              @for (pt of svgPoints(); track $index) {
+                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="5" class="chart-point" />
+                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="14" class="chart-point-trigger">
+                  <title>{{ pt.label }} ({{ pt.date | date }})</title>
+                </circle>
+              }
+            </svg>
+
+            <!-- X Axis Labels (Dates) -->
+            <div class="x-axis-labels">
+              @for (pt of svgPoints(); track $index) {
+                <div class="x-label-item" [style.left.%]="pt.leftPct">
+                  <span class="x-date">{{ pt.date | date }}</span>
+                  <span class="x-val">{{ pt.value | number:'1.0-1' }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      }
+    </div>

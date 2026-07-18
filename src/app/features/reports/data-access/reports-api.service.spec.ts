@@ -4,7 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
-import { environment } from '../../../../environments/environment';
+// environment not needed for relative url test
 import { ReportPreviewRequest, ReportPreviewResponse } from './reports.model';
 import { ReportsApiService } from './reports-api.service';
 
@@ -17,7 +17,7 @@ try {
 describe('ReportsApiService', () => {
   let service: ReportsApiService;
   let httpMock: HttpTestingController;
-  const apiUrl = `${environment.apiUrl}/reports/preview`;
+  const apiUrl = `/reports/preview`;
 
   beforeEach(() => {
     TestBed.resetTestingModule();

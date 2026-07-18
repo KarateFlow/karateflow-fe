@@ -1,0 +1,152 @@
+.page-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .page-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .athlete-info h1 {
+      margin: 1rem 0 0.25rem;
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--color-text-main);
+    }
+
+    .athlete-info p {
+      color: var(--color-text-muted);
+      font-size: 1.1rem;
+    }
+
+
+
+    .session-details {
+      background: var(--color-surface);
+      padding: 2rem;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
+      margin-bottom: 2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+
+    .exercises-section {
+      margin-bottom: 3rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      }
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      background: var(--color-bg-canvas);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-xl);
+      color: var(--color-text-muted);
+      transition: all 0.2s;
+    }
+
+    .empty-state.error {
+      border-color: var(--color-error);
+      background-color: var(--color-error-bg);
+      color: var(--color-error);
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: center;
+      padding: 2rem 0;
+      border-top: 1px solid var(--color-border);
+    }
+
+
+
+    .validation-error-banner {
+      background: var(--color-error-bg);
+      border: 1px solid var(--color-error-bg);
+      color: var(--color-error);
+      padding: 1rem;
+      border-radius: var(--radius-xl);
+      margin-top: 1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: var(--radius-xl);
+      position: relative;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .error-banner {
+      background-color: var(--color-error-bg);
+      border: 1px solid var(--color-secondary-ao);
+      color: var(--color-error);
+    }
+
+    .banner .icon {
+      font-size: 1.25rem;
+    }
+
+    .banner .content strong {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .banner .content p {
+      font-size: 0.875rem;
+      margin: 0;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.5;
+    }
+
+    .close-btn:hover {
+      opacity: 1;
+    }

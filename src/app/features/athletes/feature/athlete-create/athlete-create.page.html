@@ -1,0 +1,16 @@
+<div class="page-container">
+      <header class="page-header">
+        <h1>Registrazione Nuovo Atleta</h1>
+        <p>Inserisci i dati anagrafici e medici dell'atleta per inserirlo nel sistema.</p>
+      </header>
+
+      <section class="form-section">
+        <app-athlete-form [isSubmitting]="isSubmitting()" (save)="onSave($event)" />
+      </section>
+
+      <div class="page-actions">
+        <button class="btn-secondary" (click)="goBack()" [disabled]="isSubmitting()">
+          Annulla e Torna Indietro
+        </button>
+      </div>
+    </div>

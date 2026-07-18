@@ -1,0 +1,14 @@
+<header class="md:hidden h-16 bg-surface border-b border-border flex items-center justify-between px-4 z-20">
+  <a routerLink="/" class="text-xl font-bold text-text-main flex items-center gap-2">
+    <img src="assets/icons/Karate-flow-logo.png" alt="KarateFlow Logo" class="h-8 w-8">
+    <span><span class="text-primary-aka">Karate</span>Flow</span>
+  </a>
+  <button (click)="onToggle()" class="p-2 -mr-2 text-text-muted hover:bg-hover rounded-md focus:outline-none">
+    @if (!isMobileMenuOpen) {
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    }
+    @if (isMobileMenuOpen) {
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    }
+  </button>
+</header>

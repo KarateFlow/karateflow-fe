@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
+// API calls will be intercepted by api.interceptor.ts
 import { Athlete, RecordAthleteRequest, UpdateAthleteRequest } from './athlete.model';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { Athlete, RecordAthleteRequest, UpdateAthleteRequest } from './athlete.m
 })
 export class AthletesApiService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/athletes`;
+  private readonly apiUrl = `/athletes`;
 
   /**
    * Retrieves the list of all athletes in the system.

@@ -1,0 +1,186 @@
+<div class="page-container" [class.wide]="activeSection() !== 'history'">
+      <header class="page-header">
+        <button routerLink="/athletes" class="btn-back">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Torna all'elenco
+        </button>
+
+        @if (athleteResource.status() === 'resolved') {
+          @let athlete = athleteResource.value()!;
+          <div class="header-actions">
+            <button [routerLink]="['/athletes', athlete.athleteId, 'tests', 'new']" class="btn-test">
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="12" y1="18" x2="12" y2="12"></line>
+                <line x1="9" y1="15" x2="15" y2="15"></line>
+              </svg>
+              Nuovo Test
+            </button>
+            <button [routerLink]="['/athletes', athlete.athleteId, 'edit']" class="btn-edit">
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+              Modifica Dati
+            </button>
+          </div>
+        }
+      </header>
+
+      @if (athleteResource.isLoading()) {
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Caricamento profilo atleta...</p>
+        </div>
+      } @else if (athleteResource.error()) {
+        <div class="error-banner">
+          <strong>Errore nel caricamento</strong>
+          <p>Impossibile recuperare i dettagli dell'atleta. Riprova più tardi.</p>
+          <button (click)="athleteResource.reload()" class="btn-retry">Riprova</button>
+        </div>
+      } @else if (athleteResource.value(); as athlete) {
+        <article class="profile-card">
+          <div class="profile-header">
+            <label for="avatarUploadDetail" class="avatar-upload-label">
+              @if (avatarPreview()) {
+                <img [src]="avatarPreview()" alt="Avatar Preview" class="avatar-image" />
+                <div class="hover-overlay">
+                  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                  </svg>
+                </div>
+              } @else {
+                <div class="avatar-placeholder">
+                  {{ athlete.firstName[0] }}{{ athlete.lastName[0] }}
+                  <div class="hover-overlay">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                      <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                  </div>
+                </div>
+              }
+              <input type="file" id="avatarUploadDetail" accept="image/*" class="hidden-input" (change)="onFileSelected($event)" />
+            </label>
+            <div class="profile-info">
+              <h1>{{ athlete.firstName }} {{ athlete.lastName }}</h1>
+              <p class="id-tag">ID: {{ athlete.athleteId }}</p>
+            </div>
+          </div>
+
+          <div class="profile-grid">
+            <div class="info-group">
+              <span class="label">Data di Nascita</span>
+              <p>{{ athlete.birthDate | date }}</p>
+            </div>
+            <div class="info-group">
+              <span class="label">Contatto di Riferimento</span>
+              <p>{{ athlete.referenceContact || 'Non specificato' }}</p>
+            </div>
+            <div class="info-group">
+              <span class="label">Data Registrazione</span>
+              <p>{{ athlete.createdAt | date }}</p>
+            </div>
+          </div>
+
+          @if (athlete.medicalNotes) {
+            <div class="notes-section">
+              <span class="label">Note Mediche</span>
+              <div class="notes-content">
+                {{ athlete.medicalNotes }}
+              </div>
+            </div>
+          }
+        </article>
+
+        <div class="section-tabs">
+          <button 
+            type="button" 
+            class="section-tab-btn" 
+            [class.active]="activeSection() === 'history'"
+            (click)="activeSection.set('history')"
+          >
+            Storico Test
+          </button>
+          <button 
+            type="button" 
+            class="section-tab-btn" 
+            [class.active]="activeSection() === 'reports'"
+            (click)="activeSection.set('reports')"
+          >
+            Analisi & Confronti
+          </button>
+          <button 
+            type="button" 
+            class="section-tab-btn" 
+            [class.active]="activeSection() === 'saved-reports'"
+            (click)="activeSection.set('saved-reports'); selectedSavedReport.set(null)"
+          >
+            Report Salvati
+          </button>
+        </div>
+
+        <section class="performance-section">
+          @if (activeSection() === 'history') {
+            @if (testsResource.isLoading()) {
+              <div class="loading-state mini">
+                <div class="spinner small"></div>
+                <p>Caricamento storico test...</p>
+              </div>
+            } @else {
+              <app-athlete-tests-list [tests]="testsResource.value() ?? []" />
+            }
+          } @else if (activeSection() === 'reports') {
+            @if (testsResource.isLoading()) {
+              <div class="loading-state mini">
+                <div class="spinner small"></div>
+                <p>Caricamento storico test...</p>
+              </div>
+            } @else {
+              <app-report-dashboard 
+                [athleteId]="athlete.athleteId" 
+                [athlete]="athlete"
+                [tests]="testsResource.value() ?? []"
+                (reportSaved)="onReportSaved()"
+              />
+            }
+          } @else {
+            @if (testsResource.isLoading()) {
+              <div class="loading-state mini">
+                <div class="spinner small"></div>
+                <p>Caricamento storico test...</p>
+              </div>
+            } @else {
+              @if (selectedSavedReport(); as saved) {
+                <div class="saved-report-viewer">
+                  <button type="button" class="btn-back-to-list" (click)="selectedSavedReport.set(null)">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    Torna all'elenco dei report salvati
+                  </button>
+                  <app-report-dashboard
+                    [athleteId]="athlete.athleteId"
+                    [athlete]="athlete"
+                    [tests]="testsResource.value() ?? []"
+                    [savedReport]="saved"
+                  />
+                </div>
+              } @else {
+                <app-saved-reports-list
+                  #savedReportsList
+                  [athleteId]="athlete.athleteId"
+                  [tests]="testsResource.value() ?? []"
+                  (viewReport)="selectedSavedReport.set($event)"
+                />
+              }
+            }
+          }
+        </section>
+      }
+    </div>

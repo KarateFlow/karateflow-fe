@@ -1,0 +1,18 @@
+<div class="widget-card">
+  <div class="widget-header">
+    <div class="icon-wrapper" [class]="iconBgClass">
+      <ng-content></ng-content>
+    </div>
+    <h3>{{ title }}</h3>
+  </div>
+  <div class="widget-body">
+    <span class="stat-value">{{ value }}</span>
+  </div>
+  <div class="widget-footer">
+    @if (footerLink) {
+      <a [routerLink]="footerLink" class="quick-link">{{ footerText }} &rarr;</a>
+    } @else if (footerText) {
+      <span class="quick-link text-muted pointer-events-none" style="text-decoration: none; cursor: default;">{{ footerText }} &rarr;</span>
+    }
+  </div>
+</div>

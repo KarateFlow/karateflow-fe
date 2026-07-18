@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
+// API calls will be intercepted by api.interceptor.ts
 import { CreateTestTemplateRequest, TestTemplateResponse, UpdateTestTemplateRequest } from './test.model';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { CreateTestTemplateRequest, TestTemplateResponse, UpdateTestTemplateRequ
 })
 export class TemplatesApiService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/templates`;
+  private readonly apiUrl = `/templates`;
 
   createTemplate(request: CreateTestTemplateRequest): Observable<TestTemplateResponse> {
     return this.http.post<TestTemplateResponse>(this.apiUrl, request);

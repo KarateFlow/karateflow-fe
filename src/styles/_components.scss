@@ -1,0 +1,23 @@
+/* Global Interactive Cards (Athlete Card Style) */
+.overall-card, .table-container, .trend-select-card, .template-card, .test-card, .session-detail, .exercise-form-row, .chart-navigation, .report-card {
+  border: 1px solid var(--color-border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.overall-card:hover, .table-container:hover, .trend-select-card:hover, .template-card:hover, .test-card:hover, .session-detail:hover, .exercise-form-row:hover, .clickable-row:hover:not(.disabled-row), .chart-navigation:hover, .report-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary-aka) !important;
+}
+
+/* Specific buttons with border */
+.btn-secondary, .btn-cancel, .btn-pdf-export, .btn-back-to-list {
+  border: 1px solid var(--color-border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-secondary:hover, .btn-cancel:hover, .btn-pdf-export:hover, .btn-delete:hover, .btn-back-to-list:hover {
+  border-color: var(--color-primary-aka);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+}

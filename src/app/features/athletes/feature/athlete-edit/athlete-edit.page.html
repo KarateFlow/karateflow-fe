@@ -1,0 +1,77 @@
+<div class="page-container">
+      <header class="page-header">
+        <button [routerLink]="['/athletes', athleteId()]" class="btn-back">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Annulla e torna al profilo
+        </button>
+        <h1>Modifica Atleta</h1>
+      </header>
+
+      <div class="edit-card">
+      @if (isLoading) {
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Caricamento dati atleta in corso...</p>
+        </div>
+      } @else if (error) {
+        <div class="error-state">
+          <p>Impossibile caricare i dati dell'atleta. Riprova più tardi.</p>
+        </div>
+      } @else if (athlete) {
+        <div class="athlete-form-container">
+          <!-- Sezione in sola lettura -->
+          <div class="readonly-section">
+            <div class="info-item">
+              <span class="label">Nome</span>
+              <p>{{ athlete.firstName }}</p>
+            </div>
+            <div class="info-item">
+              <span class="label">Cognome</span>
+              <p>{{ athlete.lastName }}</p>
+            </div>
+            <div class="info-item">
+              <span class="label">Data di Nascita</span>
+              <p>{{ athlete.birthDate | date }}</p>
+            </div>
+          </div>
+
+          <hr class="divider" />
+
+          <!-- Form Editabile -->
+          <form [formGroup]="editForm" (ngSubmit)="onPreSubmit()" class="edit-form">
+            <app-ui-input
+              formControlName="referenceContact"
+              label="Contatto di Riferimento"
+              placeholder="Es. Genitore, Telefono o Email"
+            ></app-ui-input>
+
+            <app-ui-textarea
+              formControlName="medicalNotes"
+              label="Note Mediche"
+              placeholder="Es. Allergie, infortuni, certificati..."
+              [rows]="4"
+            ></app-ui-textarea>
+
+            <div class="form-actions">
+              <app-ui-button type="submit" variant="primary" [disabled]="editForm.pristine || isSubmitting()" [loading]="isSubmitting()">
+                Salva Modifiche
+              </app-ui-button>
+            </div>
+          </form>
+        </div>
+      }
+    </div>
+
+    <!-- Modale di Conferma Custom -->
+    <app-confirm-dialog
+      [isOpen]="showConfirm()"
+      title="Conferma Modifica"
+      message="Sei sicuro di voler aggiornare i dati dell'atleta? L'operazione non può essere annullata."
+      confirmText="Sì, salva"
+      cancelText="Torna indietro"
+      (confirmed)="onConfirmSave()"
+      (cancelled)="showConfirm.set(false)"
+    />

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
+// API calls will be intercepted by api.interceptor.ts
 import { ReportPreviewRequest, ReportPreviewResponse, ReportSaveRequest, ReportResponse } from './reports.model';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { ReportPreviewRequest, ReportPreviewResponse, ReportSaveRequest, ReportR
 })
 export class ReportsApiService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/reports`;
+  private readonly apiUrl = `/reports`;
 
   /**
    * Generates a preview comparison or trend report for an athlete.
