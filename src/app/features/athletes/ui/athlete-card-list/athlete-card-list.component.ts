@@ -27,7 +27,7 @@ import { Athlete } from '../../data-access/athlete.model';
             <div class="athlete-info">
               <div class="info-item">
                 <span class="label">Nascita:</span>
-                <span class="value">{{ athlete.birthDate | date: 'dd/MM/yyyy' }}</span>
+                <span class="value">{{ athlete.birthDate | date }}</span>
               </div>
               <div class="info-item">
                 <span class="label">Contatto:</span>

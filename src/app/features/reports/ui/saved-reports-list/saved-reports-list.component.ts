@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, resource, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { firstValueFrom } from 'rxjs';
 import { ReportsApiService } from '../../data-access/reports-api.service';
 import { ReportResponse } from '../../data-access/reports.model';
 import { TestResponse } from '../../../tests/data-access/test.model';
-import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-saved-reports-list',
@@ -56,7 +56,7 @@ import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/con
                   <span class="report-badge">
                     {{ report.payload.analysisType === 'COMPARISON' ? 'Confronto A vs B' : 'Trend Temporale' }}
                   </span>
-                  <span class="card-date">{{ report.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+                  <span class="card-date">{{ report.createdAt | date }}</span>
                 </div>
                 
                 <div class="card-body">

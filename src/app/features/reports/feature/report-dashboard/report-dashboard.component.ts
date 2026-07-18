@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { FormsModule } from '@angular/forms';
 import { TestResponse } from '../../../tests/data-access/test.model';
 import { ReportsApiService } from '../../data-access/reports-api.service';
@@ -29,7 +29,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
               <polyline points="7 3 7 8 15 8"></polyline>
             </svg>
             <span>
-              Report storico salvato il <strong>{{ saved.createdAt | date:'dd/MM/yyyy HH:mm' }}</strong>
+              Report storico salvato il <strong>{{ saved.createdAt | date }}</strong>
             </span>
           </div>
           <span class="report-type-badge">
@@ -74,7 +74,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
                     <option value="">-- Seleziona Test A --</option>
                     @for (test of tests(); track test.id) {
                       <option [value]="test.id">
-                        {{ test.executionDate | date:'dd/MM/yyyy HH:mm' }} - {{ test.type || 'Sessione Standard' }} ({{ test.exercises.length }} es)
+                        {{ test.executionDate | date }} - {{ test.type || 'Sessione Standard' }} ({{ test.exercises.length }} es)
                       </option>
                     }
                   </select>
@@ -86,7 +86,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
                     <option value="">-- Seleziona Test B --</option>
                     @for (test of tests(); track test.id) {
                       <option [value]="test.id" [disabled]="test.id === testIdA()">
-                        {{ test.executionDate | date:'dd/MM/yyyy HH:mm' }} - {{ test.type || 'Sessione Standard' }} ({{ test.exercises.length }} es)
+                        {{ test.executionDate | date }} - {{ test.type || 'Sessione Standard' }} ({{ test.exercises.length }} es)
                       </option>
                     }
                   </select>
@@ -426,7 +426,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
                       <tbody>
                         @for (dp of activeTrend.dataPoints; track $index) {
                           <tr>
-                            <td class="text-left">{{ dp.date | date:'dd/MM/yyyy HH:mm' }}</td>
+                            <td class="text-left">{{ dp.date | date }}</td>
                             <td class="text-right font-bold text-primary">
                               {{ dp.result | number:'1.0-2' }} <span class="unit">{{ activeTrend.unit.toLowerCase() }}</span>
                             </td>

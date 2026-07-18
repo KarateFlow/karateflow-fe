@@ -5,14 +5,15 @@ import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule
 import { firstValueFrom } from 'rxjs';
 import { TemplatesApiService } from '../../data-access/templates-api.service';
 import { CreateTestTemplateRequest, MeasurementUnit, TestTemplateResponse, UpdateTestTemplateRequest } from '../../data-access/test.model';
-import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
-import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/breadcrumb.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
+import { EmptyStateComponent } from '../../../../shared/components/empty-state.component';
 
 @Component({
   selector: 'app-templates-list',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, ConfirmDialogComponent],
+  imports: [RouterLink, ReactiveFormsModule, ConfirmDialogComponent, EmptyStateComponent],
   template: `
     <div class="page-container">
       <!-- HEADER CONDIZIONALE A SECONDA DELLO STATO -->
@@ -71,12 +72,12 @@ import { ToastService } from '../../../../shared/ui/toast/toast.service';
           </div>
         } @else {
           <!-- LISTA / GENERAL HEADER -->
-          <button routerLink="/athletes" class="btn-back">
+          <button routerLink="/" class="btn-back">
             <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
-            Torna agli Atleti
+            Torna alla Home
           </button>
           <div class="header-main">
             <div class="title-section">
@@ -109,12 +110,18 @@ import { ToastService } from '../../../../shared/ui/toast/toast.service';
         @if (!isEditing() && !isCreating() && !isViewingDetail()) {
           <!-- LISTA DEI TEMPLATE -->
           @if ((templatesResource.value() ?? []).length === 0) {
-            <div class="empty-state">
-              <div class="empty-icon">📋</div>
-              <h3>Nessun template configurato</h3>
-              <p>Crea il tuo primo template di test per velocizzare l'inserimento dei dati degli atleti.</p>
-              <button (click)="startCreate()" class="btn-secondary">Crea Template</button>
-            </div>
+            <app-empty-state 
+              title="Nessun template configurato" 
+              message="Crea il tuo primo template di test per velocizzare l'inserimento dei dati degli atleti.">
+              <svg icon xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <button actions (click)="startCreate()" class="btn-primary">Crea Template</button>
+            </app-empty-state>
           } @else {
             <div class="templates-grid">
               @for (template of templatesResource.value(); track template.id) {

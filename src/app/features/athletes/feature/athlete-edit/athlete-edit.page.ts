@@ -3,10 +3,10 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { DatePipe } from '@angular/common';
-import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/breadcrumb.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-athlete-edit',
@@ -48,7 +48,7 @@ import { ToastService } from '../../../../shared/ui/toast/toast.service';
             </div>
             <div class="info-item">
               <span class="label">Data di Nascita</span>
-              <p>{{ athlete.birthDate | date:'dd/MM/yyyy' }}</p>
+              <p>{{ athlete.birthDate | date }}</p>
             </div>
           </section>
 

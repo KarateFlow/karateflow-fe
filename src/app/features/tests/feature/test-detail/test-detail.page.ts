@@ -7,9 +7,9 @@ import { AthletesApiService } from '../../../athletes/data-access/athletes-api.s
 import { TestsApiService } from '../../data-access/tests-api.service';
 import { MeasurementUnit, TestResponse, UpdateTestRequest } from '../../data-access/test.model';
 import { ExerciseFormRowComponent } from '../../ui/exercise-form-row/exercise-form-row.component';
-import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
-import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/breadcrumb.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-test-detail',
@@ -52,7 +52,7 @@ import { ToastService } from '../../../../shared/ui/toast/toast.service';
             <div class="info-grid">
               <div class="info-group">
                 <span class="label">Data Esecuzione</span>
-                <p>{{ test.executionDate | date:'dd/MM/yyyy HH:mm' }}</p>
+                <p>{{ test.executionDate | date }}</p>
               </div>
               <div class="info-group">
                 <span class="label">Tipologia Sessione</span>
@@ -60,7 +60,7 @@ import { ToastService } from '../../../../shared/ui/toast/toast.service';
               </div>
               <div class="info-group">
                 <span class="label">Data Registrazione</span>
-                <p>{{ test.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+                <p>{{ test.createdAt | date }}</p>
               </div>
             </div>
 
@@ -133,7 +133,7 @@ import { ToastService } from '../../../../shared/ui/toast/toast.service';
               <div class="form-grid">
                 <div class="form-group">
                   <label for="executionDateReadOnly">Data Esecuzione (Non Modificabile)</label>
-                  <input id="executionDateReadOnly" type="text" [value]="test.executionDate | date:'dd/MM/yyyy HH:mm'" disabled class="input-disabled" />
+                  <input id="executionDateReadOnly" type="text" [value]="test.executionDate | date" disabled class="input-disabled" />
                 </div>
                 
                 <div class="form-group">

@@ -18,7 +18,13 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'athletes',
+    loadComponent: () =>
+      import('./features/dashboard/feature/dashboard.page').then((m) => m.DashboardPage),
     pathMatch: 'full',
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./core/ui/not-found.page').then((m) => m.NotFoundPageComponent),
   },
 ];

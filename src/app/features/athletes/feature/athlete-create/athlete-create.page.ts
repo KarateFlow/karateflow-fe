@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { Router } from '@angular/router';
 import { RecordAthleteRequest } from '../../data-access/athlete.model';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { AthleteFormComponent } from '../../ui/athlete-form/athlete-form.component';
 import { HttpErrorResponse } from '@angular/common/http';
 
