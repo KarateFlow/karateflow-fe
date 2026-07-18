@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, resource, signal, OnDestroy, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, resource, signal, computed, OnDestroy, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -123,8 +123,19 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state.c
               <button actions (click)="startCreate()" class="btn-primary">Crea Template</button>
             </app-empty-state>
           } @else {
+            <section class="list-actions">
+              <div class="search-container">
+                <span class="search-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                </span>
+                <input type="text" placeholder="Cerca template..." [value]="searchTerm()" (input)="onSearch($event)" class="search-input" />
+              </div>
+            </section>
             <div class="templates-grid">
-              @for (template of templatesResource.value(); track template.id) {
+              @for (template of filteredTemplates(); track template.id) {
                 <div 
                   class="template-card" 
                   (click)="viewDetail(template)"
@@ -361,6 +372,53 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state.c
       .btn-primary {
         width: 100%;
         justify-content: center;
+      }
+    }
+
+    .list-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 2rem;
+    }
+
+    .search-container {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-muted);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="text"].search-input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      background-color: var(--color-surface);
+      color: var(--color-text-main);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    input[type="text"].search-input:focus {
+      outline: none;
+      border-color: var(--color-primary-aka);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    @media (max-width: 640px) {
+      .search-container {
+        max-width: 100%;
       }
     }
 
@@ -964,6 +1022,20 @@ export class TemplatesListPage implements OnDestroy {
   protected readonly templatesResource = resource({
     loader: () => firstValueFrom(this.templatesApi.getTemplates()),
   });
+
+  protected readonly searchTerm = signal<string>('');
+
+  protected readonly filteredTemplates = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+    const templates = this.templatesResource.value() ?? [];
+    if (!term) return templates;
+    return templates.filter(t => t.name.toLowerCase().includes(term));
+  });
+
+  protected onSearch(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.searchTerm.set(target.value);
+  }
 
   protected readonly units = Object.values(MeasurementUnit);
 
