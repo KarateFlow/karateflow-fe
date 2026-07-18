@@ -105,11 +105,19 @@ export interface ChartDataPoint {
       min-height: 220px;
     }
 
+    @media (max-width: 640px) {
+      .bar-chart-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+
     .bar-wrapper {
       display: flex;
       justify-content: space-around;
-      height: 180px;
+      height: 200px;
       gap: 1.5rem;
+      padding-top: 2rem;
     }
 
     .bar-col {
@@ -154,7 +162,7 @@ export interface ChartDataPoint {
       position: absolute;
       top: -30px;
       background: var(--color-text-main);
-      color: white;
+      color: var(--color-bg-canvas);
       padding: 0.25rem 0.5rem;
       border-radius: var(--radius-xl);
       font-size: 0.75rem;
@@ -197,6 +205,15 @@ export interface ChartDataPoint {
 
     .delta-val.negative {
       color: var(--color-error);
+    }
+
+    @media (max-width: 640px) {
+      .delta-summary {
+        padding: 1rem;
+      }
+      .delta-val {
+        font-size: 1.5rem;
+      }
     }
 
     /* Line Chart SVG styling */

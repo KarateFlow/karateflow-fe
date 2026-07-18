@@ -94,6 +94,13 @@ import { MeasurementUnit } from '../../data-access/test.model';
       .actions { grid-column: 1 / -1; justify-content: flex-end; }
     }
 
+    @media (max-width: 480px) {
+      .exercise-row {
+        grid-template-columns: 1fr;
+      }
+      .result-field, .unit-field { grid-column: 1 / -1; }
+    }
+
     .field {
       display: flex;
       flex-direction: column;

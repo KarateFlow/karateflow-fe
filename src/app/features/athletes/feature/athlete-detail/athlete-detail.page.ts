@@ -200,6 +200,14 @@ import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/bre
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
 
     .btn-back {
@@ -224,6 +232,23 @@ import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/bre
     .header-actions {
       display: flex;
       gap: 0.75rem;
+      width: 100%;
+    }
+
+    @media (min-width: 641px) {
+      .header-actions {
+        width: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header-actions {
+        flex-direction: column;
+      }
+      .header-actions button {
+        width: 100%;
+        justify-content: center;
+      }
     }
 
     .btn-test {
@@ -286,9 +311,18 @@ import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/bre
       border-bottom: 1px solid var(--color-border);
     }
 
+    @media (max-width: 640px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+    }
+
     .avatar-placeholder {
       width: 80px;
       height: 80px;
+      flex-shrink: 0;
       background: linear-gradient(135deg, var(--color-primary-aka), var(--color-secondary-ao));
       color: white;
       border-radius: 50%;
@@ -410,10 +444,13 @@ import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/bre
 
     .section-tabs {
       display: flex;
-      gap: 1.5rem;
-      border-bottom: 2px solid var(--color-border);
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 1rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
     }
 
     .section-tab-btn {
@@ -427,6 +464,7 @@ import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/bre
       border-bottom: 2px solid transparent;
       margin-bottom: -2px;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
 
     .section-tab-btn:hover {

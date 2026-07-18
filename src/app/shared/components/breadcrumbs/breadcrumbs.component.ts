@@ -10,8 +10,8 @@ import { Breadcrumb, BreadcrumbService } from './breadcrumb.service';
   standalone: true,
   imports: [RouterLink, CommonModule],
   template: `
-    <nav aria-label="Breadcrumb" class="mb-4 flex px-4 md:px-0">
-      <ol class="flex items-center space-x-2 text-sm text-text-muted">
+    <nav aria-label="Breadcrumb" class="mb-4 flex px-4 md:px-0 w-full overflow-hidden">
+      <ol class="flex flex-wrap items-center gap-y-2 space-x-2 text-sm text-text-muted">
         @for (crumb of breadcrumbs(); track $index; let last = $last) {
           <li class="flex items-center">
             @if (!last) {

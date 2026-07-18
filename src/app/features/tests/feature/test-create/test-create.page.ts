@@ -198,6 +198,12 @@ export function noFutureDateValidator(): ValidatorFn {
       margin-bottom: 1.5rem;
     }
 
+    @media (max-width: 640px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .form-group {
       display: flex;
       flex-direction: column;
@@ -235,6 +241,17 @@ export function noFutureDateValidator(): ValidatorFn {
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .btn-add {
+        width: 100%;
+      }
     }
 
     .section-header h2 {
@@ -294,6 +311,13 @@ export function noFutureDateValidator(): ValidatorFn {
       cursor: pointer;
       transition: all 0.2s;
       box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+    }
+
+    @media (max-width: 640px) {
+      .btn-save {
+        width: 100%;
+        padding: 1rem;
+      }
     }
 
     .btn-save:hover:not(:disabled) {

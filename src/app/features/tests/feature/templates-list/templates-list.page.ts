@@ -586,6 +586,13 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state.c
       .actions { grid-column: 1 / -1; justify-content: flex-end; }
     }
 
+    @media (max-width: 480px) {
+      .exercise-row {
+        grid-template-columns: 1fr;
+      }
+      .unit-field { grid-column: 1 / -1; }
+    }
+
     .field {
       display: flex;
       flex-direction: column;
@@ -646,6 +653,23 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state.c
       border-top: 1px solid var(--color-border);
       padding-top: 1.5rem;
       margin-top: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+      }
+      .right-actions {
+        flex-direction: column;
+        margin-left: 0;
+        width: 100%;
+      }
+      .btn-cancel, .btn-save, .btn-delete-form {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+      }
     }
 
     .right-actions {
@@ -825,6 +849,18 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state.c
       background: var(--color-bg-canvas);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-xl);
+    }
+
+    @media (max-width: 640px) {
+      .exercise-detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .ex-specs {
+        width: 100%;
+        flex-wrap: wrap;
+      }
     }
 
     .ex-info {
