@@ -62,9 +62,28 @@ import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/bre
       } @else if (athleteResource.value(); as athlete) {
         <article class="profile-card">
           <div class="profile-header">
-            <div class="avatar-placeholder">
-              {{ athlete.firstName[0] }}{{ athlete.lastName[0] }}
-            </div>
+            <label for="avatarUploadDetail" class="avatar-upload-label">
+              @if (avatarPreview()) {
+                <img [src]="avatarPreview()" alt="Avatar Preview" class="avatar-image" />
+                <div class="hover-overlay">
+                  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                  </svg>
+                </div>
+              } @else {
+                <div class="avatar-placeholder">
+                  {{ athlete.firstName[0] }}{{ athlete.lastName[0] }}
+                  <div class="hover-overlay">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                      <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                  </div>
+                </div>
+              }
+              <input type="file" id="avatarUploadDetail" accept="image/*" class="hidden-input" (change)="onFileSelected($event)" />
+            </label>
             <div class="profile-info">
               <h1>{{ athlete.firstName }} {{ athlete.lastName }}</h1>
               <p class="id-tag">ID: {{ athlete.athleteId }}</p>
@@ -319,19 +338,61 @@ import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/bre
       }
     }
 
-    .avatar-placeholder {
+    .avatar-upload-label {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      border-radius: 50%;
+      overflow: hidden;
       width: 80px;
       height: 80px;
       flex-shrink: 0;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+    }
+
+    .avatar-upload-label:hover {
+      border-color: var(--color-primary-aka);
+      transform: scale(1.05);
+    }
+
+    .avatar-placeholder {
+      width: 100%;
+      height: 100%;
       background: linear-gradient(135deg, var(--color-primary-aka), var(--color-secondary-ao));
       color: white;
-      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2rem;
       font-weight: 800;
-      box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+    }
+
+    .avatar-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hover-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .avatar-upload-label:hover .hover-overlay {
+      opacity: 1;
+    }
+
+    .hidden-input {
+      display: none;
     }
 
     .profile-info h1 {
@@ -510,6 +571,7 @@ export class AthleteDetailPage {
 
   protected readonly activeSection = signal<'history' | 'reports' | 'saved-reports'>('history');
   protected readonly selectedSavedReport = signal<ReportResponse | null>(null);
+  protected readonly avatarPreview = signal<string | null>(null);
 
   protected readonly savedReportsList = viewChild<SavedReportsListComponent>('savedReportsList');
 
@@ -536,6 +598,21 @@ export class AthleteDetailPage {
     const list = this.savedReportsList();
     if (list) {
       list.reload();
+    }
+  }
+
+  protected onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result;
+        if (typeof result === 'string') {
+          this.avatarPreview.set(result);
+        }
+      };
+      reader.readAsDataURL(file);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RecordAthleteRequest } from '../../data-access/athlete.model';
 
@@ -7,6 +7,35 @@ import { RecordAthleteRequest } from '../../data-access/athlete.model';
   imports: [ReactiveFormsModule],
   template: `
     <form [formGroup]="athleteForm" (ngSubmit)="onSubmit()" class="athlete-form">
+      <div class="avatar-section">
+        <label for="avatarUpload" class="avatar-upload-label">
+          @if (avatarPreview()) {
+            <img [src]="avatarPreview()" alt="Avatar Preview" class="avatar-image" />
+            <div class="hover-overlay">
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+            </div>
+          } @else {
+            <div class="avatar-placeholder">
+              <span class="initials">{{ getInitials() }}</span>
+              <div class="hover-overlay">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+              </div>
+            </div>
+          }
+          <input type="file" id="avatarUpload" accept="image/*" class="hidden-input" (change)="onFileSelected($event)" />
+        </label>
+        <div class="avatar-hint">
+          <p class="font-bold">Foto Profilo</p>
+          <p class="text-sm">Clicca per caricare un'immagine. (Anteprima locale)</p>
+        </div>
+      </div>
+
       <div class="form-grid">
         <div class="form-group">
           <label for="firstName">Nome</label>
@@ -90,6 +119,81 @@ import { RecordAthleteRequest } from '../../data-access/athlete.model';
       padding: 1.5rem;
       border-radius: var(--radius-xl);
       border: 1px solid var(--color-border);
+    }
+
+    .avatar-section {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .avatar-upload-label {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      border-radius: 50%;
+      overflow: hidden;
+      width: 80px;
+      height: 80px;
+      border: 2px dashed var(--color-border);
+      transition: all 0.2s;
+    }
+
+    .avatar-upload-label:hover {
+      border-color: var(--color-primary-aka);
+    }
+
+    .avatar-placeholder {
+      width: 100%;
+      height: 100%;
+      background: var(--color-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary-aka);
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    .avatar-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hover-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .avatar-upload-label:hover .hover-overlay {
+      opacity: 1;
+    }
+
+    .hidden-input {
+      display: none;
+    }
+
+    .avatar-hint p {
+      margin: 0;
+      color: var(--color-text-muted);
+    }
+
+    .avatar-hint .font-bold {
+      color: var(--color-text-main);
+      margin-bottom: 0.25rem;
+    }
+
+    .avatar-hint .text-sm {
+      font-size: 0.875rem;
     }
 
     .form-grid {
@@ -186,9 +290,33 @@ export class AthleteFormComponent {
     medicalNotes: new FormControl(''),
   });
 
+  protected readonly avatarPreview = signal<string | null>(null);
+
   protected isInvalid(controlName: string): boolean {
     const control = this.athleteForm.get(controlName);
     return !!(control && control.invalid && control.touched);
+  }
+
+  protected getInitials(): string {
+    const f = this.athleteForm.get('firstName')?.value || '';
+    const l = this.athleteForm.get('lastName')?.value || '';
+    if (!f && !l) return 'AT';
+    return `${f.charAt(0)}${l.charAt(0)}`.toUpperCase();
+  }
+
+  protected onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result;
+        if (typeof result === 'string') {
+          this.avatarPreview.set(result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   protected onSubmit(): void {
