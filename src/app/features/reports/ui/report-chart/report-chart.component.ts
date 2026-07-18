@@ -23,7 +23,7 @@ export interface ChartDataPoint {
                 </div>
               </div>
               <span class="bar-label font-mono text-xs">Test A</span>
-              <span class="bar-date text-xs text-muted">{{ dateA() | date:'dd/MM/yyyy' }}</span>
+              <span class="bar-date text-xs text-muted">{{ dateA() | date }}</span>
             </div>
 
             <div class="bar-col">
@@ -33,7 +33,7 @@ export interface ChartDataPoint {
                 </div>
               </div>
               <span class="bar-label font-mono text-xs">Test B</span>
-              <span class="bar-date text-xs text-muted">{{ dateB() | date:'dd/MM/yyyy' }}</span>
+              <span class="bar-date text-xs text-muted">{{ dateB() | date }}</span>
             </div>
           </div>
           
@@ -66,7 +66,7 @@ export interface ChartDataPoint {
               @for (pt of svgPoints(); track $index) {
                 <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="5" class="chart-point" />
                 <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="14" class="chart-point-trigger">
-                  <title>{{ pt.label }} ({{ pt.date | date:'dd/MM/yyyy' }})</title>
+                  <title>{{ pt.label }} ({{ pt.date | date }})</title>
                 </circle>
               }
             </svg>
@@ -75,7 +75,7 @@ export interface ChartDataPoint {
             <div class="x-axis-labels">
               @for (pt of svgPoints(); track $index) {
                 <div class="x-label-item" [style.left.%]="pt.leftPct">
-                  <span class="x-date">{{ pt.date | date:'dd/MM' }}</span>
+                  <span class="x-date">{{ pt.date | date }}</span>
                   <span class="x-val">{{ pt.value | number:'1.0-1' }}</span>
                 </div>
               }

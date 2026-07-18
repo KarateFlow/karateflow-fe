@@ -29,7 +29,7 @@ describe('AthleteTestsListComponent', () => {
     fixture.detectChanges();
     
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.empty-history')).toBeTruthy();
+    expect(compiled.querySelector('app-empty-state')).toBeTruthy();
     expect(compiled.textContent).toContain('Nessuna sessione di test registrata');
   });
 

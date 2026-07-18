@@ -7,7 +7,7 @@ import { of, throwError } from 'rxjs';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { AthleteCreatePage } from './athlete-create.page';
 import { AthleteFormComponent } from '../../ui/athlete-form/athlete-form.component';
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
 
 try {

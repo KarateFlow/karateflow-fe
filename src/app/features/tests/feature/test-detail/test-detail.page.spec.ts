@@ -7,7 +7,7 @@ import { of, throwError, Subject } from 'rxjs';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MeasurementUnit, TestResponse } from '../../data-access/test.model';
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 describe('TestDetailPage', () => {
   let component: TestDetailPage;

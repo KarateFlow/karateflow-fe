@@ -8,7 +8,7 @@ import { ReportDashboardComponent } from '../../../reports/feature/report-dashbo
 import { SavedReportsListComponent } from '../../../reports/ui/saved-reports-list/saved-reports-list.component';
 import { ReportResponse } from '../../../reports/data-access/reports.model';
 import { DatePipe } from '@angular/common';
-import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
+import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/breadcrumb.service';
 
 @Component({
   selector: 'app-athlete-detail',
@@ -74,7 +74,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
           <div class="profile-grid">
             <div class="info-group">
               <span class="label">Data di Nascita</span>
-              <p>{{ athlete.birthDate | date:'dd/MM/yyyy' }}</p>
+              <p>{{ athlete.birthDate | date }}</p>
             </div>
             <div class="info-group">
               <span class="label">Contatto di Riferimento</span>
@@ -82,7 +82,7 @@ import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.
             </div>
             <div class="info-group">
               <span class="label">Data Registrazione</span>
-              <p>{{ athlete.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+              <p>{{ athlete.createdAt | date }}</p>
             </div>
           </div>
 

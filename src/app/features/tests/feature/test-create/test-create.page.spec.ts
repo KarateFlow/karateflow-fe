@@ -9,7 +9,7 @@ import { of, throwError } from 'rxjs';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 describe('TestCreatePage', () => {
   let component: TestCreatePage;

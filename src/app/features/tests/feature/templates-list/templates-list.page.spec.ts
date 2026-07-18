@@ -9,7 +9,7 @@ import { TemplatesListPage } from './templates-list.page';
 import { TemplatesApiService } from '../../data-access/templates-api.service';
 import { MeasurementUnit, TestTemplateResponse } from '../../data-access/test.model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 try {
   TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());

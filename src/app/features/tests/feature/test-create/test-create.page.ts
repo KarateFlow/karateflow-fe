@@ -7,10 +7,10 @@ import { TestsApiService } from '../../data-access/tests-api.service';
 import { TemplatesApiService } from '../../data-access/templates-api.service';
 import { CreateTestRequest, MeasurementUnit } from '../../data-access/test.model';
 import { ExerciseFormRowComponent } from '../../ui/exercise-form-row/exercise-form-row.component';
-import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
-import { BreadcrumbService } from '../../../../shared/ui/breadcrumbs/breadcrumb.service';
-import { ToastService } from '../../../../shared/ui/toast/toast.service';
+import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/breadcrumb.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 /**
  * Validator to ensure date is not in the future
