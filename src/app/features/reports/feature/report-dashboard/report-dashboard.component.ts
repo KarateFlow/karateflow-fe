@@ -349,24 +349,24 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
                         class="clickable-row"
                         (click)="comp.resultA !== null && comp.resultB !== null ? selectedExerciseForChart.set(comp.exerciseTitle) : null"
                       >
-                        <td class="font-bold text-left">
-                          {{ comp.exerciseTitle }}
+                        <td class="font-bold text-left" data-label="Esercizio">
+                          <span class="truncate-text">{{ comp.exerciseTitle }}</span>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right" data-label="Test A">
                           {{ comp.resultA !== null ? (comp.resultA | number:'1.0-2') : '-' }} 
                           <span class="unit">{{ comp.resultA !== null ? comp.unit.toLowerCase() : '' }}</span>
                         </td>
-                        <td class="text-right">
+                        <td class="text-right" data-label="Test B">
                           {{ comp.resultB !== null ? (comp.resultB | number:'1.0-2') : '-' }} 
                           <span class="unit">{{ comp.resultB !== null ? comp.unit.toLowerCase() : '' }}</span>
                         </td>
-                        <td class="text-right font-mono font-bold" [class.val-pos]="isPositive(comp.delta, comp.greaterIsBetter)" [class.val-neg]="isNegative(comp.delta, comp.greaterIsBetter)">
+                        <td class="text-right font-mono font-bold" [class.val-pos]="isPositive(comp.delta, comp.greaterIsBetter)" [class.val-neg]="isNegative(comp.delta, comp.greaterIsBetter)" data-label="Delta">
                           {{ formatDeltaSign(comp.delta) }}
                           @if (comp.delta !== 'N/A') {
                             <span class="unit">{{ comp.unit.toLowerCase() }}</span>
                           }
                         </td>
-                        <td class="text-right font-mono font-bold" [class.val-pos]="isPositive(comp.delta, comp.greaterIsBetter)" [class.val-neg]="isNegative(comp.delta, comp.greaterIsBetter)">
+                        <td class="text-right font-mono font-bold" [class.val-pos]="isPositive(comp.delta, comp.greaterIsBetter)" [class.val-neg]="isNegative(comp.delta, comp.greaterIsBetter)" data-label="Variazione %">
                           {{ formatPctSign(comp.percentageChange) }}
                         </td>
                       </tr>
@@ -426,8 +426,8 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
                       <tbody>
                         @for (dp of activeTrend.dataPoints; track $index) {
                           <tr>
-                            <td class="text-left">{{ dp.date | date }}</td>
-                            <td class="text-right font-bold text-primary">
+                            <td class="text-left" data-label="Data Rilevazione">{{ dp.date | date }}</td>
+                            <td class="text-right font-bold text-primary" data-label="Risultato">
                               {{ dp.result | number:'1.0-2' }} <span class="unit">{{ activeTrend.unit.toLowerCase() }}</span>
                             </td>
                           </tr>
@@ -851,7 +851,7 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       border-radius: var(--radius-xl);
       border: 1px solid var(--color-border);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-      overflow: hidden;
+      overflow-x: auto;
     }
 
     .section-title {
@@ -899,6 +899,50 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
 
     .report-table tr:last-child td {
       border-bottom: none;
+    }
+
+    .truncate-text {
+      display: inline-block;
+      max-width: 150px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 640px) {
+      .report-table thead {
+        display: none;
+      }
+      .report-table, .report-table tbody, .report-table tr, .report-table td {
+        display: block;
+        width: 100%;
+      }
+      .report-table tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 0.5rem 1rem;
+      }
+      .report-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right !important;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--color-border);
+      }
+      .report-table td:last-child {
+        border-bottom: none;
+      }
+      .report-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--color-text-muted);
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        text-align: left;
+      }
     }
 
     /* Clickable rows styling */
@@ -991,8 +1035,12 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
       font-weight: 700;
       color: var(--color-text-main);
       min-width: 140px;
+      max-width: 250px;
       text-align: center;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 0.5rem;
     }
 
     .chart-panel {
@@ -1053,10 +1101,15 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     .badge {
       background: var(--color-border);
       color: var(--color-text-muted);
-      padding: 0.15rem 0.5rem;
+      padding: 0.4rem 1rem;
       border-radius: var(--radius-full);
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-width: 2.5rem;
     }
 
     .trend-select-card.active .badge {
@@ -1103,9 +1156,13 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
     }
 
     .inline-table {
-      margin: 1.5rem;
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--color-border);
+      margin: 1.5rem 0 0 0;
+      width: 100%;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+      box-shadow: none;
     }
 
     .report-header-actions {
@@ -1247,6 +1304,42 @@ import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/repo
 
     .text-primary {
       color: var(--color-primary-aka);
+    }
+
+    @media (max-width: 640px) {
+      .report-header-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .actions-group {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn-save-report, .btn-pdf-export, .badge-saved {
+        width: 100%;
+        justify-content: center;
+      }
+      .chart-header-row {
+        flex-direction: column;
+        align-items: stretch;
+        padding-right: 0;
+        padding-bottom: 1rem;
+        gap: 1rem;
+      }
+      .chart-header-row .section-title {
+        text-align: center;
+      }
+      .chart-navigation {
+        justify-content: space-between;
+        margin: 0 1rem;
+      }
+      .saved-report-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -1752,8 +1845,15 @@ export class ReportDashboardComponent {
         }
 
         // Compute Composed Overall Trend Points (weighted average) for TREND analysis
-        let composedPoints: { date: Date; result: number }[] = [];
-        if (!isComparison) {
+        let composedPoints: { date?: Date; label?: string; result: number }[] = [];
+        
+        if (isComparison) {
+          const stats = this.reportSummaryStats();
+          if (stats) {
+            composedPoints.push({ label: 'Baseline', result: 0 });
+            composedPoints.push({ label: 'Confronto', result: stats.overallImprovement });
+          }
+        } else {
           const dateMap = new Map<string, Date>();
           const trends = report.exerciseTrends || [];
           trends.forEach(t => {
@@ -1799,8 +1899,8 @@ export class ReportDashboardComponent {
           }
         }
 
-        // Draw Composed Trend Line Chart in PDF if Trend Report
-        if (!isComparison && composedPoints.length >= 2) {
+        // Draw Composed Trend Line Chart in PDF
+        if (composedPoints.length >= 2) {
           const chartX = 15;
           const chartY = 75;
           const chartW = 180;
@@ -1853,7 +1953,7 @@ export class ReportDashboardComponent {
             const leftPct = numPoints > 1 ? i / (numPoints - 1) : 0.5;
             const x = chartX + 20 + leftPct * (chartW - 35);
             const y = chartY + chartH - 8 - ((pt.result - minVal) / (maxVal - minVal)) * (chartH - 16);
-            return { x, y, val: pt.result, date: pt.date };
+            return { x, y, val: pt.result, date: pt.date, label: pt.label };
           });
 
           // Draw line path
@@ -1879,20 +1979,20 @@ export class ReportDashboardComponent {
             pdf.setFont('helvetica', 'normal');
             pdf.setFontSize(6);
             pdf.setTextColor(textColorMuted[0], textColorMuted[1], textColorMuted[2]);
-            const dateStr = pt.date.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' });
-            pdf.text(dateStr, pt.x - 3, chartY + chartH - 3);
+            const labelStr = pt.label ? pt.label : (pt.date ? pt.date.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' }) : '');
+            pdf.text(labelStr, pt.x - 3, chartY + chartH - 3);
           });
         }
 
         // Table Title
-        const tableTitleY = isComparison ? 78 : 123;
+        const tableTitleY = composedPoints.length >= 2 ? 123 : 78;
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(11);
         pdf.setTextColor(textColorMain[0], textColorMain[1], textColorMain[2]);
         pdf.text('ANALISI DETTAGLIATA ESERCIZI', 15, tableTitleY);
 
         // 3. Table Header
-        let y = isComparison ? 82 : 127;
+        let y = composedPoints.length >= 2 ? 127 : 82;
         const drawTableHeader = () => {
           pdf.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
           pdf.rect(15, y, 180, 8, 'F');
@@ -1903,15 +2003,15 @@ export class ReportDashboardComponent {
 
           if (isComparison) {
             pdf.text('Esercizio', 18, y + 5.5);
-            pdf.text('Baseline (A)', 85, y + 5.5, { align: 'right' });
-            pdf.text('Confronto (B)', 115, y + 5.5, { align: 'right' });
-            pdf.text('Delta', 145, y + 5.5, { align: 'right' });
+            pdf.text('Baseline (A)', 110, y + 5.5, { align: 'right' });
+            pdf.text('Confronto (B)', 140, y + 5.5, { align: 'right' });
+            pdf.text('Delta', 165, y + 5.5, { align: 'right' });
             pdf.text('% Variazione', 190, y + 5.5, { align: 'right' });
           } else {
             pdf.text('Esercizio', 18, y + 5.5);
-            pdf.text('Inizio', 85, y + 5.5, { align: 'right' });
-            pdf.text('Fine', 115, y + 5.5, { align: 'right' });
-            pdf.text('Rilevazioni', 145, y + 5.5, { align: 'right' });
+            pdf.text('Inizio', 110, y + 5.5, { align: 'right' });
+            pdf.text('Fine', 140, y + 5.5, { align: 'right' });
+            pdf.text('Rilevazioni', 165, y + 5.5, { align: 'right' });
             pdf.text('Miglioramento', 190, y + 5.5, { align: 'right' });
           }
           y += 8;
@@ -1942,13 +2042,14 @@ export class ReportDashboardComponent {
 
             pdf.setTextColor(textColorMain[0], textColorMain[1], textColorMain[2]);
             pdf.setFont('helvetica', 'bold');
-            pdf.text(c.exerciseTitle, 18, y + 5.5);
+            const title = c.exerciseTitle.length > 40 ? c.exerciseTitle.substring(0, 37) + '...' : c.exerciseTitle;
+            pdf.text(title, 18, y + 5.5);
             pdf.setFont('helvetica', 'normal');
 
             const valA = c.resultA !== null ? `${c.resultA} ${c.unit.toLowerCase()}` : 'N/D';
             const valB = c.resultB !== null ? `${c.resultB} ${c.unit.toLowerCase()}` : 'N/D';
-            pdf.text(valA, 85, y + 5.5, { align: 'right' });
-            pdf.text(valB, 115, y + 5.5, { align: 'right' });
+            pdf.text(valA, 110, y + 5.5, { align: 'right' });
+            pdf.text(valB, 140, y + 5.5, { align: 'right' });
 
             const deltaVal = parseFloat(c.delta);
             const isImp = c.greaterIsBetter ? deltaVal > 0 : deltaVal < 0;
@@ -1966,7 +2067,7 @@ export class ReportDashboardComponent {
 
             const sign = deltaVal > 0 ? '+' : '';
             const deltaStr = c.delta === 'N/A' ? 'N/A' : `${sign}${c.delta} ${c.unit.toLowerCase()}`;
-            pdf.text(deltaStr, 145, y + 5.5, { align: 'right' });
+            pdf.text(deltaStr, 165, y + 5.5, { align: 'right' });
 
             const pctStr = c.percentageChange === 'N/A' ? 'N/A' : `${sign}${c.percentageChange}%`;
             pdf.text(pctStr, 190, y + 5.5, { align: 'right' });
@@ -1997,16 +2098,17 @@ export class ReportDashboardComponent {
 
             pdf.setTextColor(textColorMain[0], textColorMain[1], textColorMain[2]);
             pdf.setFont('helvetica', 'bold');
-            pdf.text(t.exerciseTitle, 18, y + 5.5);
+            const title = t.exerciseTitle.length > 40 ? t.exerciseTitle.substring(0, 37) + '...' : t.exerciseTitle;
+            pdf.text(title, 18, y + 5.5);
             pdf.setFont('helvetica', 'normal');
 
             const pts = t.dataPoints || [];
             const valA = pts.length > 0 ? `${pts[0].result} ${t.unit.toLowerCase()}` : 'N/D';
             const valB = pts.length > 0 ? `${pts[pts.length - 1].result} ${t.unit.toLowerCase()}` : 'N/D';
 
-            pdf.text(valA, 85, y + 5.5, { align: 'right' });
-            pdf.text(valB, 115, y + 5.5, { align: 'right' });
-            pdf.text(`${pts.length}`, 145, y + 5.5, { align: 'right' });
+            pdf.text(valA, 110, y + 5.5, { align: 'right' });
+            pdf.text(valB, 140, y + 5.5, { align: 'right' });
+            pdf.text(`${pts.length}`, 165, y + 5.5, { align: 'right' });
 
             if (pts.length >= 2) {
               const deltaVal = pts[pts.length - 1].result - pts[0].result;

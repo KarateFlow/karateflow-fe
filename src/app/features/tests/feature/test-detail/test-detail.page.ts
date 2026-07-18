@@ -93,10 +93,10 @@ import { ToastService } from '../../../../shared/components/toast/toast.service'
                 <tbody>
                   @for (ex of test.exercises; track $index) {
                     <tr>
-                      <td class="font-bold">{{ ex.exerciseTitle }}</td>
-                      <td class="text-right result-val">{{ ex.result | number:'1.1-2' }}</td>
-                      <td class="unit">{{ ex.unit.toLowerCase() }}</td>
-                      <td>
+                      <td class="font-bold" data-label="Esercizio"><span class="truncate-text">{{ ex.exerciseTitle }}</span></td>
+                      <td class="text-right result-val" data-label="Risultato">{{ ex.result | number:'1.1-2' }}</td>
+                      <td class="unit" data-label="Unità">{{ ex.unit.toLowerCase() }}</td>
+                      <td data-label="Tendenza">
                         <span class="trend-tag" [class.higher]="ex.greaterIsBetter">
                           {{ ex.greaterIsBetter ? 'Alto è meglio' : 'Basso è meglio' }}
                         </span>
@@ -274,6 +274,12 @@ import { ToastService } from '../../../../shared/components/toast/toast.service'
       margin-bottom: 1.5rem;
     }
 
+    @media (max-width: 640px) {
+      .info-grid, .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .info-group, .form-group {
       display: flex;
       flex-direction: column;
@@ -337,17 +343,22 @@ import { ToastService } from '../../../../shared/components/toast/toast.service'
     .count-badge {
       background: var(--color-hover);
       color: var(--color-text-muted);
-      padding: 0.25rem 0.75rem;
+      padding: 0.4rem 1rem;
       border-radius: var(--radius-full);
       font-size: 0.875rem;
       font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-width: 2.5rem;
     }
 
     .exercises-table-container {
       background: var(--color-surface);
       border-radius: var(--radius-xl);
       border: 1px solid var(--color-border);
-      overflow: hidden;
+      overflow-x: auto;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
@@ -382,6 +393,15 @@ import { ToastService } from '../../../../shared/components/toast/toast.service'
     .result-val { font-size: 1.1rem; font-weight: 800; color: var(--color-primary-aka); }
     .unit { color: var(--color-text-muted); font-weight: 600; }
 
+    .truncate-text {
+      display: inline-block;
+      max-width: 150px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+    }
+
     .trend-tag {
       font-size: 0.75rem;
       font-weight: 700;
@@ -403,6 +423,48 @@ import { ToastService } from '../../../../shared/components/toast/toast.service'
       padding: 1.5rem 0;
       border-top: 1px solid var(--color-border);
       margin-top: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .page-actions, .form-actions {
+        flex-direction: column-reverse;
+      }
+      .page-actions button, .form-actions button {
+        width: 100%;
+        justify-content: center;
+      }
+      .exercises-table thead {
+        display: none;
+      }
+      .exercises-table, .exercises-table tbody, .exercises-table tr, .exercises-table td {
+        display: block;
+        width: 100%;
+      }
+      .exercises-table tr {
+        margin-bottom: 1rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 0.5rem 1rem;
+      }
+      .exercises-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right !important;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--color-border);
+      }
+      .exercises-table td:last-child {
+        border-bottom: none;
+      }
+      .exercises-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--color-text-muted);
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        text-align: left;
+      }
     }
 
     .btn-edit, .btn-save {

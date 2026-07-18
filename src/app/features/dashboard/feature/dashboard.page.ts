@@ -124,9 +124,9 @@ import { firstValueFrom, forkJoin } from 'rxjs';
               <ul class="activity-list">
                 @for (report of summaryResource.value()?.summary?.recentReports; track report.reportId) {
                   <li class="activity-item hover-item">
-                    <a [routerLink]="['/athletes', report.athleteId, 'reports', report.reportId]" class="flex items-center w-full decoration-none">
+                    <a [routerLink]="['/athletes', report.athleteId, 'reports', report.reportId]" class="flex flex-col sm:flex-row sm:items-center w-full decoration-none gap-2 sm:gap-4">
                       <!-- Column 1: Athlete + Info -->
-                      <div class="flex flex-col gap-1 flex-1 min-w-0">
+                      <div class="flex flex-col gap-1 flex-1 min-w-0 w-full">
                         <span class="font-medium activity-link truncate">{{ getAthleteName(report.athleteId, summaryResource.value()?.athletes) }}</span>
                         <div class="flex flex-col">
                           <span class="text-sm font-medium truncate">
@@ -144,18 +144,21 @@ import { firstValueFrom, forkJoin } from 'rxjs';
                         </div>
                       </div>
 
-                      <!-- Column 2: Improvement Badge -->
-                      <div class="w-24 flex justify-center shrink-0">
-                        @if (getOverallImprovement(report); as imp) {
-                          <span class="text-xs font-bold px-2 py-0-5 rounded-full" [ngClass]="imp.isPositive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
-                            {{ imp.text }}
-                          </span>
-                        }
-                      </div>
+                      <!-- Flex container for badge and date on mobile -->
+                      <div class="flex flex-row items-center justify-between sm:justify-end w-full sm:w-auto gap-4 mt-2 sm:mt-0">
+                        <!-- Column 2: Improvement Badge -->
+                        <div class="flex shrink-0">
+                          @if (getOverallImprovement(report); as imp) {
+                            <span class="text-xs font-bold px-2 py-0-5 rounded-full" [ngClass]="imp.isPositive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
+                              {{ imp.text }}
+                            </span>
+                          }
+                        </div>
 
-                      <!-- Column 3: Saved Date -->
-                      <div class="w-32 flex justify-end shrink-0">
-                        <span class="text-sm text-muted whitespace-nowrap">Salvato il:<br>{{ report.createdAt | date }}</span>
+                        <!-- Column 3: Saved Date -->
+                        <div class="flex shrink-0 text-right sm:w-32">
+                          <span class="text-sm text-muted whitespace-nowrap">Salvato il:<br class="hidden sm:block"> {{ report.createdAt | date }}</span>
+                        </div>
                       </div>
                     </a>
                   </li>
