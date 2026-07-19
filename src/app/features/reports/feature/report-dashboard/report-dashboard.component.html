@@ -262,12 +262,12 @@
               <!-- CHART FIRST (TOP) -->
               <div class="bg-surface rounded-xl overflow-hidden shadow-sm">
                 @if (selectedComparison(); as activeComp) {
-                  <div class="flex justify-between items-center bg-bg-canvas border-b pr-6">
-                    <div class="text-lg font-extrabold p-5 text-text-main">Grafico di Confronto</div>
-                    <div class="flex items-center gap-4 bg-surface py-1.5 px-3 rounded-xl shadow-sm">
+                  <div class="flex flex-col md:flex-row md:justify-between md:items-center bg-bg-canvas border-b p-5 gap-4">
+                    <div class="text-lg font-extrabold text-text-main">Grafico di Confronto</div>
+                    <div class="flex items-center justify-between gap-4 bg-surface py-1.5 px-3 rounded-xl shadow-sm w-full md:w-auto overflow-hidden">
                       <button 
                         type="button" 
-                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
+                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0" 
                         (click)="navigateExercise(-1)" 
                         [disabled]="availableExercises().length <= 1"
                         aria-label="Esercizio precedente"
@@ -276,10 +276,10 @@
                           <polyline points="15 18 9 12 15 6"></polyline>
                         </svg>
                       </button>
-                      <span class="text-sm font-bold text-text-main min-w-[140px] max-w-[250px] text-center truncate px-2">{{ selectedExerciseForChart() }}</span>
+                      <span class="text-sm font-bold text-text-main flex-1 text-center truncate px-2 min-w-0 md:min-w-[140px] md:max-w-[250px]" [title]="selectedExerciseForChart()">{{ selectedExerciseForChart() }}</span>
                       <button 
                         type="button" 
-                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
+                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0" 
                         (click)="navigateExercise(1)" 
                         [disabled]="availableExercises().length <= 1"
                         aria-label="Esercizio successivo"
@@ -309,52 +309,101 @@
               </div>
 
               <!-- TABLE SECOND (BOTTOM) -->
-              <div class="bg-surface rounded-xl overflow-x-auto shadow-sm">
-                <div class="text-lg font-extrabold p-5 bg-bg-canvas text-text-main border-b">Risultati degli Esercizi <span class="text-sm font-medium text-text-muted ml-2">(Clicca su una riga per visualizzare il relativo grafico sopra)</span></div>
-                <table class="w-full border-collapse text-[0.95rem]">
-                  <caption class="sr-only">Risultati del confronto tra due test per ogni esercizio.</caption>
-                  <thead>
-                    <tr>
-                      <th class="bg-bg-canvas text-left py-3.5 px-4 text-xs uppercase tracking-wider text-text-muted border-b border-border">Esercizio</th>
-                      <th class="bg-bg-canvas text-right py-3.5 px-4 text-xs uppercase tracking-wider text-text-muted border-b border-border">Test A</th>
-                      <th class="bg-bg-canvas text-right py-3.5 px-4 text-xs uppercase tracking-wider text-text-muted border-b border-border">Test B</th>
-                      <th class="bg-bg-canvas text-right py-3.5 px-4 text-xs uppercase tracking-wider text-text-muted border-b border-border">Delta</th>
-                      <th class="bg-bg-canvas text-right py-3.5 px-4 text-xs uppercase tracking-wider text-text-muted border-b border-border">Variazione %</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (comp of report.comparisonResults; track comp.exerciseTitle) {
-                      <tr 
-                        [class.bg-hover]="selectedExerciseForChart() === comp.exerciseTitle"
-                        [class.opacity-60]="comp.resultA === null || comp.resultB === null"
-                        [class.cursor-not-allowed]="comp.resultA === null || comp.resultB === null"
-                        class="cursor-pointer transition-colors hover:bg-bg-canvas border-b border-border last:border-b-0"
-                        (click)="comp.resultA !== null && comp.resultB !== null ? selectedExerciseForChart.set(comp.exerciseTitle) : null"
-                      >
-                        <td class="py-3 px-4 font-bold text-left" data-label="Esercizio">
-                          <span class="inline-block max-w-[150px] whitespace-nowrap overflow-hidden text-ellipsis align-middle">{{ comp.exerciseTitle }}</span>
-                        </td>
-                        <td class="py-3 px-4 text-right" data-label="Test A">
+              <div class="bg-surface rounded-xl shadow-sm overflow-hidden">
+                <div class="text-lg font-extrabold p-5 bg-bg-canvas text-text-main border-b">Risultati degli Esercizi <span class="text-sm font-medium text-text-muted ml-2 block sm:inline mt-1 sm:mt-0">(Clicca su una riga per visualizzare il relativo grafico sopra)</span></div>
+                <div class="overflow-x-auto">
+                  <table class="w-full border-collapse text-[0.95rem] hidden sm:table">
+                    <caption class="sr-only">Risultati del confronto tra due test per ogni esercizio.</caption>
+                    <thead>
+                      <tr>
+                        <th class="bg-bg-canvas text-left py-3.5 px-4 text-xs uppercase tracking-wider text-text-muted border-b border-border">Esercizio</th>
+                        <th class="bg-bg-canvas text-right py-3.5 px-4 text-xs uppercase tracking-wider text-text-muted border-b border-border">Test A</th>
+                        <th class="bg-bg-canvas text-right py-3.5 px-4 text-xs uppercase tracking-wider text-text-muted border-b border-border">Test B</th>
+                        <th class="bg-bg-canvas text-right py-3.5 px-4 text-xs uppercase tracking-wider text-text-muted border-b border-border">Delta</th>
+                        <th class="bg-bg-canvas text-right py-3.5 px-4 text-xs uppercase tracking-wider text-text-muted border-b border-border">Variazione %</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (comp of report.comparisonResults; track comp.exerciseTitle) {
+                        <tr 
+                          [class.bg-hover]="selectedExerciseForChart() === comp.exerciseTitle"
+                          [class.opacity-60]="comp.resultA === null || comp.resultB === null"
+                          [class.cursor-not-allowed]="comp.resultA === null || comp.resultB === null"
+                          class="cursor-pointer transition-colors hover:bg-bg-canvas border-b border-border last:border-b-0"
+                          (click)="comp.resultA !== null && comp.resultB !== null ? selectedExerciseForChart.set(comp.exerciseTitle) : null"
+                        >
+                          <td class="py-3 px-4 font-bold text-left" data-label="Esercizio">
+                            <span class="inline-block max-w-[150px] whitespace-nowrap overflow-hidden text-ellipsis align-middle">{{ comp.exerciseTitle }}</span>
+                          </td>
+                          <td class="py-3 px-4 text-right" data-label="Test A">
+                            {{ comp.resultA !== null ? (comp.resultA | number:'1.0-2') : '-' }} 
+                            <span class="text-[0.85rem] font-medium text-text-muted ml-1">{{ comp.resultA !== null ? comp.unit.toLowerCase() : '' }}</span>
+                          </td>
+                          <td class="py-3 px-4 text-right" data-label="Test B">
+                            {{ comp.resultB !== null ? (comp.resultB | number:'1.0-2') : '-' }} 
+                            <span class="text-[0.85rem] font-medium text-text-muted ml-1">{{ comp.resultB !== null ? comp.unit.toLowerCase() : '' }}</span>
+                          </td>
+                          <td class="py-3 px-4 text-right font-mono font-bold" [class.text-success]="isPositive(comp.delta, comp.greaterIsBetter)" [class.text-error]="isNegative(comp.delta, comp.greaterIsBetter)" data-label="Delta">
+                            {{ formatDeltaSign(comp.delta) }}
+                            @if (comp.delta !== 'N/A') {
+                              <span class="text-[0.85rem] font-medium text-text-muted ml-1">{{ comp.unit.toLowerCase() }}</span>
+                            }
+                          </td>
+                          <td class="py-3 px-4 text-right font-mono font-bold" [class.text-success]="isPositive(comp.delta, comp.greaterIsBetter)" [class.text-error]="isNegative(comp.delta, comp.greaterIsBetter)" data-label="Variazione %">
+                            {{ formatPctSign(comp.percentageChange) }}
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Mobile View -->
+                <div class="sm:hidden flex flex-col p-4 gap-4">
+                  @for (comp of report.comparisonResults; track comp.exerciseTitle) {
+                    <div 
+                      [class.bg-hover]="selectedExerciseForChart() === comp.exerciseTitle"
+                      [class.opacity-60]="comp.resultA === null || comp.resultB === null"
+                      [class.cursor-not-allowed]="comp.resultA === null || comp.resultB === null"
+                      class="flex flex-col gap-2 pb-4 border-b border-border last:border-b-0 last:pb-0 cursor-pointer transition-colors hover:bg-bg-canvas p-3 rounded-lg"
+                      (click)="comp.resultA !== null && comp.resultB !== null ? selectedExerciseForChart.set(comp.exerciseTitle) : null"
+                    >
+                      <div class="flex justify-between items-center border-b border-border/50 pb-2 mb-1">
+                        <span class="text-xs font-bold text-text-muted uppercase">Esercizio</span>
+                        <span class="font-bold text-text-main truncate max-w-[200px]" [title]="comp.exerciseTitle">{{ comp.exerciseTitle }}</span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-text-muted uppercase">Test A</span>
+                        <span class="text-right">
                           {{ comp.resultA !== null ? (comp.resultA | number:'1.0-2') : '-' }} 
                           <span class="text-[0.85rem] font-medium text-text-muted ml-1">{{ comp.resultA !== null ? comp.unit.toLowerCase() : '' }}</span>
-                        </td>
-                        <td class="py-3 px-4 text-right" data-label="Test B">
+                        </span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-text-muted uppercase">Test B</span>
+                        <span class="text-right">
                           {{ comp.resultB !== null ? (comp.resultB | number:'1.0-2') : '-' }} 
                           <span class="text-[0.85rem] font-medium text-text-muted ml-1">{{ comp.resultB !== null ? comp.unit.toLowerCase() : '' }}</span>
-                        </td>
-                        <td class="py-3 px-4 text-right font-mono font-bold" [class.text-success]="isPositive(comp.delta, comp.greaterIsBetter)" [class.text-error]="isNegative(comp.delta, comp.greaterIsBetter)" data-label="Delta">
+                        </span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-text-muted uppercase">Delta</span>
+                        <span class="text-right font-mono font-bold" [class.text-success]="isPositive(comp.delta, comp.greaterIsBetter)" [class.text-error]="isNegative(comp.delta, comp.greaterIsBetter)">
                           {{ formatDeltaSign(comp.delta) }}
                           @if (comp.delta !== 'N/A') {
                             <span class="text-[0.85rem] font-medium text-text-muted ml-1">{{ comp.unit.toLowerCase() }}</span>
                           }
-                        </td>
-                        <td class="py-3 px-4 text-right font-mono font-bold" [class.text-success]="isPositive(comp.delta, comp.greaterIsBetter)" [class.text-error]="isNegative(comp.delta, comp.greaterIsBetter)" data-label="Variazione %">
+                        </span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-text-muted uppercase">Variazione %</span>
+                        <span class="text-right font-mono font-bold" [class.text-success]="isPositive(comp.delta, comp.greaterIsBetter)" [class.text-error]="isNegative(comp.delta, comp.greaterIsBetter)">
                           {{ formatPctSign(comp.percentageChange) }}
-                        </td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
+                        </span>
+                      </div>
+                    </div>
+                  }
+                </div>
               </div>
             </div>
           } @else {
@@ -391,12 +440,12 @@
               <!-- CHART FIRST (TOP/MAIN) -->
               <div class="bg-surface rounded-xl shadow-sm overflow-hidden md:col-span-2">
                 @if (selectedTrend(); as activeTrend) {
-                  <div class="flex justify-between items-center bg-bg-canvas border-b pr-6">
-                    <div class="text-lg font-extrabold p-5 text-text-main">Trend Storico</div>
-                    <div class="flex items-center gap-4 bg-surface py-1.5 px-3 rounded-xl shadow-sm">
+                  <div class="flex flex-col md:flex-row md:justify-between md:items-center bg-bg-canvas border-b p-5 gap-4">
+                    <div class="text-lg font-extrabold text-text-main">Trend Storico</div>
+                    <div class="flex items-center justify-between gap-4 bg-surface py-1.5 px-3 rounded-xl shadow-sm w-full md:w-auto overflow-hidden">
                       <button 
                         type="button" 
-                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
+                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0" 
                         (click)="navigateExercise(-1)" 
                         [disabled]="availableExercises().length <= 1"
                         aria-label="Esercizio precedente"
@@ -405,10 +454,10 @@
                           <polyline points="15 18 9 12 15 6"></polyline>
                         </svg>
                       </button>
-                      <span class="text-sm font-bold text-text-main min-w-[140px] max-w-[250px] text-center truncate px-2">{{ selectedExerciseForChart() }}</span>
+                      <span class="text-sm font-bold text-text-main flex-1 text-center truncate px-2 min-w-0 md:min-w-[140px] md:max-w-[250px]" [title]="selectedExerciseForChart()">{{ selectedExerciseForChart() }}</span>
                       <button 
                         type="button" 
-                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
+                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0" 
                         (click)="navigateExercise(1)" 
                         [disabled]="availableExercises().length <= 1"
                         aria-label="Esercizio successivo"
@@ -424,27 +473,47 @@
                     [linePoints]="activeTrendPoints()"
                   />
                   
-                  <div class="border-t bg-surface overflow-x-auto">
+                  <div class="border-t bg-surface overflow-hidden">
                     <div class="text-[0.95rem] font-extrabold py-3 px-5 bg-bg-canvas border-b text-text-main">Rilevazioni</div>
-                    <table class="w-full border-collapse text-[0.95rem]">
-                      <caption class="sr-only">Rilevazioni storiche dell'esercizio selezionato.</caption>
-                      <thead>
-                        <tr>
-                          <th class="bg-bg-canvas text-left py-3 px-5 text-xs uppercase tracking-wider text-text-muted border-b border-border">Data Rilevazione</th>
-                          <th class="bg-bg-canvas text-right py-3 px-5 text-xs uppercase tracking-wider text-text-muted border-b border-border">Risultato</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (dp of activeTrend.dataPoints; track $index) {
-                          <tr class="border-b border-border last:border-b-0">
-                            <td class="py-3 px-5 text-left" data-label="Data Rilevazione">{{ dp.date | date }}</td>
-                            <td class="py-3 px-5 text-right font-bold text-primary" data-label="Risultato">
-                              {{ dp.result | number:'1.0-2' }} <span class="text-[0.85rem] font-medium text-text-muted ml-1">{{ activeTrend.unit.toLowerCase() }}</span>
-                            </td>
+                    <div class="overflow-x-auto">
+                      <table class="w-full border-collapse text-[0.95rem] hidden sm:table">
+                        <caption class="sr-only">Rilevazioni storiche dell'esercizio selezionato.</caption>
+                        <thead>
+                          <tr>
+                            <th class="bg-bg-canvas text-left py-3 px-5 text-xs uppercase tracking-wider text-text-muted border-b border-border">Data Rilevazione</th>
+                            <th class="bg-bg-canvas text-right py-3 px-5 text-xs uppercase tracking-wider text-text-muted border-b border-border">Risultato</th>
                           </tr>
-                        }
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          @for (dp of activeTrend.dataPoints; track $index) {
+                            <tr class="border-b border-border last:border-b-0">
+                              <td class="py-3 px-5 text-left" data-label="Data Rilevazione">{{ dp.date | date }}</td>
+                              <td class="py-3 px-5 text-right font-bold text-primary" data-label="Risultato">
+                                {{ dp.result | number:'1.0-2' }} <span class="text-[0.85rem] font-medium text-text-muted ml-1">{{ activeTrend.unit.toLowerCase() }}</span>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <!-- Mobile View -->
+                    <div class="sm:hidden flex flex-col p-4 gap-4">
+                      @for (dp of activeTrend.dataPoints; track $index) {
+                        <div class="flex flex-col gap-2 pb-4 border-b border-border last:border-b-0 last:pb-0">
+                          <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-text-muted uppercase">Data Rilevazione</span>
+                            <span class="font-bold text-text-main">{{ dp.date | date }}</span>
+                          </div>
+                          <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-text-muted uppercase">Risultato</span>
+                            <span class="font-extrabold text-primary text-lg">
+                              {{ dp.result | number:'1.0-2' }} <span class="text-sm font-semibold text-text-muted lowercase ml-1">{{ activeTrend.unit.toLowerCase() }}</span>
+                            </span>
+                          </div>
+                        </div>
+                      }
+                    </div>
                   </div>
                 } @else {
                   <div class="h-[250px] bg-bg-canvas border-dashed border-slate-300 rounded-xl flex items-center justify-center text-center text-text-muted p-8 italic m-6">
