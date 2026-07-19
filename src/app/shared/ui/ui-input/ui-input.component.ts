@@ -35,19 +35,19 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@a
   ]
 })
 export class UiInputComponent implements ControlValueAccessor {
-  @Input() id: string = `ui-input-${Math.random().toString(36).substring(2, 9)}`;
-  @Input() label: string = '';
+  @Input() id = `ui-input-${Math.random().toString(36).substring(2, 9)}`;
+  @Input() label = '';
   @Input() type: 'text' | 'number' | 'password' | 'email' | 'date' | 'datetime-local' | 'time' = 'text';
-  @Input() placeholder: string = '';
-  @Input() invalid: boolean = false;
-  @Input() errorMessage: string = '';
-  @Input() fullWidth: boolean = false;
+  @Input() placeholder = '';
+  @Input() invalid = false;
+  @Input() errorMessage = '';
+  @Input() fullWidth = false;
 
-  value: any = '';
-  disabled: boolean = false;
+  value: unknown = '';
+  disabled = false;
 
-  onChangeFn: any = () => {};
-  onTouchedFn: any = () => {};
+  onChangeFn: (value: unknown) => void = () => { /* empty */ };
+  onTouchedFn: () => void = () => { /* empty */ };
 
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement;
@@ -56,15 +56,15 @@ export class UiInputComponent implements ControlValueAccessor {
   }
 
   // ControlValueAccessor methods
-  writeValue(value: any): void {
+  writeValue(value: unknown): void {
     this.value = value || '';
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: unknown) => void): void {
     this.onChangeFn = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouchedFn = fn;
   }
 

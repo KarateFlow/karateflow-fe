@@ -53,7 +53,7 @@
               <!-- Data Points and Interactive Hover Zones -->
               @for (pt of svgPoints(); track $index) {
                 <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="5" class="fill-surface stroke-primary stroke-[3] transition-all duration-200 ease-in-out hover:r-8 hover:stroke-secondary" />
-                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="14" class="fill-transparent cursor-pointer" (mouseover)="pt.hover = true" (mouseout)="pt.hover = false">
+                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="14" class="fill-transparent cursor-pointer" (mouseover)="pt.hover = true" (mouseout)="pt.hover = false" (focus)="pt.hover = true" (blur)="pt.hover = false">
                   <title>{{ pt.label }} ({{ pt.date | date }})</title>
                 </circle>
               }

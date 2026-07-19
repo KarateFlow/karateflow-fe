@@ -11,7 +11,7 @@
     @if (athleteResource.status() === 'resolved') {
       @let athlete = athleteResource.value()!;
       <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-        <app-ui-button variant="secondary" (onClick)="navigateTo(['/athletes', athlete.athleteId, 'tests', 'new'])" class="w-full sm:w-auto flex">
+        <app-ui-button variant="secondary" (btnClick)="navigateTo(['/athletes', athlete.athleteId, 'tests', 'new'])" class="w-full sm:w-auto flex">
           <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
@@ -20,7 +20,7 @@
           </svg>
           <span class="ml-2">Nuovo Test</span>
         </app-ui-button>
-        <app-ui-button variant="outline" (onClick)="navigateTo(['/athletes', athlete.athleteId, 'edit'])" class="w-full sm:w-auto flex">
+        <app-ui-button variant="outline" (btnClick)="navigateTo(['/athletes', athlete.athleteId, 'edit'])" class="w-full sm:w-auto flex">
           <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>

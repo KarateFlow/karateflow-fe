@@ -4,10 +4,10 @@ import { ToastService } from '../../../../shared/components/toast/toast.service'
 import { FormsModule } from '@angular/forms';
 import { TestResponse } from '../../../tests/data-access/test.model';
 import { ReportsStore } from '../../data-access/reports.store';
-import { ReportPreviewResponse, ReportResponse, ExerciseTrend, TrendDataPoint } from '../../data-access/reports.model';
+import { ReportPreviewResponse, ReportResponse } from '../../data-access/reports.model';
 import { Athlete } from '../../../athletes/data-access/athlete.model';
 import { ChartDataPoint, ReportChartComponent } from '../../ui/report-chart/report-chart.component';
-import { calculateReportSummaryStats, isPositive, isNegative, formatDeltaSign, formatPctSign, getTrendPeriodDirectly } from '../../utils/reports.utils';
+import { calculateReportSummaryStats, isPositive, isNegative, formatDeltaSign, formatPctSign } from '../../utils/reports.utils';
 import { exportReportToPDF } from '../../utils/pdf-export.utils';
 
 import { UiInputComponent } from '../../../../shared/ui/ui-input/ui-input.component';

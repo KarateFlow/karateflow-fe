@@ -1,4 +1,4 @@
-import { Injectable, inject, resource, signal } from '@angular/core';
+import { Injectable, inject, resource } from '@angular/core';
 import { TemplatesApiService } from './templates-api.service';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';

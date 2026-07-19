@@ -6,10 +6,9 @@ import { firstValueFrom } from 'rxjs';
 import { AthletesApiService } from '../../../athletes/data-access/athletes-api.service';
 import { TestStore } from '../../data-access/test.store';
 import { TemplateStore } from '../../data-access/template.store';
-import { CreateTestRequest, MeasurementUnit } from '../../data-access/test.model';
+import { CreateTestRequest, MeasurementUnit, TestTemplateResponse } from '../../data-access/test.model';
 import { ExerciseFormRowComponent } from '../../ui/exercise-form-row/exercise-form-row.component';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { HttpErrorResponse } from '@angular/common/http';
 import { BreadcrumbService } from '../../../../shared/components/breadcrumbs/breadcrumb.service';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { UiInputComponent } from '../../../../shared/ui/ui-input/ui-input.component';
@@ -111,10 +110,10 @@ export class TestCreatePage {
     if (!templateId) return;
 
     const templates = this.templatesResource.value() ?? [];
-    const selected = templates.find(t => t.id === templateId);
+    const selected = templates.find((t: TestTemplateResponse) => t.id === templateId);
     if (selected) {
       this.exercises.clear();
-      selected.exercises.forEach(ex => {
+      selected.exercises.forEach((ex: { exerciseTitle: string, unit: MeasurementUnit, greaterIsBetter: boolean }) => {
         this.exercises.push(new FormGroup({
           exerciseTitle: new FormControl(ex.exerciseTitle, { nonNullable: true, validators: [Validators.required] }),
           result: new FormControl<number | null>(null, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),

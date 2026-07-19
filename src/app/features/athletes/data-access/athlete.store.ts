@@ -1,4 +1,4 @@
-import { Injectable, inject, signal, computed, resource } from '@angular/core';
+import { Injectable, inject, signal, resource } from '@angular/core';
 import { AthletesApiService } from './athletes-api.service';
 import { Athlete } from './athlete.model';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -30,12 +30,14 @@ export class AthleteStore {
     this.selectedAthleteId.set(id);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createAthlete(request: any): Promise<Athlete> {
     const athlete = await firstValueFrom(this.api.createAthlete(request));
     this.athletesResource.reload();
     return athlete;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async updateAthlete(id: string, request: any): Promise<Athlete> {
     const athlete = await firstValueFrom(this.api.updateAthlete(id, request));
     this.athletesResource.reload();

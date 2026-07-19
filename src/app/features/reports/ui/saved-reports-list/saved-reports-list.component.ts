@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, input, output, resource, signal, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output, effect, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
-import { firstValueFrom } from 'rxjs';
 import { ReportsStore } from '../../data-access/reports.store';
 import { ReportResponse } from '../../data-access/reports.model';
 import { TestResponse } from '../../../tests/data-access/test.model';
@@ -37,7 +36,7 @@ export class SavedReportsListComponent {
       const reportId = this.autoOpenReportId();
       if (reports && reports.length > 0 && reportId) {
         // Troviamo il report sia per reportId che per id per supportare eventuali mock backend
-        const report = reports.find(r => r.reportId === reportId || (r as any).id === reportId);
+        const report = reports.find(r => r.reportId === reportId || (r as unknown as {id: string}).id === reportId);
         if (report) {
           // Usiamo untracked o setTimeout per evitare error NG0100 (ExpressionChangedAfterItHasBeenCheckedError)
           setTimeout(() => this.viewReport.emit(report), 0);

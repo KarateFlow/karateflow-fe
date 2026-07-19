@@ -3,7 +3,7 @@
   <header class="mb-8 flex flex-col gap-4">
     @if (isViewingDetail() && !isEditing()) {
       <div class="self-start">
-        <app-ui-button variant="outline" (onClick)="closeDetail()">
+        <app-ui-button variant="outline" (btnClick)="closeDetail()">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
@@ -19,17 +19,17 @@
           }
         </div>
         <div class="flex gap-3 w-full sm:w-auto">
-          <app-ui-button variant="danger" (onClick)="confirmDeleteCurrent()" class="flex-1 sm:flex-none">
+          <app-ui-button variant="danger" (btnClick)="confirmDeleteCurrent()" class="flex-1 sm:flex-none">
             Elimina
           </app-ui-button>
-          <app-ui-button variant="primary" (onClick)="startEdit(selectedTemplate()!)" class="flex-1 sm:flex-none">
+          <app-ui-button variant="primary" (btnClick)="startEdit(selectedTemplate()!)" class="flex-1 sm:flex-none">
             Modifica
           </app-ui-button>
         </div>
       </div>
     } @else if (isEditing()) {
       <div class="self-start">
-        <app-ui-button variant="outline" (onClick)="cancel()">
+        <app-ui-button variant="outline" (btnClick)="cancel()">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
@@ -43,7 +43,7 @@
       </div>
     } @else if (isCreating()) {
       <div class="self-start">
-        <app-ui-button variant="outline" (onClick)="cancel()">
+        <app-ui-button variant="outline" (btnClick)="cancel()">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
@@ -71,7 +71,7 @@
           <h1 class="text-3xl font-extrabold text-text-main m-0 mb-1">Gestione Template di Test</h1>
           <p class="text-lg text-text-muted m-0">Configura modelli di esercizi predefiniti per velocizzare la registrazione delle sessioni.</p>
         </div>
-        <app-ui-button variant="primary" (onClick)="startCreate()" class="w-full sm:w-auto">
+        <app-ui-button variant="primary" (btnClick)="startCreate()" class="w-full sm:w-auto">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -92,7 +92,7 @@
     <div class="bg-error-bg border border-error rounded-xl p-8 text-center text-error flex flex-col items-center gap-4">
       <strong class="text-xl">Errore nel caricamento</strong>
       <p class="font-medium">Impossibile recuperare l'elenco dei template di test.</p>
-      <app-ui-button variant="primary" (onClick)="templatesResource.reload()">Riprova</app-ui-button>
+      <app-ui-button variant="primary" (btnClick)="templatesResource.reload()">Riprova</app-ui-button>
     </div>
   } @else {
     @if (!isEditing() && !isCreating() && !isViewingDetail()) {
@@ -108,7 +108,7 @@
             <line x1="16" y1="17" x2="8" y2="17"></line>
             <polyline points="10 9 9 9 8 9"></polyline>
           </svg>
-          <app-ui-button actions variant="primary" (onClick)="startCreate()">Crea Template</app-ui-button>
+          <app-ui-button actions variant="primary" (btnClick)="startCreate()">Crea Template</app-ui-button>
         </app-empty-state>
       } @else {
         <section class="flex justify-end mb-8">
@@ -209,7 +209,7 @@
         <section class="pt-2">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <h2 class="text-2xl font-extrabold text-text-main m-0">Elenco Esercizi</h2>
-            <app-ui-button variant="secondary" (onClick)="addExercise()">
+            <app-ui-button variant="secondary" (btnClick)="addExercise()">
               + Aggiungi Esercizio
             </app-ui-button>
           </div>
@@ -258,13 +258,13 @@
                 </div>
 
                 <div class="sm:col-span-1 md:col-span-2 flex items-center justify-end md:justify-center gap-2 pb-1">
-                  <app-ui-button variant="secondary" (onClick)="duplicateExercise(i)" title="Duplica esercizio" class="flex-1 md:flex-none">
+                  <app-ui-button variant="secondary" (btnClick)="duplicateExercise(i)" title="Duplica esercizio" class="flex-1 md:flex-none">
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
                       <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                     </svg>
                   </app-ui-button>
-                  <app-ui-button variant="danger" (onClick)="removeExercise(i)" title="Rimuovi esercizio" class="flex-1 md:flex-none">
+                  <app-ui-button variant="danger" (btnClick)="removeExercise(i)" title="Rimuovi esercizio" class="flex-1 md:flex-none">
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
                       <polyline points="3 6 5 6 21 6"></polyline>
                       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -282,14 +282,14 @@
 
         <footer class="flex flex-col-reverse sm:flex-row justify-between items-center gap-4 py-6 border-t border-border mt-8">
           @if (isEditing()) {
-            <app-ui-button variant="danger" (onClick)="confirmDeleteCurrent()" class="w-full sm:w-auto">
+            <app-ui-button variant="danger" (btnClick)="confirmDeleteCurrent()" class="w-full sm:w-auto">
               Elimina Template
             </app-ui-button>
           } @else {
             <div></div>
           }
           <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <app-ui-button variant="outline" (onClick)="cancel()" class="w-full sm:w-auto flex justify-center">
+            <app-ui-button variant="outline" (btnClick)="cancel()" class="w-full sm:w-auto flex justify-center">
               Annulla
             </app-ui-button>
             <app-ui-button type="submit" variant="primary" [disabled]="isSaving()" [loading]="isSaving()" loadingText="Salvataggio..." class="w-full sm:w-auto flex justify-center">

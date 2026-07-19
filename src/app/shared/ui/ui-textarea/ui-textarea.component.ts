@@ -37,19 +37,19 @@ import { NgClass } from '@angular/common';
   ]
 })
 export class UiTextareaComponent implements ControlValueAccessor {
-  @Input() id: string = `ui-textarea-${Math.random().toString(36).substring(2, 9)}`;
-  @Input() label: string = '';
-  @Input() placeholder: string = '';
-  @Input() invalid: boolean = false;
-  @Input() errorMessage: string = '';
-  @Input() fullWidth: boolean = false;
-  @Input() rows: number = 4;
+  @Input() id = `ui-textarea-${Math.random().toString(36).substring(2, 9)}`;
+  @Input() label = '';
+  @Input() placeholder = '';
+  @Input() invalid = false;
+  @Input() errorMessage = '';
+  @Input() fullWidth = false;
+  @Input() rows = 4;
 
-  value: any = '';
-  disabled: boolean = false;
+  value: unknown = '';
+  disabled = false;
 
-  onChangeFn: any = () => {};
-  onTouchedFn: any = () => {};
+  onChangeFn: (value: unknown) => void = () => { /* empty */ };
+  onTouchedFn: () => void = () => { /* empty */ };
 
   onInput(event: Event): void {
     const target = event.target as HTMLTextAreaElement;
@@ -58,15 +58,15 @@ export class UiTextareaComponent implements ControlValueAccessor {
   }
 
   // ControlValueAccessor methods
-  writeValue(value: any): void {
+  writeValue(value: unknown): void {
     this.value = value || '';
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: unknown) => void): void {
     this.onChangeFn = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouchedFn = fn;
   }
 

@@ -25,7 +25,7 @@
     <div class="bg-error-bg border border-error rounded-xl p-8 text-center text-error flex flex-col items-center gap-4">
       <strong class="text-xl">Errore nel caricamento</strong>
       <p class="font-medium">Impossibile recuperare i dettagli del test. Riprova più tardi.</p>
-      <app-ui-button variant="primary" (onClick)="testResource.reload()">Riprova</app-ui-button>
+      <app-ui-button variant="primary" (btnClick)="testResource.reload()">Riprova</app-ui-button>
     </div>
   } @else if (testResource.value(); as test) {
     @if (!isEditing()) {
@@ -121,7 +121,7 @@
       </section>
 
       <footer class="flex flex-col-reverse sm:flex-row justify-end gap-4 py-6 border-t border-border mt-8">
-        <app-ui-button variant="danger" (onClick)="showDeleteConfirm.set(true)" class="w-full sm:w-auto flex justify-center">
+        <app-ui-button variant="danger" (btnClick)="showDeleteConfirm.set(true)" class="w-full sm:w-auto flex justify-center">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem">
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -130,7 +130,7 @@
           </svg>
           Elimina Test
         </app-ui-button>
-        <app-ui-button variant="secondary" (onClick)="startEdit(test)" class="w-full sm:w-auto flex justify-center">
+        <app-ui-button variant="secondary" (btnClick)="startEdit(test)" class="w-full sm:w-auto flex justify-center">
           <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -172,7 +172,7 @@
         <section class="mb-4">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <h2 class="text-2xl font-extrabold text-text-main m-0">Modifica Esercizi</h2>
-            <app-ui-button variant="secondary" (onClick)="addExercise()">
+            <app-ui-button variant="secondary" (btnClick)="addExercise()">
               + Aggiungi Esercizio
             </app-ui-button>
           </div>
@@ -200,7 +200,7 @@
         </section>
 
         <footer class="flex flex-col-reverse sm:flex-row justify-end gap-4 py-6 border-t border-border mt-8">
-          <app-ui-button variant="outline" (onClick)="cancelEdit()" class="w-full sm:w-auto flex justify-center">
+          <app-ui-button variant="outline" (btnClick)="cancelEdit()" class="w-full sm:w-auto flex justify-center">
             Annulla
           </app-ui-button>
           <app-ui-button type="submit" variant="primary" [disabled]="isSaving()" [loading]="isSaving()" loadingText="Salvataggio..." class="w-full sm:w-auto flex justify-center">

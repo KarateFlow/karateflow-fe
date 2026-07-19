@@ -85,7 +85,7 @@ export class AthleteDetailPage {
     }
   }
 
-  protected navigateTo(commands: any[]): void {
+  protected navigateTo(commands: unknown[]): void {
     this.router.navigate(commands);
   }
 

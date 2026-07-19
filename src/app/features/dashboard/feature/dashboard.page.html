@@ -2,7 +2,7 @@
   <header class="flex justify-between items-center mb-8">
     <div>
       <div class="flex items-center gap-3 mb-2">
-        <h1 class="text-3xl font-extrabold text-text-main m-0 tracking-tight">Dashboard</h1>
+        <h1 class="text-4xl font-extrabold text-text-main m-0 tracking-tight">Dashboard</h1>
       </div>
       <p class="text-text-muted">Benvenuto Coach! Ecco un riepilogo delle tue attività.</p>
       <p class="text-sm text-text-muted mt-1">{{ today | date }}</p>
@@ -59,7 +59,7 @@
     </div>
 
     <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-      <div class="bg-surface rounded-xl shadow-sm flex flex-col transition-all hover:shadow-md hover:-translate-y-0.5">
+      <div class="surface-card flex flex-col">
         <div class="flex items-center gap-4 border-b border-border p-5">
           <h3 class="m-0 text-lg font-bold text-text-main">Ultimi Test</h3>
         </div>
@@ -88,7 +88,7 @@
         </div>
       </div>
 
-      <div class="bg-surface rounded-xl shadow-sm flex flex-col transition-all hover:shadow-md hover:-translate-y-0.5">
+      <div class="surface-card flex flex-col">
         <div class="flex items-center gap-4 border-b border-border p-5">
           <h3 class="m-0 text-lg font-bold text-text-main">Ultimi Report</h3>
         </div>

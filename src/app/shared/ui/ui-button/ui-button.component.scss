@@ -3,13 +3,14 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-xl);
-  font-weight: 700;
-  font-size: 0.9rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  font-size: 0.875rem;
   cursor: pointer;
-  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: inherit;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
 }
 
@@ -34,17 +35,32 @@ button:disabled {
 
 .btn-primary:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px oklch(0.55 0.20 var(--hue-accent) / 0.3);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.98);
+  box-shadow: none;
 }
 
 .btn-secondary {
   background-color: var(--color-surface);
   color: var(--color-text-main);
   border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:hover:not(:disabled) {
   background-color: var(--color-surface-hover);
   border-color: var(--color-text-muted);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary:active:not(:disabled) {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-danger {
@@ -54,8 +70,14 @@ button:disabled {
 }
 
 .btn-danger:hover:not(:disabled) {
-  background-color: var(--color-error);
-  filter: brightness(0.9); /* O usare una var hover se la si crea */
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px oklch(0.60 0.18 var(--hue-error) / 0.3);
+}
+
+.btn-danger:active:not(:disabled) {
+  transform: scale(0.98);
+  box-shadow: none;
 }
 
 .btn-outline {
@@ -66,6 +88,11 @@ button:disabled {
 
 .btn-outline:hover:not(:disabled) {
   background-color: var(--color-primary-subtle);
+  transform: translateY(-1px);
+}
+
+.btn-outline:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .spinner {

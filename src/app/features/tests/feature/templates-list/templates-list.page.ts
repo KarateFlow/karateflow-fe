@@ -59,7 +59,7 @@ export class TemplatesListPage implements OnDestroy {
     const term = this.searchTerm().toLowerCase().trim();
     const templates = this.templatesResource.value() ?? [];
     if (!term) return templates;
-    return templates.filter(t => t.name.toLowerCase().includes(term));
+    return templates.filter((t: TestTemplateResponse) => t.name.toLowerCase().includes(term));
   });
 
   protected onSearch(event: Event): void {
