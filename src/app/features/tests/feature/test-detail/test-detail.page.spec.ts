@@ -3,7 +3,8 @@ import { TestDetailPage } from './test-detail.page';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { AthletesApiService } from '../../../athletes/data-access/athletes-api.service';
 import { TestsApiService } from '../../data-access/tests-api.service';
-import { of, throwError, Subject } from 'rxjs';
+import { of, throwError, Subject, timer } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MeasurementUnit, TestResponse } from '../../data-access/test.model';
@@ -89,20 +90,21 @@ describe('TestDetailPage', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.loading-state')).toBeTruthy();
+    expect(compiled.querySelector('.animate-spin')).toBeTruthy();
   });
 
   it('should display error state and support retry when fetch fails', async () => {
-    mockTestsApi.getTest.mockReturnValue(throwError(() => new Error('Fetch Error')));
+    mockTestsApi.getTest.mockReturnValue(timer(0).pipe(switchMap(() => throwError(() => new Error('Fetch Error')))));
 
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.error-banner')).toBeTruthy();
+    expect(compiled.querySelector('.bg-error-bg')).toBeTruthy();
 
-    const retryBtn = compiled.querySelector('.btn-retry') as HTMLElement;
+    const buttons = Array.from(compiled.querySelectorAll('button'));
+    const retryBtn = buttons.find(b => b.textContent?.includes('Riprova')) as HTMLElement;
     expect(retryBtn).toBeTruthy();
     
     // Set the mock to succeed on retry
@@ -125,9 +127,12 @@ describe('TestDetailPage', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('Test Forza');
     expect(compiled.textContent).toContain('Nota di test');
-    expect(compiled.querySelector('.exercises-table')).toBeTruthy();
-    expect(compiled.querySelector('.btn-edit')).toBeTruthy();
-    expect(compiled.querySelector('.btn-delete')).toBeTruthy();
+    expect(compiled.querySelector('table')).toBeTruthy();
+    const buttons = compiled.querySelectorAll('app-ui-button');
+    const editBtn = Array.from(buttons).find(b => b.textContent?.includes('Modifica')) as HTMLElement;
+    const deleteBtn = Array.from(buttons).find(b => b.textContent?.includes('Elimina')) as HTMLElement;
+    expect(editBtn).toBeTruthy();
+    expect(deleteBtn).toBeTruthy();
   });
 
   it('should start editing and pre-populate the form', async () => {
@@ -146,8 +151,10 @@ describe('TestDetailPage', () => {
     expect(component.exercises.at(0).value.exerciseTitle).toBe('Pushup');
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.test-form')).toBeTruthy();
-    expect(compiled.querySelector('.btn-cancel')).toBeTruthy();
+    expect(compiled.querySelector('form')).toBeTruthy();
+    const buttons = compiled.querySelectorAll('app-ui-button');
+    const cancelBtn = Array.from(buttons).find(b => b.textContent?.includes('Annulla')) as HTMLElement;
+    expect(cancelBtn).toBeTruthy();
   });
 
   it('should duplicate an exercise and increment its suffix number correctly', async () => {

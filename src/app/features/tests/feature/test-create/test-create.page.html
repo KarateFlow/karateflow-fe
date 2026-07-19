@@ -1,0 +1,113 @@
+<div class="max-w-5xl mx-auto w-full py-6">
+  <header class="mb-8">
+    <a [routerLink]="['/athletes', athleteId()]" class="inline-flex items-center gap-2 text-text-muted hover:text-primary font-bold px-3 py-2 -ml-3 rounded-xl transition-colors focus-ring outline-none">
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Torna al profilo
+    </a>
+    
+    @if (athleteResource.value(); as athlete) {
+      <div class="mt-4">
+        <h1 class="text-3xl font-extrabold text-text-main m-0 mb-1">Nuova Sessione di Test</h1>
+        <p class="text-lg text-text-muted m-0">Atleta: <strong class="text-text-main">{{ athlete.firstName }} {{ athlete.lastName }}</strong></p>
+      </div>
+    }
+  </header>
+
+  <form [formGroup]="testForm" (ngSubmit)="onPreSubmit()" class="flex flex-col gap-8">
+    <section class="surface-card p-6 md:p-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="md:col-span-2">
+          <app-ui-select
+            id="templateSelect"
+            (selectionChange)="onTemplateSelect($event)"
+            label="Seleziona Template"
+          >
+            <option value="">-- Nessun template (Inserimento manuale) --</option>
+            @for (tpl of templatesResource.value() ?? []; track tpl.id) {
+              <option [value]="tpl.id">{{ tpl.name }}</option>
+            }
+          </app-ui-select>
+        </div>
+
+        <app-ui-input
+          id="type"
+          type="text"
+          formControlName="type"
+          label="Tipologia Sessione"
+          placeholder="Es. Screening stagionale, Test Forza..."
+        ></app-ui-input>
+
+        <app-ui-input
+          id="executionDate"
+          type="datetime-local"
+          formControlName="executionDate"
+          label="Data Esecuzione"
+          [invalid]="isInvalid('executionDate')"
+          [errorMessage]="testForm.get('executionDate')?.hasError('futureDate') ? 'La data non può essere futura' : 'La data è obbligatoria'"
+        ></app-ui-input>
+      </div>
+
+      <div class="flex flex-col w-full gap-1.5">
+        <label for="coachNotes" class="font-bold text-text-main text-sm">Note del Coach (Opzionali)</label>
+        <textarea 
+          id="coachNotes" 
+          formControlName="coachNotes" 
+          rows="3" 
+          placeholder="Annotazioni generali sulla sessione..."
+          class="w-full p-3 border border-border rounded-xl font-sans text-sm bg-surface text-text-main outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-colors"
+        ></textarea>
+      </div>
+    </section>
+
+    <section class="mb-4">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h2 class="text-2xl font-extrabold text-text-main m-0">Esercizi Svolti</h2>
+        <app-ui-button variant="secondary" (btnClick)="addExercise()">
+          + Aggiungi Esercizio
+        </app-ui-button>
+      </div>
+
+      @if (exercises.controls.length === 0) {
+        <div class="text-center p-12 bg-bg-canvas border-2 border-dashed rounded-xl transition-colors" [ngClass]="exercises.touched && exercises.invalid ? 'border-error bg-error-bg text-error' : 'border-border text-text-muted'">
+          <p class="font-medium text-lg">Nessun esercizio aggiunto. Clicca sul tasto sopra per iniziare.</p>
+        </div>
+      }
+
+      <div class="flex flex-col gap-2">
+        @for (ctrl of exercises.controls; track ctrl; let i = $index) {
+          <app-exercise-form-row 
+            [formGroup]="asFormGroup(ctrl)" 
+            [index]="i"
+            (duplicate)="duplicateExercise(i)"
+            (remove)="removeExercise(i)"
+          />
+        }
+      </div>
+      
+      @if (exercises.touched && exercises.hasError('minlength')) {
+        <div class="mt-4 p-4 bg-error-bg border border-error rounded-xl text-error font-semibold text-center">
+          Inserire almeno un esercizio per poter salvare la sessione.
+        </div>
+      }
+    </section>
+
+    <footer class="flex justify-center py-8 border-t border-border">
+      <app-ui-button type="submit" variant="primary" [disabled]="isSubmitting()" [loading]="isSubmitting()" loadingText="Registrazione in corso...">
+        Salva Sessione
+      </app-ui-button>
+    </footer>
+  </form>
+</div>
+
+<app-confirm-dialog
+  [isOpen]="showConfirm()"
+  title="Registra Sessione"
+  message="Stai per salvare questa sessione di test. Confermi che i dati inseriti sono corretti?"
+  confirmText="Sì, salva"
+  cancelText="Rivedi"
+  (confirmed)="onConfirmSave()"
+  (cancelled)="showConfirm.set(false)"
+/>

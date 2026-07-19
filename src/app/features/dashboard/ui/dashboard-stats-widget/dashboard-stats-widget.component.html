@@ -1,0 +1,19 @@
+<div class="surface-card flex flex-col gap-3 p-6 h-full group relative overflow-hidden">
+  <div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors pointer-events-none"></div>
+  <div class="flex items-center gap-3 text-text-muted relative z-10">
+    <div class="flex items-center justify-center opacity-70 group-hover:opacity-100 group-hover:text-primary transition-all p-2 rounded-lg bg-bg-canvas border border-border" [ngClass]="iconBgClass.replace('bg-', 'text-').replace('bg-secondary', 'text-secondary')">
+      <ng-content></ng-content>
+    </div>
+    <span class="text-[11px] font-bold uppercase tracking-[0.1em] text-text-muted">{{ title }}</span>
+  </div>
+  <div class="mt-4 relative z-10">
+    <span class="text-5xl font-mono font-extrabold text-text-main leading-none tracking-tighter">{{ value }}</span>
+  </div>
+  <div class="mt-auto pt-5 border-t border-border/40 relative z-10">
+    @if (footerLink) {
+      <a [routerLink]="footerLink" class="text-primary font-semibold text-sm inline-flex items-center gap-1.5 transition-transform hover:translate-x-1 focus-ring">{{ footerText }} <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    } @else if (footerText) {
+      <span class="text-text-muted font-medium text-sm inline-flex items-center cursor-default opacity-60">{{ footerText }}</span>
+    }
+  </div>
+</div>

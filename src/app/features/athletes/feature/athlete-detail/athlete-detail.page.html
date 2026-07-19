@@ -1,0 +1,191 @@
+<div class="py-6 w-full max-w-6xl mx-auto transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out-quart">
+  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+    <a routerLink="/athletes" class="inline-flex items-center gap-2 text-text-muted hover:text-primary font-bold px-3 py-2 -ml-3 rounded-xl transition-colors focus-ring outline-none">
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Torna all'elenco
+    </a>
+
+    @if (athleteResource.status() === 'resolved') {
+      @let athlete = athleteResource.value()!;
+      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <app-ui-button variant="secondary" (btnClick)="navigateTo(['/athletes', athlete.athleteId, 'tests', 'new'])" class="w-full sm:w-auto flex">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+            <line x1="9" y1="15" x2="15" y2="15"></line>
+          </svg>
+          <span class="ml-2">Nuovo Test</span>
+        </app-ui-button>
+        <app-ui-button variant="outline" (btnClick)="navigateTo(['/athletes', athlete.athleteId, 'edit'])" class="w-full sm:w-auto flex">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          <span class="ml-2">Modifica Dati</span>
+        </app-ui-button>
+      </div>
+    }
+  </header>
+
+  @if (athleteResource.isLoading()) {
+    <div class="flex flex-col items-center justify-center py-24 gap-6 text-text-muted">
+      <div class="relative w-12 h-12">
+        <div class="absolute inset-0 border-4 border-surface-hover border-t-primary rounded-full animate-spin"></div>
+      </div>
+      <p class="font-medium">Caricamento profilo atleta...</p>
+    </div>
+  } @else if (athleteResource.error()) {
+    <div class="flex flex-col items-center gap-4 p-8 bg-error-bg border border-error rounded-xl text-error text-center">
+      <strong class="text-xl">Errore nel caricamento</strong>
+      <p>Impossibile recuperare i dettagli dell'atleta. Riprova più tardi.</p>
+      <button (click)="athleteResource.reload()" class="bg-surface border border-error text-error px-6 py-2 mt-2 rounded-xl font-bold hover:bg-error-bg transition-colors focus-ring outline-none">
+        Riprova
+      </button>
+    </div>
+  } @else if (athleteResource.value(); as athlete) {
+    <article class="surface-card p-6 md:p-10 mb-8 flex flex-col">
+      <div class="flex flex-col sm:flex-row items-center gap-6 mb-8 pb-8 border-b border-border">
+        <label for="avatarUploadDetail" class="relative group cursor-pointer rounded-full overflow-hidden w-20 h-20 shrink-0 border-2 border-transparent hover:border-primary transition-colors focus-ring outline-none block" tabindex="0" (keydown.enter)="avatarUploadDetail.click()" (keydown.space)="avatarUploadDetail.click()">
+          @if (avatarPreview()) {
+            <img [src]="avatarPreview()" alt="Avatar Preview" class="w-full h-full object-cover" />
+          } @else {
+            <div class="w-full h-full bg-gradient-to-br from-primary to-secondary text-white flex items-center justify-center text-3xl font-extrabold shadow-inner">
+              {{ athlete.firstName[0] }}{{ athlete.lastName[0] }}
+            </div>
+          }
+          <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </div>
+          <input #avatarUploadDetail type="file" id="avatarUploadDetail" accept="image/*" class="hidden" (change)="onFileSelected($event)" tabindex="-1" />
+        </label>
+        <div class="text-center sm:text-left">
+          <h1 class="text-4xl font-extrabold text-text-main m-0">{{ athlete.firstName }} {{ athlete.lastName }}</h1>
+          <p class="text-text-muted font-mono text-sm mt-1">ID: {{ athlete.athleteId }}</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
+        <div class="flex flex-col gap-1">
+          <span class="text-xs font-bold uppercase tracking-wider text-text-muted">Data di Nascita</span>
+          <p class="text-lg font-semibold text-text-main m-0">{{ athlete.birthDate | date }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <span class="text-xs font-bold uppercase tracking-wider text-text-muted">Contatto di Riferimento</span>
+          <p class="text-lg font-semibold text-text-main m-0">{{ athlete.referenceContact || 'Non specificato' }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <span class="text-xs font-bold uppercase tracking-wider text-text-muted">Data Registrazione</span>
+          <p class="text-lg font-semibold text-text-main m-0">{{ athlete.createdAt | date }}</p>
+        </div>
+      </div>
+
+      @if (athlete.medicalNotes) {
+        <div class="mt-4">
+          <span class="block text-xs font-bold uppercase tracking-wider text-text-muted mb-3">Note Mediche</span>
+          <div class="bg-error-bg border-l-4 border-secondary p-4 rounded-r-xl text-error italic leading-relaxed">
+            {{ athlete.medicalNotes }}
+          </div>
+        </div>
+      }
+    </article>
+
+    <div class="flex gap-2 sm:gap-6 mb-8 border-b border-border overflow-x-auto pb-2 scrollbar-hide">
+      <button 
+        type="button" 
+        class="px-2 py-3 text-base font-bold text-text-muted border-b-2 border-transparent transition-colors focus-ring outline-none whitespace-nowrap hover:text-primary" 
+        [ngClass]="{'!text-primary !border-primary': activeSection() === 'history'}"
+        (click)="activeSection.set('history')"
+      >
+        Storico Test
+      </button>
+      <button 
+        type="button" 
+        class="px-2 py-3 text-base font-bold text-text-muted border-b-2 border-transparent transition-colors focus-ring outline-none whitespace-nowrap hover:text-primary" 
+        [ngClass]="{'!text-primary !border-primary': activeSection() === 'reports'}"
+        (click)="activeSection.set('reports')"
+      >
+        Analisi & Confronti
+      </button>
+      <button 
+        type="button" 
+        class="px-2 py-3 text-base font-bold text-text-muted border-b-2 border-transparent transition-colors focus-ring outline-none whitespace-nowrap hover:text-primary" 
+        [ngClass]="{'!text-primary !border-primary': activeSection() === 'saved-reports'}"
+        (click)="activeSection.set('saved-reports'); selectedSavedReport.set(null)"
+      >
+        Report Salvati
+      </button>
+    </div>
+
+    <section class="mt-4">
+      @if (activeSection() === 'history') {
+        @if (testsResource.isLoading()) {
+          <div class="flex flex-col items-center py-12 gap-4 text-text-muted animate-in fade-in duration-300">
+            <div class="w-8 h-8 border-2 border-surface-hover border-t-primary rounded-full animate-spin"></div>
+            <p>Caricamento storico test...</p>
+          </div>
+        } @else {
+          <div class="animate-in fade-in duration-300 ease-out">
+            <app-athlete-tests-list [tests]="testsResource.value() ?? []" />
+          </div>
+        }
+      } @else if (activeSection() === 'reports') {
+        @if (testsResource.isLoading()) {
+          <div class="flex flex-col items-center py-12 gap-4 text-text-muted animate-in fade-in duration-300">
+            <div class="w-8 h-8 border-2 border-surface-hover border-t-primary rounded-full animate-spin"></div>
+            <p>Caricamento storico test...</p>
+          </div>
+        } @else {
+          <div class="animate-in fade-in duration-300 ease-out">
+            <app-report-dashboard 
+              [athleteId]="athlete.athleteId" 
+              [athlete]="athlete"
+              [tests]="testsResource.value() ?? []"
+              (reportSaved)="onReportSaved()"
+            />
+          </div>
+        }
+      } @else {
+        @if (testsResource.isLoading()) {
+          <div class="flex flex-col items-center py-12 gap-4 text-text-muted animate-in fade-in duration-300">
+            <div class="w-8 h-8 border-2 border-surface-hover border-t-primary rounded-full animate-spin"></div>
+            <p>Caricamento storico test...</p>
+          </div>
+        } @else {
+          @if (selectedSavedReport(); as saved) {
+            <div class="animate-in fade-in slide-in-from-right-4 duration-300 ease-out">
+              <button type="button" class="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-surface border border-border text-text-main font-bold text-sm rounded-xl hover:bg-bg-canvas hover:border-primary hover:text-primary transition-colors focus-ring outline-none" (click)="closeSavedReport()">
+                <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Torna all'elenco dei report salvati
+              </button>
+              <app-report-dashboard
+                [athleteId]="athlete.athleteId"
+                [athlete]="athlete"
+                [tests]="testsResource.value() ?? []"
+                [savedReport]="saved"
+              />
+            </div>
+          } @else {
+            <div class="animate-in fade-in duration-300 ease-out">
+              <app-saved-reports-list
+                #savedReportsList
+                [athleteId]="athlete.athleteId"
+                [tests]="testsResource.value() ?? []"
+                [autoOpenReportId]="autoOpenReportId()"
+                (viewReport)="selectedSavedReport.set($event)"
+              />
+            </div>
+          }
+        }
+      }
+    </section>
+  }
+</div>

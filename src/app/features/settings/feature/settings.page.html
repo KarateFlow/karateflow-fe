@@ -1,0 +1,27 @@
+<div class="max-w-3xl mx-auto w-full py-6">
+  <header class="mb-8">
+    <h1 class="text-3xl font-extrabold text-text-main mb-2">Impostazioni</h1>
+    <p class="text-lg text-text-muted">Gestisci le preferenze del tuo account e dell'applicazione.</p>
+  </header>
+
+  <section class="surface-card overflow-hidden mb-8">
+    <div class="px-6 py-5 border-b bg-bg-canvas">
+      <h2 class="text-xl font-bold text-text-main m-0">Aspetto</h2>
+      <p class="text-sm text-text-muted mt-1">Personalizza l'interfaccia utente</p>
+    </div>
+
+    <div class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex-1">
+        <label for="themeSelect" class="block font-bold text-text-main mb-1 text-base">Tema dell'Applicazione</label>
+        <span class="block text-sm text-text-muted">Scegli tra tema chiaro, scuro o segui le impostazioni di sistema.</span>
+      </div>
+      <div class="w-full sm:w-auto min-w-[200px]">
+        <app-ui-select id="themeSelect" [ngModel]="themeService.currentTheme()" (ngModelChange)="onThemeChange($event)">
+          <option value="light">Chiaro</option>
+          <option value="dark">Scuro</option>
+          <option value="system">Sistema</option>
+        </app-ui-select>
+      </div>
+    </div>
+  </section>
+</div>

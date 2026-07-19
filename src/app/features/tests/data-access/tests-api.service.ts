@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
+// API calls will be intercepted by api.interceptor.ts
 import { CreateTestRequest, TestResponse, UpdateTestRequest } from './test.model';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { CreateTestRequest, TestResponse, UpdateTestRequest } from './test.model
 })
 export class TestsApiService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = `${environment.apiUrl}/tests`;
+  private readonly apiUrl = `/tests`;
 
   /**
    * Records a new physical test session.

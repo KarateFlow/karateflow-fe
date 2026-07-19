@@ -56,27 +56,15 @@ import { ToastService } from './toast.service';
     }
 
     .toast-warning {
-      background-color: #fef3c7;
-      color: #92400e;
-      border-color: #fcd34d;
-    }
-    
-    :host-context(.dark) .toast-warning {
-      background-color: rgba(146, 64, 14, 0.2);
-      border-color: rgba(252, 211, 77, 0.3);
-      color: #fcd34d;
+      background-color: var(--color-warning-bg);
+      color: var(--color-warning);
+      border-color: var(--color-warning);
     }
 
     .toast-info {
-      background-color: #e0f2fe;
-      color: #0369a1;
-      border-color: #7dd3fc;
-    }
-
-    :host-context(.dark) .toast-info {
-      background-color: rgba(3, 105, 161, 0.2);
-      border-color: rgba(125, 211, 252, 0.3);
-      color: #7dd3fc;
+      background-color: var(--color-info-bg);
+      color: var(--color-info);
+      border-color: var(--color-info);
     }
 
     @keyframes slideIn {

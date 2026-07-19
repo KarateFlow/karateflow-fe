@@ -41,13 +41,13 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      background: oklch(0 0 0 / 0.5);
       backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      animation: fadeIn 0.2s ease-out;
+      animation: fadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .modal-container {
@@ -55,7 +55,8 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
       border-radius: var(--radius-xl);
       width: 90%;
       max-width: 400px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--color-border);
       overflow: hidden;
       animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -94,29 +95,39 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
       border: 1px solid var(--color-border);
       color: var(--color-text-main);
       padding: 0.5rem 1.25rem;
-      border-radius: var(--radius-xl);
+      border-radius: var(--radius-md);
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      outline: none;
+    }
+
+    .btn-secondary:focus-visible {
+      box-shadow: var(--shadow-focus);
     }
 
     .btn-secondary:hover {
-      background: var(--color-hover);
+      background: var(--color-surface-hover);
     }
 
     .btn-confirm {
-      background: var(--color-primary-aka);
+      background: var(--color-primary);
       color: white;
-      border: none;
+      border: 1px solid transparent;
       padding: 0.5rem 1.25rem;
-      border-radius: var(--radius-xl);
+      border-radius: var(--radius-md);
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      outline: none;
+    }
+
+    .btn-confirm:focus-visible {
+      box-shadow: var(--shadow-focus);
     }
 
     .btn-confirm:hover {
-      filter: brightness(1.1);
+      background: var(--color-primary-hover);
     }
 
     @keyframes fadeIn {

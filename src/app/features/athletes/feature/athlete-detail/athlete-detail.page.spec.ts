@@ -4,7 +4,8 @@ import { provideRouter, ActivatedRoute } from '@angular/router';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
 import { TestsApiService } from '../../../tests/data-access/tests-api.service';
 import { ReportsApiService } from '../../../reports/data-access/reports-api.service';
-import { of, throwError } from 'rxjs';
+import { of, throwError, timer } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { Athlete } from '../../data-access/athlete.model';
 import { TestResponse } from '../../../tests/data-access/test.model';
 import { ReportPreviewResponse, ReportResponse } from '../../../reports/data-access/reports.model';
@@ -65,7 +66,8 @@ describe('AthleteDetailPage', () => {
               paramMap: {
                 get: (key: string) => key === 'id' ? '123' : null
               }
-            }
+            },
+            queryParams: of({})
           }
         },
         { provide: AthletesApiService, useValue: mockAthletesApi },
@@ -94,7 +96,7 @@ describe('AthleteDetailPage', () => {
   });
 
   it('should display error state and support retry for athleteResource', async () => {
-    mockAthletesApi.getAthlete.mockReturnValue(throwError(() => new Error('API Error')));
+    mockAthletesApi.getAthlete.mockReturnValue(timer(0).pipe(switchMap(() => throwError(() => new Error('API Error')))));
     
     fixture.detectChanges();
     await fixture.whenStable();
@@ -102,7 +104,7 @@ describe('AthleteDetailPage', () => {
 
     expect(component['athleteResource'].error()).toBeTruthy();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.error-banner')).toBeTruthy();
+    expect(compiled.querySelector('.bg-error-bg')).toBeTruthy();
 
     // Test retry
     expect(mockAthletesApi.getAthlete).toHaveBeenCalledTimes(1);

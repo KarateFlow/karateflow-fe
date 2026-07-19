@@ -4,7 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { CreateTestTemplateRequest, MeasurementUnit } from './test.model';
-import { environment } from '../../../../environments/environment';
+// environment not needed for relative url test
 
 describe('TemplatesApiService', () => {
   let service: TemplatesApiService;
@@ -36,7 +36,7 @@ describe('TemplatesApiService', () => {
 
     service.createTemplate(mockRequest).subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/templates`);
+    const req = httpMock.expectOne(`/templates`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(mockRequest);
     req.flush({});
@@ -45,7 +45,7 @@ describe('TemplatesApiService', () => {
   it('should send GET request to retrieve all templates', () => {
     service.getTemplates().subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/templates`);
+    const req = httpMock.expectOne(`/templates`);
     expect(req.request.method).toBe('GET');
     req.flush([]);
   });
@@ -53,7 +53,7 @@ describe('TemplatesApiService', () => {
   it('should send GET request to retrieve single template by id', () => {
     service.getTemplate('456').subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/templates/456`);
+    const req = httpMock.expectOne(`/templates/456`);
     expect(req.request.method).toBe('GET');
     req.flush({});
   });
@@ -66,7 +66,7 @@ describe('TemplatesApiService', () => {
 
     service.updateTemplate('456', mockRequest).subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/templates/456`);
+    const req = httpMock.expectOne(`/templates/456`);
     expect(req.request.method).toBe('PUT');
     expect(req.request.body).toEqual(mockRequest);
     req.flush({});
@@ -75,7 +75,7 @@ describe('TemplatesApiService', () => {
   it('should send DELETE request to remove template', () => {
     service.deleteTemplate('456').subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/templates/456`);
+    const req = httpMock.expectOne(`/templates/456`);
     expect(req.request.method).toBe('DELETE');
     req.flush({});
   });

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { DashboardApiService, DashboardSummary } from './dashboard-api.service';
-import { environment } from '../../../../environments/environment';
+// environment not needed for relative url test
 
 describe('DashboardApiService', () => {
   let service: DashboardApiService;
@@ -40,7 +40,7 @@ describe('DashboardApiService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/dashboard/summary`);
+    const req = httpMock.expectOne(`/dashboard/summary`);
     expect(req.request.method).toBe('GET');
     req.flush(mockResponse);
   });
@@ -58,7 +58,7 @@ describe('DashboardApiService', () => {
       expect(response).toEqual(fallbackResponse);
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/dashboard/summary`);
+    const req = httpMock.expectOne(`/dashboard/summary`);
     req.error(new ProgressEvent('Network error'));
   });
 });

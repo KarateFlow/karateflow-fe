@@ -57,12 +57,11 @@ describe('AthleteCreatePage', () => {
     vi.useRealTimers();
   });
 
-  it('should handle successful athlete creation', () => {
+  it('should handle successful athlete creation', async () => {
     const mockAthlete = { firstName: 'Mario', lastName: 'Rossi', athleteId: '123' };
     athletesApi.createAthlete.mockReturnValue(of(mockAthlete));
 
-    // @ts-expect-error - Accesso a metodo protetto per il test
-    component.onSave({ firstName: 'Mario', lastName: 'Rossi', birthDate: '2010-01-01' });
+    await component['onSave']({ firstName: 'Mario', lastName: 'Rossi', birthDate: '2010-01-01' });
 
     // @ts-expect-error - Accesso a segnale protetto per il test
     expect(component.isSubmitting()).toBe(false);
@@ -72,36 +71,33 @@ describe('AthleteCreatePage', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/athletes']);
   });
 
-  it('should handle connection error (status 0)', () => {
+  it('should handle connection error (status 0)', async () => {
     const error = new HttpErrorResponse({ status: 0 });
     athletesApi.createAthlete.mockReturnValue(throwError(() => error));
 
-    // @ts-expect-error - Accesso a metodo protetto per il test
-    component.onSave({ firstName: 'Mario', lastName: 'Rossi', birthDate: '2010-01-01' });
+    await component['onSave']({ firstName: 'Mario', lastName: 'Rossi', birthDate: '2010-01-01' });
 
     // @ts-expect-error - Accesso a segnale protetto per il test
     expect(component.isSubmitting()).toBe(false);
     expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('server non risponde'));
   });
 
-  it('should handle conflict error (status 409)', () => {
+  it('should handle conflict error (status 409)', async () => {
     const error = new HttpErrorResponse({ status: 409 });
     athletesApi.createAthlete.mockReturnValue(throwError(() => error));
 
-    // @ts-expect-error - Accesso a metodo protetto per il test
-    component.onSave({ firstName: 'Mario', lastName: 'Rossi', birthDate: '2010-01-01' });
+    await component['onSave']({ firstName: 'Mario', lastName: 'Rossi', birthDate: '2010-01-01' });
 
     // @ts-expect-error - Accesso a segnale protetto per il test
     expect(component.isSubmitting()).toBe(false);
     expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('già registrato'));
   });
 
-  it('should handle server error (status 500)', () => {
+  it('should handle server error (status 500)', async () => {
     const error = new HttpErrorResponse({ status: 500 });
     athletesApi.createAthlete.mockReturnValue(throwError(() => error));
 
-    // @ts-expect-error - Accesso a metodo protetto per il test
-    component.onSave({ firstName: 'Mario', lastName: 'Rossi', birthDate: '2010-01-01' });
+    await component['onSave']({ firstName: 'Mario', lastName: 'Rossi', birthDate: '2010-01-01' });
 
     // @ts-expect-error - Accesso a segnale protetto per il test
     expect(component.isSubmitting()).toBe(false);

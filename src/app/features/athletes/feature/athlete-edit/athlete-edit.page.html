@@ -1,0 +1,80 @@
+<div class="max-w-3xl mx-auto w-full py-6">
+  <header class="mb-8">
+    <a [routerLink]="['/athletes', athleteId()]" class="inline-flex items-center gap-2 text-text-muted hover:text-primary font-bold px-3 py-2 -ml-3 rounded-xl transition-colors focus-ring outline-none">
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Annulla e torna al profilo
+    </a>
+    <h1 class="text-3xl font-extrabold text-text-main mt-4 m-0">Modifica Atleta</h1>
+  </header>
+
+  <div class="surface-card p-6 md:p-8">
+    @if (isLoading) {
+      <div class="flex flex-col items-center justify-center py-12 gap-6 text-text-muted">
+        <div class="relative w-10 h-10">
+          <div class="absolute inset-0 border-4 border-surface-hover border-t-primary rounded-full animate-spin"></div>
+        </div>
+        <p class="font-medium">Caricamento dati atleta in corso...</p>
+      </div>
+    } @else if (error) {
+      <div class="text-center p-8 bg-error-bg border border-error rounded-xl text-error">
+        <p>Impossibile caricare i dati dell'atleta. Riprova più tardi.</p>
+      </div>
+    } @else if (athlete) {
+      <div class="flex flex-col gap-6">
+        <!-- Sezione in sola lettura -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-bold uppercase tracking-wider text-text-muted">Nome</span>
+            <p class="text-lg font-semibold text-text-main m-0">{{ athlete.firstName }}</p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-bold uppercase tracking-wider text-text-muted">Cognome</span>
+            <p class="text-lg font-semibold text-text-main m-0">{{ athlete.lastName }}</p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-bold uppercase tracking-wider text-text-muted">Data di Nascita</span>
+            <p class="text-lg font-semibold text-text-main m-0">{{ athlete.birthDate | date }}</p>
+          </div>
+        </div>
+
+        <hr class="border-t border-border my-2" />
+
+        <!-- Form Editabile -->
+        <form [formGroup]="editForm" (ngSubmit)="onPreSubmit()" class="flex flex-col gap-6">
+          <app-ui-input
+            formControlName="referenceContact"
+            label="Contatto di Riferimento"
+            placeholder="Es. Genitore, Telefono o Email"
+          ></app-ui-input>
+
+          <app-ui-textarea
+            formControlName="medicalNotes"
+            label="Note Mediche"
+            placeholder="Es. Allergie, infortuni, certificati..."
+            [rows]="4"
+          ></app-ui-textarea>
+
+          <div class="flex justify-end mt-4">
+            <app-ui-button type="submit" variant="primary" [disabled]="editForm.pristine || isSubmitting()" [loading]="isSubmitting()">
+              Salva Modifiche
+            </app-ui-button>
+          </div>
+        </form>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Modale di Conferma Custom -->
+<app-confirm-dialog
+  [isOpen]="showConfirm()"
+  title="Conferma Modifica"
+  message="Sei sicuro di voler aggiornare i dati dell'atleta? L'operazione non può essere annullata."
+  confirmText="Sì, salva"
+  cancelText="Torna indietro"
+  (confirmed)="onConfirmSave()"
+  (cancelled)="showConfirm.set(false)"
+/>

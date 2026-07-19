@@ -4,7 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { CreateTestRequest, MeasurementUnit } from './test.model';
-import { environment } from '../../../../environments/environment';
+// environment not needed for relative url test
 
 describe('TestsApiService', () => {
   let service: TestsApiService;
@@ -37,7 +37,7 @@ describe('TestsApiService', () => {
 
     service.createTest(mockRequest).subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/tests`);
+    const req = httpMock.expectOne(`/tests`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(mockRequest);
     req.flush({});
@@ -46,7 +46,7 @@ describe('TestsApiService', () => {
   it('should send GET request to retrieve tests by athlete id', () => {
     service.getTestsByAthlete('123').subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/tests?athleteId=123`);
+    const req = httpMock.expectOne(`/tests?athleteId=123`);
     expect(req.request.method).toBe('GET');
     req.flush([]);
   });
@@ -54,7 +54,7 @@ describe('TestsApiService', () => {
   it('should send GET request to retrieve single test by id', () => {
     service.getTest('456').subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/tests/456`);
+    const req = httpMock.expectOne(`/tests/456`);
     expect(req.request.method).toBe('GET');
     req.flush({});
   });
@@ -68,7 +68,7 @@ describe('TestsApiService', () => {
 
     service.updateTest('456', mockRequest).subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/tests/456`);
+    const req = httpMock.expectOne(`/tests/456`);
     expect(req.request.method).toBe('PUT');
     expect(req.request.body).toEqual(mockRequest);
     req.flush({});
@@ -77,7 +77,7 @@ describe('TestsApiService', () => {
   it('should send DELETE request to remove test', () => {
     service.deleteTest('456').subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/tests/456`);
+    const req = httpMock.expectOne(`/tests/456`);
     expect(req.request.method).toBe('DELETE');
     req.flush({});
   });

@@ -137,7 +137,7 @@ describe('TestCreatePage', () => {
     await component['onConfirmSave']();
 
     expect(component['isSubmitting']()).toBe(false);
-    expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('server non risponde'));
+    expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('Impossibile raggiungere il backend. Verifica la tua connessione o lo stato del server.'));
     
     consoleSpy.mockRestore();
   });
@@ -165,7 +165,7 @@ describe('TestCreatePage', () => {
     await component['onConfirmSave']();
 
     expect(component['isSubmitting']()).toBe(false);
-    expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('Errore del server'));
+    expect(toastService.error).toHaveBeenCalledWith(expect.stringContaining('Il server ha riscontrato un problema interno. Riprova tra qualche istante.'));
     
     consoleSpy.mockRestore();
   });
