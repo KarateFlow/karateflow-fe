@@ -16,9 +16,9 @@ import { Breadcrumb, BreadcrumbService } from './breadcrumb.service';
           <li class="flex items-center">
             @if (!last) {
               @if (crumb.url) {
-                <a [routerLink]="crumb.url" (click)="onCrumbClick($event, crumb)" class="hover:text-primary-aka transition-colors focus-ring rounded-sm outline-none">{{ crumb.label }}</a>
+                <a [routerLink]="crumb.url" (click)="onCrumbClick($event, crumb)" class="hover:text-primary transition-colors focus-ring rounded-sm outline-none">{{ crumb.label }}</a>
               } @else if (crumb.action) {
-                <a href="javascript:void(0)" (click)="onCrumbClick($event, crumb)" class="hover:text-primary-aka transition-colors focus-ring rounded-sm outline-none">{{ crumb.label }}</a>
+                <a href="javascript:void(0)" (click)="onCrumbClick($event, crumb)" class="hover:text-primary transition-colors focus-ring rounded-sm outline-none">{{ crumb.label }}</a>
               } @else {
                 <span class="text-text-muted">{{ crumb.label }}</span>
               }

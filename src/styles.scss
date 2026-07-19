@@ -17,6 +17,6 @@ body {
 }
 
 /* Fallback Classes in case Tailwind JIT misses them in Angular bindings */
-.bg-primary-aka { background-color: var(--color-primary-aka) !important; }
+.bg-primary { background-color: var(--color-primary) !important; }
 .bg-success { background-color: var(--color-success) !important; }
-.bg-secondary-ao { background-color: var(--color-secondary-ao) !important; }
+.bg-secondary { background-color: var(--color-secondary) !important; }

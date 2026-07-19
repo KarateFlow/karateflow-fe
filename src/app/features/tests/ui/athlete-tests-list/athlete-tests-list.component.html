@@ -32,18 +32,18 @@
           placeholder="Cerca sessione..." 
           [value]="searchTerm()" 
           (input)="onSearch($event)" 
-          class="w-full pl-10 pr-4 py-2 border border-border rounded-xl bg-surface text-text-main placeholder-text-muted outline-none focus:border-primary-aka focus:ring-2 focus:ring-primary-aka/10 transition-colors" 
+          class="w-full pl-10 pr-4 py-2 border border-border rounded-xl bg-surface text-text-main placeholder-text-muted outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-colors" 
         />
       </div>
     </section>
 
     <div class="flex flex-col gap-4">
       @for (test of filteredTests(); track test.id) {
-        <article class="bg-surface border rounded-xl overflow-hidden transition-colors"
+        <article class="bg-surface rounded-xl overflow-hidden transition-colors"
                  [class.border-border]="expandedId() !== test.id"
-                 [class.border-primary-aka]="expandedId() === test.id">
+                 [class.border-primary]="expandedId() === test.id">
           <header 
-            class="flex items-center p-5 cursor-pointer gap-8 outline-none focus-visible:bg-hover focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-primary-aka transition-colors hover:bg-hover" 
+            class="flex items-center p-5 cursor-pointer gap-8 outline-none focus-visible:bg-hover focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-primary transition-colors hover:bg-hover" 
             (click)="toggleExpand(test.id)"
             (keydown.enter)="toggleExpand(test.id)"
             (keydown.space)="toggleExpand(test.id)"
@@ -61,7 +61,7 @@
               <span class="text-sm text-text-muted">{{ test.exercises.length }} esercizi svolti</span>
             </div>
 
-            <div class="text-text-muted transition-transform duration-300" [class.rotate-180]="expandedId() === test.id" [class.text-primary-aka]="expandedId() === test.id">
+            <div class="text-text-muted transition-transform duration-300" [class.rotate-180]="expandedId() === test.id" [class.text-primary]="expandedId() === test.id">
               <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none">
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
@@ -69,15 +69,15 @@
           </header>
 
           @if (expandedId() === test.id) {
-            <div class="p-6 border-t border-border bg-bg-canvas animate-in fade-in slide-in-from-top-2 duration-200">
+            <div class="p-6 border-t bg-bg-canvas animate-in fade-in slide-in-from-top-2 duration-200">
               @if (test.coachNotes) {
-                <div class="mb-4 p-4 bg-surface border-l-4 border-secondary-ao rounded-r-md text-sm">
+                <div class="mb-4 p-4 bg-surface border-l-4 border-secondary rounded-r-md text-sm">
                   <strong class="block mb-1 text-text-main">Note del Coach:</strong>
                   <p class="m-0 text-text-muted">{{ test.coachNotes }}</p>
                 </div>
               }
 
-              <div class="bg-surface rounded-xl border border-border overflow-hidden">
+              <div class="bg-surface rounded-xl overflow-hidden">
                 <table class="w-full text-left border-collapse text-sm hidden sm:table">
                   <thead>
                     <tr class="bg-bg-canvas text-xs uppercase tracking-wider text-text-muted border-b border-border">
@@ -91,7 +91,7 @@
                     @for (ex of test.exercises.slice(0, 5); track $index) {
                       <tr class="border-b border-border last:border-b-0">
                         <td class="p-3 font-bold text-text-main max-w-[120px] truncate" [title]="ex.exerciseTitle">{{ ex.exerciseTitle }}</td>
-                        <td class="p-3 text-right font-extrabold text-primary-aka text-lg">{{ ex.result | number:'1.1-2' }}</td>
+                        <td class="p-3 text-right font-extrabold text-primary text-lg">{{ ex.result | number:'1.1-2' }}</td>
                         <td class="p-3 font-semibold text-text-muted lowercase">{{ ex.unit }}</td>
                         <td class="p-3">
                           <span class="text-xs font-bold px-2 py-1 rounded-full" 
@@ -117,7 +117,7 @@
                       </div>
                       <div class="flex justify-between items-center">
                         <span class="text-xs font-bold text-text-muted uppercase">Risultato</span>
-                        <span class="font-extrabold text-primary-aka text-lg">{{ ex.result | number:'1.1-2' }} <span class="text-sm font-semibold text-text-muted lowercase ml-1">{{ ex.unit }}</span></span>
+                        <span class="font-extrabold text-primary text-lg">{{ ex.result | number:'1.1-2' }} <span class="text-sm font-semibold text-text-muted lowercase ml-1">{{ ex.unit }}</span></span>
                       </div>
                       <div class="flex justify-between items-center">
                         <span class="text-xs font-bold text-text-muted uppercase">Tendenza</span>
@@ -141,7 +141,7 @@
               }
 
               <div class="flex justify-end mt-4">
-                <a [routerLink]="['/athletes', test.athleteId, 'tests', test.id]" class="inline-flex items-center gap-2 bg-primary-aka text-white text-sm font-bold px-4 py-2 rounded-xl hover:brightness-110 transition-colors focus-ring outline-none">
+                <a [routerLink]="['/athletes', test.athleteId, 'tests', test.id]" class="inline-flex items-center gap-2 bg-primary text-white text-sm font-bold px-4 py-2 rounded-xl hover:brightness-110 transition-colors focus-ring outline-none">
                   <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>

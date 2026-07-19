@@ -24,7 +24,7 @@
             </div>
           </div>
           
-          <div class="flex flex-col items-center justify-center p-4 sm:p-6 bg-bg-canvas rounded-xl border border-border text-center">
+          <div class="flex flex-col items-center justify-center p-4 sm:p-6 bg-bg-canvas rounded-xl text-center">
             <span class="text-xs text-text-muted uppercase tracking-wider font-bold">Variazione</span>
             <div class="text-2xl sm:text-3xl font-extrabold my-2" [class.text-success]="isPositiveChange()" [class.text-error]="!isPositiveChange()">
               {{ deltaValFormatted() }}
@@ -36,7 +36,8 @@
         @if (linePoints().length === 0) {
           <div class="h-[180px] flex items-center justify-center text-text-muted italic">Nessun dato per tracciare il grafico</div>
         } @else {
-          <div class="relative w-full h-[200px]">
+          <div class="overflow-x-auto pb-6 -mx-6 px-6">
+            <div class="relative w-full h-[200px] min-w-[450px]">
             <svg viewBox="0 0 500 240" class="overflow-visible" width="100%" height="100%">
               <!-- Grid Lines -->
               @for (yVal of gridYLines(); track $index) {
@@ -45,13 +46,13 @@
               }
 
               <!-- The Line Path -->
-              <path [attr.d]="svgPath()" fill="none" class="stroke-primary-aka stroke-[3] drop-shadow-[0_4px_6px_rgba(37,99,235,0.2)]" stroke-linecap="round" stroke-linejoin="round" />
+              <path [attr.d]="svgPath()" fill="none" class="stroke-primary stroke-[3] drop-shadow-[0_4px_6px_rgba(37,99,235,0.2)]" stroke-linecap="round" stroke-linejoin="round" />
               <!-- Area under line -->
               <path [attr.d]="svgAreaPath()" class="opacity-10 pointer-events-none" fill="url(#gradient-fill)" />
 
               <!-- Data Points and Interactive Hover Zones -->
               @for (pt of svgPoints(); track $index) {
-                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="5" class="fill-surface stroke-primary-aka stroke-[3] transition-all duration-200 ease-in-out hover:r-8 hover:stroke-secondary-ao" />
+                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="5" class="fill-surface stroke-primary stroke-[3] transition-all duration-200 ease-in-out hover:r-8 hover:stroke-secondary" />
                 <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="14" class="fill-transparent cursor-pointer" (mouseover)="pt.hover = true" (mouseout)="pt.hover = false">
                   <title>{{ pt.label }} ({{ pt.date | date }})</title>
                 </circle>
@@ -66,6 +67,7 @@
                   <span class="text-[8px] text-text-muted font-semibold">{{ pt.value | number:'1.0-1' }}</span>
                 </div>
               }
+            </div>
             </div>
           </div>
         }

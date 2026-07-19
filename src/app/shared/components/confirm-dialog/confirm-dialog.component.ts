@@ -111,7 +111,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
     }
 
     .btn-confirm {
-      background: var(--color-primary-aka);
+      background: var(--color-primary);
       color: white;
       border: 1px solid transparent;
       padding: 0.5rem 1.25rem;
@@ -127,7 +127,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
     }
 
     .btn-confirm:hover {
-      background: var(--color-primary-aka-hover);
+      background: var(--color-primary-hover);
     }
 
     @keyframes fadeIn {

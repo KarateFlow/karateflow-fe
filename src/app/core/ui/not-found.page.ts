@@ -59,7 +59,7 @@ import { RouterLink } from '@angular/router';
       font-weight: 900;
       line-height: 1;
       margin: 0;
-      color: var(--color-primary-aka);
+      color: var(--color-primary);
       text-shadow: 2px 2px 0px rgba(37, 99, 235, 0.1);
     }
 
@@ -83,7 +83,7 @@ import { RouterLink } from '@angular/router';
     }
 
     .btn-primary {
-      background-color: var(--color-primary-aka);
+      background-color: var(--color-primary);
       color: white;
       text-decoration: none;
       font-weight: 700;

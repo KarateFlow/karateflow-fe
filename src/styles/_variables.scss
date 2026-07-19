@@ -1,16 +1,16 @@
 /* Root variables for KarateFlow Design System */
 :root {
   /* Core Hues */
-  --hue-aka: 258;
-  --hue-ao: 19;
+  --hue-primary: 258;
+  --hue-secondary: 45;
   
   /* Brand Colors */
-  --color-primary-aka: oklch(0.52 0.18 var(--hue-aka));
-  --color-primary-aka-hover: oklch(0.48 0.18 var(--hue-aka));
-  --color-primary-aka-subtle: oklch(0.96 0.04 var(--hue-aka));
+  --color-primary: oklch(0.52 0.18 var(--hue-primary));
+  --color-primary-hover: oklch(0.48 0.18 var(--hue-primary));
+  --color-primary-subtle: oklch(0.96 0.04 var(--hue-primary));
 
-  --color-secondary-ao: oklch(0.52 0.22 var(--hue-ao));
-  --color-secondary-ao-hover: oklch(0.48 0.22 var(--hue-ao));
+  --color-secondary: oklch(0.52 0.22 var(--hue-secondary));
+  --color-secondary-hover: oklch(0.48 0.22 var(--hue-secondary));
 
   /* Feedback Colors */
   --color-success: oklch(0.65 0.15 150);
@@ -26,23 +26,23 @@
   --color-info-bg: oklch(0.96 0.04 240);
 
   /* Surface Colors */
-  --color-bg-canvas: oklch(0.98 0.01 var(--hue-aka));
+  --color-bg-canvas: oklch(0.98 0.01 var(--hue-primary));
   --color-surface: oklch(1 0 0);
-  --color-surface-hover: oklch(0.96 0.015 var(--hue-aka));
+  --color-surface-hover: oklch(0.96 0.015 var(--hue-primary));
   
   /* Typography Colors */
-  --color-text-main: oklch(0.20 0.03 var(--hue-aka));
-  --color-text-muted: oklch(0.50 0.03 var(--hue-aka));
+  --color-text-main: oklch(0.20 0.03 var(--hue-primary));
+  --color-text-muted: oklch(0.50 0.03 var(--hue-primary));
   
   /* Utilities */
-  --color-border: oklch(0.90 0.02 var(--hue-aka));
-  --color-hover: oklch(0.94 0.015 var(--hue-aka));
-  --color-focus-ring: oklch(0.60 0.15 var(--hue-aka) / 0.5);
+  --color-border: oklch(0.90 0.02 var(--hue-primary));
+  --color-hover: oklch(0.94 0.015 var(--hue-primary));
+  --color-focus-ring: oklch(0.60 0.15 var(--hue-primary) / 0.5);
 
   /* Design Tokens */
-  --radius-xl: 12px;
-  --radius-lg: 8px;
-  --radius-md: 6px;
+  --radius-xl: 6px;
+  --radius-lg: 4px;
+  --radius-md: 2px;
   --radius-full: 9999px;
 
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -55,22 +55,22 @@
 }
 
 .dark {
-  --color-bg-canvas: oklch(0.18 0.02 var(--hue-aka));
-  --color-surface: oklch(0.22 0.02 var(--hue-aka));
-  --color-surface-hover: oklch(0.26 0.02 var(--hue-aka));
+  --color-bg-canvas: oklch(0.18 0.02 var(--hue-primary));
+  --color-surface: oklch(0.22 0.02 var(--hue-primary));
+  --color-surface-hover: oklch(0.26 0.02 var(--hue-primary));
   
-  --color-text-main: oklch(0.96 0.01 var(--hue-aka));
-  --color-text-muted: oklch(0.70 0.02 var(--hue-aka));
+  --color-text-main: oklch(0.96 0.01 var(--hue-primary));
+  --color-text-muted: oklch(0.70 0.02 var(--hue-primary));
   
-  --color-border: oklch(0.30 0.02 var(--hue-aka));
-  --color-hover: oklch(0.28 0.02 var(--hue-aka));
+  --color-border: oklch(0.30 0.02 var(--hue-primary));
+  --color-hover: oklch(0.28 0.02 var(--hue-primary));
 
-  --color-primary-aka: oklch(0.62 0.18 var(--hue-aka));
-  --color-primary-aka-hover: oklch(0.68 0.18 var(--hue-aka));
-  --color-primary-aka-subtle: oklch(0.30 0.08 var(--hue-aka));
+  --color-primary: oklch(0.62 0.18 var(--hue-primary));
+  --color-primary-hover: oklch(0.68 0.18 var(--hue-primary));
+  --color-primary-subtle: oklch(0.30 0.08 var(--hue-primary));
 
-  --color-secondary-ao: oklch(0.62 0.22 var(--hue-ao));
-  --color-secondary-ao-hover: oklch(0.68 0.22 var(--hue-ao));
+  --color-secondary: oklch(0.62 0.22 var(--hue-secondary));
+  --color-secondary-hover: oklch(0.68 0.22 var(--hue-secondary));
 
   --color-success: oklch(0.75 0.15 150);
   --color-success-bg: oklch(0.30 0.05 150);
@@ -84,7 +84,7 @@
   --color-info: oklch(0.70 0.15 240);
   --color-info-bg: oklch(0.30 0.05 240);
 
-  --color-focus-ring: oklch(0.70 0.15 var(--hue-aka) / 0.5);
+  --color-focus-ring: oklch(0.70 0.15 var(--hue-primary) / 0.5);
 
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);

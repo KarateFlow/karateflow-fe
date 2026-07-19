@@ -1,23 +1,23 @@
 <div class="mt-6">
       @if (isExportingPDF()) {
         <div class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm flex flex-col items-center justify-center z-[9999] text-white font-bold">
-          <div class="w-8 h-8 border-4 border-slate-700 border-t-primary-aka rounded-full animate-spin mb-4"></div>
+          <div class="w-8 h-8 border-4 border-slate-700 border-t-primary rounded-full animate-spin mb-4"></div>
           <p>Preparazione del documento PDF in corso...</p>
         </div>
       }
       @if (savedReport(); as saved) {
-        <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-8 flex justify-between items-center">
-          <div class="flex items-center gap-3 text-blue-900">
+        <div class="bg-primary-subtle rounded-xl p-5 mb-8 flex justify-between items-center">
+          <div class="flex items-center gap-3 text-primary">
             <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
               <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
               <polyline points="17 21 17 13 7 13 7 21"></polyline>
               <polyline points="7 3 7 8 15 8"></polyline>
             </svg>
             <span>
-              Report storico salvato il <strong>{{ saved.createdAt | date }}</strong>
+              Report storico salvato il <strong class="text-text-main">{{ saved.createdAt | date }}</strong>
             </span>
           </div>
-          <span class="bg-blue-100 text-blue-800 font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wider">
+          <span class="bg-primary/20 text-primary font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wider">
             {{ saved.payload.analysisType === 'COMPARISON' ? 'Confronto A vs B' : 'Trend Temporale' }}
           </span>
         </div>
@@ -27,7 +27,7 @@
             <button 
               type="button" 
               class="px-4 py-2 font-bold text-sm text-text-muted inline-flex items-center gap-2 rounded-xl transition-colors hover:bg-hover hover:text-text-main focus-ring outline-none" 
-              [ngClass]="{'!text-primary-aka !bg-hover': analysisType() === 'COMPARISON'}" 
+              [ngClass]="{'!text-primary !bg-hover': analysisType() === 'COMPARISON'}" 
               (click)="setAnalysisType('COMPARISON')"
             >
               <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
@@ -40,7 +40,7 @@
             <button 
               type="button" 
               class="px-4 py-2 font-bold text-sm text-text-muted inline-flex items-center gap-2 rounded-xl transition-colors hover:bg-hover hover:text-text-main focus-ring outline-none" 
-              [ngClass]="{'!text-primary-aka !bg-hover': analysisType() === 'TREND'}" 
+              [ngClass]="{'!text-primary !bg-hover': analysisType() === 'TREND'}" 
               (click)="setAnalysisType('TREND')"
             >
               <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
@@ -111,7 +111,7 @@
       <!-- State Visualizers -->
       @if (isLoading()) {
         <div class="flex flex-col items-center py-12 gap-4 text-text-muted">
-          <div class="w-8 h-8 border-4 border-surface-hover border-t-primary-aka rounded-full animate-spin"></div>
+          <div class="w-8 h-8 border-4 border-surface-hover border-t-primary rounded-full animate-spin"></div>
           <p>Generazione dell'anteprima in corso...</p>
         </div>
       }
@@ -175,7 +175,7 @@
           <!-- Riepilogo di Confronto -->
           @if (reportSummaryStats(); as stats) {
             <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_3fr] gap-6 mb-8">
-              <div class="bg-surface rounded-xl p-6 border flex flex-col justify-center relative overflow-hidden shadow-sm" 
+              <div class="bg-surface rounded-xl p-6 flex flex-col justify-center relative overflow-hidden shadow-sm" 
                    [ngClass]="stats.overallImprovement >= 0 ? 'bg-gradient-to-br from-success-bg to-white border-success' : 'bg-gradient-to-br from-error-bg to-white border-error'">
                 <div class="absolute top-0 left-0 w-1 h-full" [ngClass]="stats.overallImprovement >= 0 ? 'bg-success' : 'bg-error'"></div>
                 <div class="text-xs font-bold uppercase tracking-wider text-text-muted mb-1">Miglioramento Complessivo</div>
@@ -186,7 +186,7 @@
               </div>
               
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div class="bg-surface rounded-xl p-5 border border-border flex items-center gap-4 shadow-sm">
+                <div class="bg-surface rounded-xl p-5 flex items-center gap-4 shadow-sm">
                   <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-success-bg text-success">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none">
                       <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
@@ -199,7 +199,7 @@
                   </div>
                 </div>
                 
-                <div class="bg-surface rounded-xl p-5 border border-border flex items-center gap-4 shadow-sm">
+                <div class="bg-surface rounded-xl p-5 flex items-center gap-4 shadow-sm">
                   <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-error-bg text-error">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none">
                       <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
@@ -212,7 +212,7 @@
                   </div>
                 </div>
                 
-                <div class="bg-surface rounded-xl p-5 border border-border flex items-center gap-4 shadow-sm">
+                <div class="bg-surface rounded-xl p-5 flex items-center gap-4 shadow-sm">
                   <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-bg-canvas text-text-muted">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none">
                       <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -224,7 +224,7 @@
                   </div>
                 </div>
                 
-                <div class="bg-surface rounded-xl p-5 border border-border flex items-center gap-4 shadow-sm">
+                <div class="bg-surface rounded-xl p-5 flex items-center gap-4 shadow-sm">
                   <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-hover text-slate-400">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none">
                       <circle cx="12" cy="12" r="10"></circle>
@@ -260,14 +260,14 @@
             <!-- COMPARISON VISUALS -->
             <div class="grid grid-cols-1 gap-8 items-start">
               <!-- CHART FIRST (TOP) -->
-              <div class="bg-surface rounded-xl border border-border overflow-hidden shadow-sm">
+              <div class="bg-surface rounded-xl overflow-hidden shadow-sm">
                 @if (selectedComparison(); as activeComp) {
-                  <div class="flex justify-between items-center bg-bg-canvas border-b border-border pr-6">
+                  <div class="flex justify-between items-center bg-bg-canvas border-b pr-6">
                     <div class="text-lg font-extrabold p-5 text-text-main">Grafico di Confronto</div>
-                    <div class="flex items-center gap-4 bg-surface border border-border py-1.5 px-3 rounded-xl shadow-sm">
+                    <div class="flex items-center gap-4 bg-surface py-1.5 px-3 rounded-xl shadow-sm">
                       <button 
                         type="button" 
-                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary-aka disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
+                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
                         (click)="navigateExercise(-1)" 
                         [disabled]="availableExercises().length <= 1"
                         aria-label="Esercizio precedente"
@@ -279,7 +279,7 @@
                       <span class="text-sm font-bold text-text-main min-w-[140px] max-w-[250px] text-center truncate px-2">{{ selectedExerciseForChart() }}</span>
                       <button 
                         type="button" 
-                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary-aka disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
+                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
                         (click)="navigateExercise(1)" 
                         [disabled]="availableExercises().length <= 1"
                         aria-label="Esercizio successivo"
@@ -302,15 +302,15 @@
                     [greaterIsBetter]="activeComp.greaterIsBetter"
                   />
                 } @else {
-                  <div class="h-[250px] bg-bg-canvas border border-dashed border-slate-300 rounded-xl flex items-center justify-center text-center text-text-muted p-8 italic m-6">
+                  <div class="h-[250px] bg-bg-canvas border-dashed border-slate-300 rounded-xl flex items-center justify-center text-center text-text-muted p-8 italic m-6">
                     Nessun esercizio confrontabile disponibile nei test selezionati.
                   </div>
                 }
               </div>
 
               <!-- TABLE SECOND (BOTTOM) -->
-              <div class="bg-surface rounded-xl border border-border overflow-x-auto shadow-sm">
-                <div class="text-lg font-extrabold p-5 bg-bg-canvas text-text-main border-b border-border">Risultati degli Esercizi <span class="text-sm font-medium text-text-muted ml-2">(Clicca su una riga per visualizzare il relativo grafico sopra)</span></div>
+              <div class="bg-surface rounded-xl overflow-x-auto shadow-sm">
+                <div class="text-lg font-extrabold p-5 bg-bg-canvas text-text-main border-b">Risultati degli Esercizi <span class="text-sm font-medium text-text-muted ml-2">(Clicca su una riga per visualizzare il relativo grafico sopra)</span></div>
                 <table class="w-full border-collapse text-[0.95rem]">
                   <thead>
                     <tr>
@@ -360,8 +360,8 @@
             <!-- TREND VISUALS -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
               <!-- SELECTOR SECOND (BOTTOM/SIDE) -->
-              <div class="bg-surface rounded-xl border border-border shadow-sm flex flex-col md:col-span-1">
-                <div class="text-lg font-extrabold p-5 bg-bg-canvas text-text-main border-b border-border">
+              <div class="bg-surface rounded-xl shadow-sm flex flex-col md:col-span-1">
+                <div class="text-lg font-extrabold p-5 bg-bg-canvas text-text-main border-b">
                   Esercizi Disponibili <span class="block text-sm font-medium text-text-muted mt-1">(Clicca su una card per visualizzare il grafico)</span>
                 </div>
                 <div class="grid grid-cols-1 gap-4 p-5 max-h-[600px] overflow-y-auto">
@@ -369,13 +369,13 @@
                     <button 
                       type="button" 
                       class="bg-surface border rounded-xl w-full text-left p-4 cursor-pointer transition-all outline-none"
-                      [ngClass]="selectedExerciseForChart() === trend.exerciseTitle ? 'bg-hover border-primary-aka shadow-sm' : 'border-border hover:border-primary-aka hover:bg-bg-canvas'"
+                      [ngClass]="selectedExerciseForChart() === trend.exerciseTitle ? 'bg-hover border-primary shadow-sm' : 'border-border hover:border-primary hover:bg-bg-canvas'"
                       (click)="selectedExerciseForChart.set(trend.exerciseTitle)"
                     >
                       <div class="flex justify-between items-start mb-2 gap-2">
                         <span class="font-bold text-text-main leading-tight">{{ trend.exerciseTitle }}</span>
                         <span class="bg-border text-text-muted px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap"
-                              [ngClass]="{'bg-blue-100 text-primary-aka': selectedExerciseForChart() === trend.exerciseTitle}">
+                              [ngClass]="{'bg-blue-100 text-primary': selectedExerciseForChart() === trend.exerciseTitle}">
                           {{ trend.dataPoints.length }} ril.
                         </span>
                       </div>
@@ -388,14 +388,14 @@
               </div>
 
               <!-- CHART FIRST (TOP/MAIN) -->
-              <div class="bg-surface rounded-xl border border-border shadow-sm overflow-hidden md:col-span-2">
+              <div class="bg-surface rounded-xl shadow-sm overflow-hidden md:col-span-2">
                 @if (selectedTrend(); as activeTrend) {
-                  <div class="flex justify-between items-center bg-bg-canvas border-b border-border pr-6">
+                  <div class="flex justify-between items-center bg-bg-canvas border-b pr-6">
                     <div class="text-lg font-extrabold p-5 text-text-main">Trend Storico</div>
-                    <div class="flex items-center gap-4 bg-surface border border-border py-1.5 px-3 rounded-xl shadow-sm">
+                    <div class="flex items-center gap-4 bg-surface py-1.5 px-3 rounded-xl shadow-sm">
                       <button 
                         type="button" 
-                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary-aka disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
+                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
                         (click)="navigateExercise(-1)" 
                         [disabled]="availableExercises().length <= 1"
                         aria-label="Esercizio precedente"
@@ -407,7 +407,7 @@
                       <span class="text-sm font-bold text-text-main min-w-[140px] max-w-[250px] text-center truncate px-2">{{ selectedExerciseForChart() }}</span>
                       <button 
                         type="button" 
-                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary-aka disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
+                        class="p-1 rounded-md text-text-main hover:bg-hover hover:text-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
                         (click)="navigateExercise(1)" 
                         [disabled]="availableExercises().length <= 1"
                         aria-label="Esercizio successivo"
@@ -423,8 +423,8 @@
                     [linePoints]="activeTrendPoints()"
                   />
                   
-                  <div class="border-t border-border bg-surface">
-                    <div class="text-[0.95rem] font-extrabold py-3 px-5 bg-bg-canvas border-b border-border text-text-main">Rilevazioni</div>
+                  <div class="border-t bg-surface overflow-x-auto">
+                    <div class="text-[0.95rem] font-extrabold py-3 px-5 bg-bg-canvas border-b text-text-main">Rilevazioni</div>
                     <table class="w-full border-collapse text-[0.95rem]">
                       <thead>
                         <tr>
@@ -436,7 +436,7 @@
                         @for (dp of activeTrend.dataPoints; track $index) {
                           <tr class="border-b border-border last:border-b-0">
                             <td class="py-3 px-5 text-left" data-label="Data Rilevazione">{{ dp.date | date }}</td>
-                            <td class="py-3 px-5 text-right font-bold text-primary-aka" data-label="Risultato">
+                            <td class="py-3 px-5 text-right font-bold text-primary" data-label="Risultato">
                               {{ dp.result | number:'1.0-2' }} <span class="text-[0.85rem] font-medium text-text-muted ml-1">{{ activeTrend.unit.toLowerCase() }}</span>
                             </td>
                           </tr>
@@ -445,7 +445,7 @@
                     </table>
                   </div>
                 } @else {
-                  <div class="h-[250px] bg-bg-canvas border border-dashed border-slate-300 rounded-xl flex items-center justify-center text-center text-text-muted p-8 italic m-6">
+                  <div class="h-[250px] bg-bg-canvas border-dashed border-slate-300 rounded-xl flex items-center justify-center text-center text-text-muted p-8 italic m-6">
                     Nessun esercizio selezionato o dati non presenti nel periodo indicato.
                   </div>
                 }
@@ -454,7 +454,7 @@
           }
         </div>
       } @else if (!isLoading()) {
-        <div class="text-center py-16 px-8 bg-surface border-2 border-dashed border-border rounded-xl text-text-muted mt-4">
+        <div class="text-center py-16 px-8 bg-surface border-2 border-dashed rounded-xl text-text-muted mt-4">
           <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="1.5" fill="none" class="mx-auto mb-4 opacity-40">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>

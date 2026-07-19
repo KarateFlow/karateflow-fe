@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 export interface ChartDataPoint {
   date: Date;
@@ -19,7 +19,7 @@ export interface TrendLinePoint {
 @Component({
   selector: 'app-report-chart',
   standalone: true,
-  imports: [DatePipe, DecimalPipe],
+  imports: [CommonModule],
   templateUrl: './report-chart.component.html',
   styleUrl: './report-chart.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

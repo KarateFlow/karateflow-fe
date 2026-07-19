@@ -8,15 +8,15 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          aka: 'var(--color-primary-aka)',
+          DEFAULT: 'var(--color-primary)',
+          subtle: 'var(--color-primary-subtle)',
         },
         secondary: {
-          ao: 'var(--color-secondary-ao)',
+          DEFAULT: 'var(--color-secondary)',
         },
         bg: {
           canvas: 'var(--color-bg-canvas)',
         },
-        surface: 'var(--color-surface)',
         text: {
           main: 'var(--color-text-main)',
           muted: 'var(--color-text-muted)',
@@ -24,6 +24,7 @@ module.exports = {
         border: 'var(--color-border)',
         hover: 'var(--color-hover)',
         surface: {
+          DEFAULT: 'var(--color-surface)',
           hover: 'var(--color-surface-hover)'
         },
         success: {

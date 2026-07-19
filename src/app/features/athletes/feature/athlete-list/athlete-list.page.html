@@ -11,6 +11,7 @@
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
         <span class="ml-2">Nuovo Atleta</span>
+        <kbd class="hidden sm:inline-block ml-3 px-1.5 py-0.5 text-[10px] font-mono font-bold text-primary bg-bg-canvas rounded opacity-80 shadow-sm border border-primary/20">C</kbd>
       </app-ui-button>
     </div>
   </header>
@@ -18,7 +19,7 @@
   @if (store.athletesResource.isLoading()) {
     <div class="flex flex-col items-center justify-center py-32 gap-6 text-text-muted">
       <div class="relative w-16 h-16">
-        <div class="absolute inset-0 border-4 border-surface-hover border-t-primary-aka rounded-full animate-spin"></div>
+        <div class="absolute inset-0 border-4 border-surface-hover border-t-primary rounded-full animate-spin"></div>
       </div>
       <p class="font-medium text-lg">Caricamento atleti in corso...</p>
     </div>
@@ -60,12 +61,16 @@
             </svg>
           </span>
           <input 
+            #searchInput
             type="text" 
             placeholder="Cerca atleta..." 
             [value]="searchTerm()" 
             (input)="onSearch($event)" 
-            class="w-full py-3 pr-4 pl-11 border border-border rounded-xl bg-bg-canvas text-text-main text-sm font-sans outline-none transition-colors focus-visible:border-primary-aka focus-visible:ring-2 focus-visible:ring-primary-aka/15" 
+            class="w-full py-3 pr-12 pl-11 border border-border rounded-xl bg-bg-canvas text-text-main text-sm font-sans outline-none transition-colors focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/15" 
           />
+          <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none hidden sm:flex gap-1">
+            <kbd class="px-2 py-0.5 text-xs font-mono font-bold text-text-muted bg-surface border border-border rounded-md shadow-sm">/</kbd>
+          </div>
         </div>
       </section>
       <section>

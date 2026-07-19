@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, computed, OnDestroy, DestroyRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, computed, OnDestroy, DestroyRef, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -42,6 +42,7 @@ export class TemplatesListPage implements OnDestroy {
   protected readonly isCreating = signal(false);
   protected readonly isSaving = signal(false);
   protected readonly isViewingDetail = signal(false);
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
   protected readonly selectedTemplateId = signal<string | null>(null);
   protected readonly selectedTemplate = signal<TestTemplateResponse | null>(null);
   protected readonly showDeleteConfirm = signal(false);
@@ -267,5 +268,35 @@ export class TemplatesListPage implements OnDestroy {
 
   ngOnDestroy(): void {
     this.breadcrumbService.clearExtraCrumbs();
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (this.isUserTyping(event)) return;
+
+    if (event.key === '/') {
+      if (!this.isEditing() && !this.isCreating() && !this.isViewingDetail()) {
+        event.preventDefault();
+        this.searchInput?.nativeElement.focus();
+      }
+    } else if (event.key.toLowerCase() === 'c') {
+      if (!this.isEditing() && !this.isCreating() && !this.isViewingDetail()) {
+        event.preventDefault();
+        this.startCreate();
+      }
+    } else if (event.key === 'Escape') {
+      if (this.isEditing() || this.isCreating()) {
+        event.preventDefault();
+        this.cancel();
+      } else if (this.isViewingDetail()) {
+        event.preventDefault();
+        this.closeDetail();
+      }
+    }
+  }
+
+  private isUserTyping(event: KeyboardEvent): boolean {
+    const target = event.target as HTMLElement;
+    return target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
   }
 }

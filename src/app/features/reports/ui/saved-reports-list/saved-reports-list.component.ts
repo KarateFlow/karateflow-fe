@@ -6,11 +6,12 @@ import { ReportsStore } from '../../data-access/reports.store';
 import { ReportResponse } from '../../data-access/reports.model';
 import { TestResponse } from '../../../tests/data-access/test.model';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-saved-reports-list',
   standalone: true,
-  imports: [DatePipe, ConfirmDialogComponent],
+  imports: [DatePipe, ConfirmDialogComponent, EmptyStateComponent],
   templateUrl: './saved-reports-list.component.html',
   styleUrl: './saved-reports-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

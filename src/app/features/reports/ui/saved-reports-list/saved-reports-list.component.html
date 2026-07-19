@@ -1,7 +1,7 @@
 <div class="mt-6">
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-xl font-extrabold text-text-main m-0">Storico Report Salvati</h2>
-        <button type="button" class="bg-surface border border-border text-text-main flex items-center gap-2 font-bold text-sm cursor-pointer px-4 py-2 rounded-xl transition-all shadow-sm hover:bg-bg-canvas hover:border-primary-aka hover:text-primary-aka focus-ring" (click)="reportsResource.reload()">
+        <button type="button" class="bg-surface border border-border text-text-main flex items-center gap-2 font-bold text-sm cursor-pointer px-4 py-2 rounded-xl transition-all shadow-sm hover:bg-bg-canvas hover:border-primary hover:text-primary focus-ring" (click)="reportsResource.reload()">
           <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
             <polyline points="23 4 23 10 17 10"></polyline>
             <polyline points="1 20 1 14 7 14"></polyline>
@@ -13,7 +13,7 @@
 
       @if (reportsResource.isLoading()) {
         <div class="flex flex-col items-center py-16 gap-6 text-text-muted">
-          <div class="w-10 h-10 border-[3px] border-surface-hover border-t-primary-aka rounded-full animate-spin"></div>
+          <div class="w-10 h-10 border-[3px] border-surface-hover border-t-primary rounded-full animate-spin"></div>
           <p>Caricamento report salvati...</p>
         </div>
       } @else if (reportsResource.error()) {
@@ -24,22 +24,23 @@
         </div>
       } @else if (reportsResource.value(); as reports) {
         @if (reports.length === 0) {
-          <div class="bg-surface border-2 border-dashed border-border rounded-xl p-12 text-center text-text-muted flex flex-col items-center gap-4">
-            <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="1.5" fill="none" class="text-slate-400">
+          <app-empty-state 
+            title="Nessun report salvato" 
+            message="I report ti permettono di confrontare le prestazioni e tracciare i miglioramenti. Genera un report e salvalo per iniziare.">
+            <svg icon aria-hidden="true" viewBox="0 0 24 24" width="64" height="64" stroke="currentColor" stroke-width="1.5" fill="none" class="text-slate-400">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
               <polyline points="14 2 14 8 20 8"></polyline>
               <line x1="16" y1="13" x2="8" y2="13"></line>
               <line x1="16" y1="17" x2="8" y2="17"></line>
               <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
-            <p class="max-w-[450px] m-0 leading-relaxed text-[0.95rem]">Nessun report salvato per questo atleta. Genera un report e clicca su "Salva Report" per inserirlo nello storico.</p>
-          </div>
+          </app-empty-state>
         } @else {
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             @for (report of reports; track report.reportId) {
-              <div class="bg-surface rounded-xl shadow-sm p-5 border border-border flex flex-col justify-between transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div class="bg-surface rounded-xl shadow-sm p-5 flex flex-col justify-between transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <div class="flex justify-between items-center mb-4">
-                  <span class="bg-blue-50 text-blue-800 border border-blue-200 px-2 py-1 rounded-xl text-xs font-bold uppercase tracking-wider">
+                  <span class="bg-primary-subtle text-primary px-2 py-1 rounded-xl text-xs font-bold uppercase tracking-wider">
                     {{ report.payload.analysisType === 'COMPARISON' ? 'Confronto A vs B' : 'Trend Temporale' }}
                   </span>
                   <span class="text-xs text-text-muted font-bold">{{ report.createdAt | date }}</span>
@@ -68,7 +69,7 @@
                 </div>
 
                 <div class="flex gap-3 border-t border-border pt-4">
-                  <button type="button" class="flex-1 border-none inline-flex items-center justify-center gap-1.5 p-2 rounded-xl text-[0.825rem] font-bold cursor-pointer transition-colors bg-hover text-primary-aka hover:bg-primary-aka hover:text-white focus-ring" (click)="viewReport.emit(report)">
+                  <button type="button" class="flex-1 border-none inline-flex items-center justify-center gap-1.5 p-2 rounded-xl text-[0.825rem] font-bold cursor-pointer transition-colors bg-hover text-primary hover:bg-primary hover:text-white focus-ring" (click)="viewReport.emit(report)">
                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
                       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                       <circle cx="12" cy="12" r="3"></circle>

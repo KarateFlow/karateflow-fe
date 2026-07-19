@@ -20,7 +20,7 @@ import { NgClass } from '@angular/common';
         [placeholder]="placeholder"
         [rows]="rows"
         class="w-full p-3 border rounded-xl font-sans text-sm outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        [ngClass]="invalid ? 'border-error text-error placeholder-error focus:ring-error/20 focus:border-error bg-error-bg' : 'border-border text-text-main bg-surface focus:border-primary-aka focus:ring-2 focus:ring-primary-aka/10'"
+        [ngClass]="invalid ? 'border-error text-error placeholder-error focus:ring-error/20 focus:border-error bg-error-bg' : 'border-border text-text-main bg-surface focus:border-primary focus:ring-2 focus:ring-primary/10'"
       ></textarea>
       @if (invalid && errorMessage) {
         <span class="text-xs font-semibold text-error">{{ errorMessage }}</span>

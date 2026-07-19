@@ -1,6 +1,6 @@
 <div class="max-w-5xl mx-auto w-full py-6">
   <header class="mb-8">
-    <a [routerLink]="['/athletes', athleteId()]" class="inline-flex items-center gap-2 text-text-muted hover:text-primary-aka font-bold px-3 py-2 -ml-3 rounded-xl transition-colors focus-ring outline-none">
+    <a [routerLink]="['/athletes', athleteId()]" class="inline-flex items-center gap-2 text-text-muted hover:text-primary font-bold px-3 py-2 -ml-3 rounded-xl transition-colors focus-ring outline-none">
       <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
@@ -18,7 +18,7 @@
 
   @if (testResource.isLoading()) {
     <div class="flex flex-col items-center py-16 gap-6 text-text-muted">
-      <div class="w-10 h-10 border-4 border-hover border-t-primary-aka rounded-full animate-spin"></div>
+      <div class="w-10 h-10 border-4 border-hover border-t-primary rounded-full animate-spin"></div>
       <p class="font-medium text-lg">Caricamento dettagli sessione...</p>
     </div>
   } @else if (testResource.error()) {
@@ -49,7 +49,7 @@
         @if (test.coachNotes) {
           <div class="pt-6 border-t border-border">
             <span class="text-sm font-bold text-text-muted uppercase tracking-wider block mb-3">Note del Coach</span>
-            <div class="bg-bg-canvas border-l-4 border-secondary-ao p-5 rounded-r-xl text-text-main leading-relaxed">
+            <div class="bg-bg-canvas border-l-4 border-secondary p-5 rounded-r-xl text-text-main leading-relaxed">
               {{ test.coachNotes }}
             </div>
           </div>
@@ -62,7 +62,7 @@
           <span class="bg-hover text-text-muted px-4 py-1.5 rounded-full text-sm font-semibold inline-flex items-center justify-center min-w-[2.5rem]">{{ test.exercises.length }} esercizi</span>
         </div>
 
-        <div class="bg-surface rounded-xl border border-border overflow-hidden">
+        <div class="bg-surface rounded-xl overflow-hidden">
           <table class="w-full text-left border-collapse text-sm hidden sm:table">
             <thead>
               <tr class="bg-bg-canvas text-xs uppercase tracking-wider text-text-muted border-b border-border">
@@ -76,7 +76,7 @@
               @for (ex of test.exercises; track $index) {
                 <tr class="border-b border-border last:border-b-0">
                   <td class="p-3 font-bold text-text-main max-w-[150px] truncate" [title]="ex.exerciseTitle">{{ ex.exerciseTitle }}</td>
-                  <td class="p-3 text-right font-extrabold text-primary-aka text-lg">{{ ex.result | number:'1.1-2' }}</td>
+                  <td class="p-3 text-right font-extrabold text-primary text-lg">{{ ex.result | number:'1.1-2' }}</td>
                   <td class="p-3 font-semibold text-text-muted lowercase">{{ ex.unit }}</td>
                   <td class="p-3">
                     <span class="text-xs font-bold px-2 py-1 rounded-full" 
@@ -102,7 +102,7 @@
                 </div>
                 <div class="flex justify-between items-center">
                   <span class="text-xs font-bold text-text-muted uppercase">Risultato</span>
-                  <span class="font-extrabold text-primary-aka text-lg">{{ ex.result | number:'1.1-2' }} <span class="text-sm font-semibold text-text-muted lowercase ml-1">{{ ex.unit }}</span></span>
+                  <span class="font-extrabold text-primary text-lg">{{ ex.result | number:'1.1-2' }} <span class="text-sm font-semibold text-text-muted lowercase ml-1">{{ ex.unit }}</span></span>
                 </div>
                 <div class="flex justify-between items-center">
                   <span class="text-xs font-bold text-text-muted uppercase">Tendenza</span>
@@ -164,7 +164,7 @@
               formControlName="coachNotes" 
               rows="3" 
               placeholder="Annotazioni generali sulla sessione..."
-              class="w-full p-3 border border-border rounded-xl font-sans text-sm bg-surface text-text-main outline-none focus:border-primary-aka focus:ring-2 focus:ring-primary-aka/10 transition-colors"
+              class="w-full p-3 border border-border rounded-xl font-sans text-sm bg-surface text-text-main outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-colors"
             ></textarea>
           </div>
         </section>

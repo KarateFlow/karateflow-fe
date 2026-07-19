@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, computed, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AthleteStore } from '../../data-access/athlete.store';
 import { AthleteCardListComponent } from '../../ui/athlete-card-list/athlete-card-list.component';
@@ -17,6 +17,8 @@ import { UiButtonComponent } from '../../../../shared/ui/ui-button/ui-button.com
 export class AthleteListPage {
   protected readonly store = inject(AthleteStore);
   private readonly router = inject(Router);
+
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   protected readonly searchTerm = signal<string>('');
 
@@ -41,5 +43,23 @@ export class AthleteListPage {
 
   protected onNewAthlete(): void {
     this.router.navigate(['/athletes/new']);
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (this.isUserTyping(event)) return;
+
+    if (event.key === '/') {
+      event.preventDefault();
+      this.searchInput?.nativeElement.focus();
+    } else if (event.key.toLowerCase() === 'c') {
+      event.preventDefault();
+      this.onNewAthlete();
+    }
+  }
+
+  private isUserTyping(event: KeyboardEvent): boolean {
+    const target = event.target as HTMLElement;
+    return target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
   }
 }

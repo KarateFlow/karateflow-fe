@@ -88,4 +88,14 @@ export class AthleteDetailPage {
   protected navigateTo(commands: any[]): void {
     this.router.navigate(commands);
   }
+
+  protected closeSavedReport(): void {
+    this.selectedSavedReport.set(null);
+    this.autoOpenReportId.set(null);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { reportId: null },
+      queryParamsHandling: 'merge'
+    });
+  }
 }

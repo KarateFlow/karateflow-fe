@@ -1,6 +1,6 @@
-<div class="py-6 w-full max-w-6xl mx-auto transition-all duration-300">
+<div class="py-6 w-full max-w-6xl mx-auto transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out-quart">
   <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-    <a routerLink="/athletes" class="inline-flex items-center gap-2 text-text-muted hover:text-primary-aka font-bold px-3 py-2 -ml-3 rounded-xl transition-colors focus-ring outline-none">
+    <a routerLink="/athletes" class="inline-flex items-center gap-2 text-text-muted hover:text-primary font-bold px-3 py-2 -ml-3 rounded-xl transition-colors focus-ring outline-none">
       <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
@@ -34,7 +34,7 @@
   @if (athleteResource.isLoading()) {
     <div class="flex flex-col items-center justify-center py-24 gap-6 text-text-muted">
       <div class="relative w-12 h-12">
-        <div class="absolute inset-0 border-4 border-surface-hover border-t-primary-aka rounded-full animate-spin"></div>
+        <div class="absolute inset-0 border-4 border-surface-hover border-t-primary rounded-full animate-spin"></div>
       </div>
       <p class="font-medium">Caricamento profilo atleta...</p>
     </div>
@@ -49,11 +49,11 @@
   } @else if (athleteResource.value(); as athlete) {
     <article class="surface-card p-6 md:p-10 mb-8 flex flex-col">
       <div class="flex flex-col sm:flex-row items-center gap-6 mb-8 pb-8 border-b border-border">
-        <label for="avatarUploadDetail" class="relative group cursor-pointer rounded-full overflow-hidden w-20 h-20 shrink-0 border-2 border-transparent hover:border-primary-aka transition-colors focus-ring outline-none block" tabindex="0" (keydown.enter)="avatarUploadDetail.click()" (keydown.space)="avatarUploadDetail.click()">
+        <label for="avatarUploadDetail" class="relative group cursor-pointer rounded-full overflow-hidden w-20 h-20 shrink-0 border-2 border-transparent hover:border-primary transition-colors focus-ring outline-none block" tabindex="0" (keydown.enter)="avatarUploadDetail.click()" (keydown.space)="avatarUploadDetail.click()">
           @if (avatarPreview()) {
             <img [src]="avatarPreview()" alt="Avatar Preview" class="w-full h-full object-cover" />
           } @else {
-            <div class="w-full h-full bg-gradient-to-br from-primary-aka to-secondary-ao text-white flex items-center justify-center text-3xl font-extrabold shadow-inner">
+            <div class="w-full h-full bg-gradient-to-br from-primary to-secondary text-white flex items-center justify-center text-3xl font-extrabold shadow-inner">
               {{ athlete.firstName[0] }}{{ athlete.lastName[0] }}
             </div>
           }
@@ -89,7 +89,7 @@
       @if (athlete.medicalNotes) {
         <div class="mt-4">
           <span class="block text-xs font-bold uppercase tracking-wider text-text-muted mb-3">Note Mediche</span>
-          <div class="bg-error-bg border-l-4 border-secondary-ao p-4 rounded-r-xl text-error italic leading-relaxed">
+          <div class="bg-error-bg border-l-4 border-secondary p-4 rounded-r-xl text-error italic leading-relaxed">
             {{ athlete.medicalNotes }}
           </div>
         </div>
@@ -99,24 +99,24 @@
     <div class="flex gap-2 sm:gap-6 mb-8 border-b border-border overflow-x-auto pb-2 scrollbar-hide">
       <button 
         type="button" 
-        class="px-2 py-3 text-base font-bold text-text-muted border-b-2 border-transparent transition-colors focus-ring outline-none whitespace-nowrap hover:text-primary-aka" 
-        [ngClass]="{'!text-primary-aka !border-primary-aka': activeSection() === 'history'}"
+        class="px-2 py-3 text-base font-bold text-text-muted border-b-2 border-transparent transition-colors focus-ring outline-none whitespace-nowrap hover:text-primary" 
+        [ngClass]="{'!text-primary !border-primary': activeSection() === 'history'}"
         (click)="activeSection.set('history')"
       >
         Storico Test
       </button>
       <button 
         type="button" 
-        class="px-2 py-3 text-base font-bold text-text-muted border-b-2 border-transparent transition-colors focus-ring outline-none whitespace-nowrap hover:text-primary-aka" 
-        [ngClass]="{'!text-primary-aka !border-primary-aka': activeSection() === 'reports'}"
+        class="px-2 py-3 text-base font-bold text-text-muted border-b-2 border-transparent transition-colors focus-ring outline-none whitespace-nowrap hover:text-primary" 
+        [ngClass]="{'!text-primary !border-primary': activeSection() === 'reports'}"
         (click)="activeSection.set('reports')"
       >
         Analisi & Confronti
       </button>
       <button 
         type="button" 
-        class="px-2 py-3 text-base font-bold text-text-muted border-b-2 border-transparent transition-colors focus-ring outline-none whitespace-nowrap hover:text-primary-aka" 
-        [ngClass]="{'!text-primary-aka !border-primary-aka': activeSection() === 'saved-reports'}"
+        class="px-2 py-3 text-base font-bold text-text-muted border-b-2 border-transparent transition-colors focus-ring outline-none whitespace-nowrap hover:text-primary" 
+        [ngClass]="{'!text-primary !border-primary': activeSection() === 'saved-reports'}"
         (click)="activeSection.set('saved-reports'); selectedSavedReport.set(null)"
       >
         Report Salvati
@@ -126,37 +126,41 @@
     <section class="mt-4">
       @if (activeSection() === 'history') {
         @if (testsResource.isLoading()) {
-          <div class="flex flex-col items-center py-12 gap-4 text-text-muted">
-            <div class="w-8 h-8 border-2 border-surface-hover border-t-primary-aka rounded-full animate-spin"></div>
+          <div class="flex flex-col items-center py-12 gap-4 text-text-muted animate-in fade-in duration-300">
+            <div class="w-8 h-8 border-2 border-surface-hover border-t-primary rounded-full animate-spin"></div>
             <p>Caricamento storico test...</p>
           </div>
         } @else {
-          <app-athlete-tests-list [tests]="testsResource.value() ?? []" />
+          <div class="animate-in fade-in duration-300 ease-out">
+            <app-athlete-tests-list [tests]="testsResource.value() ?? []" />
+          </div>
         }
       } @else if (activeSection() === 'reports') {
         @if (testsResource.isLoading()) {
-          <div class="flex flex-col items-center py-12 gap-4 text-text-muted">
-            <div class="w-8 h-8 border-2 border-surface-hover border-t-primary-aka rounded-full animate-spin"></div>
+          <div class="flex flex-col items-center py-12 gap-4 text-text-muted animate-in fade-in duration-300">
+            <div class="w-8 h-8 border-2 border-surface-hover border-t-primary rounded-full animate-spin"></div>
             <p>Caricamento storico test...</p>
           </div>
         } @else {
-          <app-report-dashboard 
-            [athleteId]="athlete.athleteId" 
-            [athlete]="athlete"
-            [tests]="testsResource.value() ?? []"
-            (reportSaved)="onReportSaved()"
-          />
+          <div class="animate-in fade-in duration-300 ease-out">
+            <app-report-dashboard 
+              [athleteId]="athlete.athleteId" 
+              [athlete]="athlete"
+              [tests]="testsResource.value() ?? []"
+              (reportSaved)="onReportSaved()"
+            />
+          </div>
         }
       } @else {
         @if (testsResource.isLoading()) {
-          <div class="flex flex-col items-center py-12 gap-4 text-text-muted">
-            <div class="w-8 h-8 border-2 border-surface-hover border-t-primary-aka rounded-full animate-spin"></div>
+          <div class="flex flex-col items-center py-12 gap-4 text-text-muted animate-in fade-in duration-300">
+            <div class="w-8 h-8 border-2 border-surface-hover border-t-primary rounded-full animate-spin"></div>
             <p>Caricamento storico test...</p>
           </div>
         } @else {
           @if (selectedSavedReport(); as saved) {
-            <div>
-              <button type="button" class="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-surface border border-border text-text-main font-bold text-sm rounded-xl hover:bg-bg-canvas hover:border-primary-aka hover:text-primary-aka transition-colors focus-ring outline-none" (click)="selectedSavedReport.set(null)">
+            <div class="animate-in fade-in slide-in-from-right-4 duration-300 ease-out">
+              <button type="button" class="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-surface border border-border text-text-main font-bold text-sm rounded-xl hover:bg-bg-canvas hover:border-primary hover:text-primary transition-colors focus-ring outline-none" (click)="closeSavedReport()">
                 <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
                   <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
@@ -170,13 +174,15 @@
               />
             </div>
           } @else {
-            <app-saved-reports-list
-              #savedReportsList
-              [athleteId]="athlete.athleteId"
-              [tests]="testsResource.value() ?? []"
-              [autoOpenReportId]="autoOpenReportId()"
-              (viewReport)="selectedSavedReport.set($event)"
-            />
+            <div class="animate-in fade-in duration-300 ease-out">
+              <app-saved-reports-list
+                #savedReportsList
+                [athleteId]="athlete.athleteId"
+                [tests]="testsResource.value() ?? []"
+                [autoOpenReportId]="autoOpenReportId()"
+                (viewReport)="selectedSavedReport.set($event)"
+              />
+            </div>
           }
         }
       }

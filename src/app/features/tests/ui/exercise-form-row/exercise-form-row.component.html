@@ -1,4 +1,4 @@
-<div [formGroup]="formGroup()" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 items-end p-4 bg-bg-canvas rounded-xl border border-border mb-3">
+<div [formGroup]="formGroup()" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 items-end p-4 bg-bg-canvas rounded-xl mb-3">
   <div class="sm:col-span-2 md:col-span-3">
     <app-ui-input
       [id]="'title-'+index()"
@@ -38,7 +38,7 @@
   <div class="sm:col-span-2 md:col-span-3 flex flex-col gap-1.5 pb-2">
     <span class="text-xs font-bold uppercase tracking-wider text-text-muted">Tendenza</span>
     <div class="flex items-center gap-2">
-      <input type="checkbox" formControlName="greaterIsBetter" [id]="'gib-'+index()" class="w-4 h-4 text-primary-aka bg-surface border-border rounded focus:ring-primary-aka focus:ring-2 accent-primary-aka" />
+      <input type="checkbox" formControlName="greaterIsBetter" [id]="'gib-'+index()" class="w-4 h-4 text-primary bg-surface border-border rounded focus:ring-primary focus:ring-2 accent-primary" />
       <label [for]="'gib-'+index()" class="text-sm cursor-pointer text-text-main font-medium select-none truncate">
         {{ formGroup().get('greaterIsBetter')?.value ? 'Alto è meglio' : 'Basso è meglio' }}
       </label>

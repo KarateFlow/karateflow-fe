@@ -1,10 +1,10 @@
 <form [formGroup]="athleteForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6 surface-card p-6 md:p-8">
   <div class="flex items-center gap-6 mb-2 border-b border-border pb-6">
-    <label for="avatarUpload" class="relative inline-block cursor-pointer rounded-full overflow-hidden w-24 h-24 border-2 border-dashed border-border hover:border-primary-aka transition-colors focus-ring outline-none shrink-0 group" tabindex="0" (keydown.enter)="avatarUpload.click()" (keydown.space)="avatarUpload.click()">
+    <label for="avatarUpload" class="relative inline-block cursor-pointer rounded-full overflow-hidden w-24 h-24 border-2 border-dashed border-border hover:border-primary transition-colors focus-ring outline-none shrink-0 group" tabindex="0" (keydown.enter)="avatarUpload.click()" (keydown.space)="avatarUpload.click()">
       @if (avatarPreview()) {
         <img [src]="avatarPreview()" alt="Avatar Preview" class="w-full h-full object-cover" />
       } @else {
-        <div class="w-full h-full bg-surface flex items-center justify-center text-primary-aka font-extrabold text-2xl shadow-inner">
+        <div class="w-full h-full bg-surface flex items-center justify-center text-primary font-extrabold text-2xl shadow-inner">
           <span class="uppercase">{{ getInitials() }}</span>
         </div>
       }
@@ -65,7 +65,7 @@
       formControlName="medicalNotes"
       rows="3"
       placeholder="Es. Allergie, infortuni pregressi..."
-      class="w-full p-3 border border-border rounded-xl font-sans text-sm bg-surface text-text-main outline-none focus:border-primary-aka focus:ring-2 focus:ring-primary-aka/10 transition-colors"
+      class="w-full p-3 border border-border rounded-xl font-sans text-sm bg-surface text-text-main outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-colors"
     ></textarea>
   </div>
 

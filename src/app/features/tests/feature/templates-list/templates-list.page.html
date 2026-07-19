@@ -77,6 +77,7 @@
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
           Nuovo Template
+          <kbd class="hidden sm:inline-block ml-3 px-1.5 py-0.5 text-[10px] font-mono font-bold text-primary bg-bg-canvas rounded opacity-80 shadow-sm border border-primary/20">C</kbd>
         </app-ui-button>
       </div>
     }
@@ -84,7 +85,7 @@
 
   @if (templatesResource.isLoading()) {
     <div class="flex flex-col items-center py-16 gap-6 text-text-muted">
-      <div class="w-10 h-10 border-4 border-hover border-t-primary-aka rounded-full animate-spin"></div>
+      <div class="w-10 h-10 border-4 border-hover border-t-primary rounded-full animate-spin"></div>
       <p class="font-medium text-lg">Caricamento dei template in corso...</p>
     </div>
   } @else if (templatesResource.error()) {
@@ -110,21 +111,31 @@
           <app-ui-button actions variant="primary" (onClick)="startCreate()">Crea Template</app-ui-button>
         </app-empty-state>
       } @else {
-        <section class="mb-4">
+        <section class="flex justify-end mb-8">
           <div class="relative w-full max-w-sm">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none flex items-center">
               <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
             </span>
-            <input type="text" placeholder="Cerca template..." [value]="searchTerm()" (input)="onSearch($event)" class="w-full pl-10 pr-4 py-2 border border-border rounded-xl bg-surface text-text-main placeholder-text-muted outline-none focus:border-primary-aka focus:ring-2 focus:ring-primary-aka/10 transition-colors" />
+            <input 
+              #searchInput
+              type="text" 
+              placeholder="Cerca template..." 
+              [value]="searchTerm()" 
+              (input)="onSearch($event)" 
+              class="w-full py-3 pr-12 pl-11 border border-border rounded-xl bg-bg-canvas text-text-main text-sm font-sans outline-none transition-colors focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/15" 
+            />
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none hidden sm:flex gap-1">
+              <kbd class="px-2 py-0.5 text-xs font-mono font-bold text-text-muted bg-surface border border-border rounded-md shadow-sm">/</kbd>
+            </div>
           </div>
         </section>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           @for (template of filteredTemplates(); track template.id) {
             <div 
-              class="surface-card p-6 cursor-pointer hover:-translate-y-1 hover:border-primary-aka hover:shadow-lg transition-all focus-ring outline-none flex flex-col gap-2" 
+              class="surface-card p-6 cursor-pointer hover:-translate-y-1 hover:border-primary hover:shadow-lg transition-all focus-ring outline-none flex flex-col gap-2" 
               (click)="viewDetail(template)"
               tabindex="0"
               (keydown.enter)="viewDetail(template)"
@@ -148,9 +159,9 @@
         <h2 class="text-2xl font-extrabold text-text-main m-0 mb-6 pb-4 border-b border-border">Esercizi Inclusi</h2>
         <div class="flex flex-col gap-4">
           @for (ex of selectedTemplate()?.exercises; track $index) {
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 bg-bg-canvas border border-border rounded-xl gap-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 bg-bg-canvas rounded-xl gap-4">
               <div class="flex items-center gap-4">
-                <span class="font-bold text-primary-aka bg-blue-50 px-2 py-1 rounded-md text-sm">#{{ $index + 1 }}</span>
+                <span class="font-bold text-primary bg-blue-50 px-2 py-1 rounded-md text-sm">#{{ $index + 1 }}</span>
                 <span class="font-bold text-text-main text-lg">{{ ex.exerciseTitle }}</span>
               </div>
               <div class="flex items-center gap-3 w-full sm:w-auto flex-wrap">
@@ -189,7 +200,7 @@
                 formControlName="description" 
                 rows="3" 
                 placeholder="Fornisci dettagli o indicazioni sull'utilizzo di questo template..."
-                class="w-full p-3 border border-border rounded-xl font-sans text-sm bg-surface text-text-main outline-none focus:border-primary-aka focus:ring-2 focus:ring-primary-aka/10 transition-colors"
+                class="w-full p-3 border border-border rounded-xl font-sans text-sm bg-surface text-text-main outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-colors"
               ></textarea>
             </div>
           </div>
@@ -211,7 +222,7 @@
 
           <div class="flex flex-col gap-2">
             @for (ctrl of exercises.controls; track ctrl; let i = $index) {
-              <div [formGroup]="asFormGroup(ctrl)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 items-end p-4 bg-bg-canvas rounded-xl border border-border mb-3">
+              <div [formGroup]="asFormGroup(ctrl)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 items-end p-4 bg-bg-canvas rounded-xl mb-3">
                 <div class="sm:col-span-2 md:col-span-5">
                   <app-ui-input
                     [id]="'title-'+i"
@@ -239,7 +250,7 @@
                 <div class="sm:col-span-1 md:col-span-2 flex flex-col gap-1.5 pb-2">
                   <span class="text-xs font-bold uppercase tracking-wider text-text-muted">Tendenza</span>
                   <div class="flex items-center gap-2">
-                    <input type="checkbox" formControlName="greaterIsBetter" [id]="'gib-'+i" class="w-4 h-4 text-primary-aka bg-surface border-border rounded focus:ring-primary-aka focus:ring-2 accent-primary-aka" />
+                    <input type="checkbox" formControlName="greaterIsBetter" [id]="'gib-'+i" class="w-4 h-4 text-primary bg-surface border-border rounded focus:ring-primary focus:ring-2 accent-primary" />
                     <label [for]="'gib-'+i" class="text-sm cursor-pointer text-text-main font-medium select-none">
                       {{ ctrl.get('greaterIsBetter')?.value ? 'Alto è max' : 'Basso è max' }}
                     </label>
