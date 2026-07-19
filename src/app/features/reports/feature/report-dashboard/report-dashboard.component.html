@@ -367,6 +367,8 @@
                       [class.cursor-not-allowed]="comp.resultA === null || comp.resultB === null"
                       class="flex flex-col gap-2 pb-4 border-b border-border last:border-b-0 last:pb-0 cursor-pointer transition-colors hover:bg-bg-canvas p-3 rounded-lg"
                       (click)="comp.resultA !== null && comp.resultB !== null ? selectedExerciseForChart.set(comp.exerciseTitle) : null"
+                      (keydown.enter)="comp.resultA !== null && comp.resultB !== null ? selectedExerciseForChart.set(comp.exerciseTitle) : null"
+                      tabindex="0"
                     >
                       <div class="flex justify-between items-center border-b border-border/50 pb-2 mb-1">
                         <span class="text-xs font-bold text-text-muted uppercase">Esercizio</span>
