@@ -49,7 +49,7 @@ describe('AthleteTestsListComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelectorAll('.session-card').length).toBe(1);
+    expect(compiled.querySelectorAll('article').length).toBe(1);
     expect(compiled.textContent).toContain('Test Forza');
     expect(compiled.textContent).toContain('1 esercizi svolti');
   });
@@ -67,12 +67,12 @@ describe('AthleteTestsListComponent', () => {
     ]);
     fixture.detectChanges();
 
-    const summary = fixture.nativeElement.querySelector('.session-summary') as HTMLElement;
+    const summary = fixture.nativeElement.querySelector('header') as HTMLElement;
     summary.click();
     fixture.detectChanges();
 
     expect(component['expandedId']()).toBe('1');
-    expect(fixture.nativeElement.querySelector('.session-detail')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('article > div.animate-in')).toBeTruthy();
 
     summary.click();
     fixture.detectChanges();
@@ -100,17 +100,17 @@ describe('AthleteTestsListComponent', () => {
     fixture.detectChanges();
 
     // Expand card
-    const summary = fixture.nativeElement.querySelector('.session-summary') as HTMLElement;
+    const summary = fixture.nativeElement.querySelector('header') as HTMLElement;
     summary.click();
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
     // Should render only 5 rows
-    const rows = compiled.querySelectorAll('.exercises-table tbody tr');
+    const rows = compiled.querySelectorAll('tbody tr');
     expect(rows.length).toBe(5);
 
     // Should show hint
-    const hint = compiled.querySelector('.more-exercises-hint');
+    const hint = compiled.querySelector('div.italic');
     expect(hint).toBeTruthy();
     expect(hint?.textContent).toContain('e altri 2 esercizi');
   });

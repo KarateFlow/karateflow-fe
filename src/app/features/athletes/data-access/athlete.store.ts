@@ -17,9 +17,9 @@ export class AthleteStore {
   // but caching it here allows fast navigation back and forth)
   readonly selectedAthleteId = signal<string | null>(null);
 
-  readonly selectedAthleteResource = resource({
-    loader: () => {
-      const id = this.selectedAthleteId();
+  readonly selectedAthleteResource = resource<Athlete | null, string | null>({
+    params: () => this.selectedAthleteId(),
+    loader: ({ params: id }) => {
       if (!id) return Promise.resolve(null);
       return firstValueFrom(this.api.getAthlete(id));
     },

@@ -34,6 +34,9 @@ export class AthleteEditPage {
   });
 
   protected get athlete() {
+    if (this.store.selectedAthleteResource.error() || this.store.selectedAthleteResource.isLoading()) {
+      return null;
+    }
     return this.store.selectedAthleteResource.value();
   }
   

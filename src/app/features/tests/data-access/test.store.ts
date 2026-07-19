@@ -2,7 +2,7 @@ import { Injectable, inject, resource, signal } from '@angular/core';
 import { TestsApiService } from './tests-api.service';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CreateTestRequest, UpdateTestRequest } from './test.model';
+import { CreateTestRequest, UpdateTestRequest, TestResponse } from './test.model';
 
 @Injectable({ providedIn: 'root' })
 export class TestStore {
@@ -11,9 +11,9 @@ export class TestStore {
   // Global state for a selected test
   readonly selectedTestId = signal<string | null>(null);
 
-  readonly selectedTestResource = resource({
-    loader: () => {
-      const id = this.selectedTestId();
+  readonly selectedTestResource = resource<TestResponse | null, string | null>({
+    params: () => this.selectedTestId(),
+    loader: ({ params: id }) => {
       if (!id) return Promise.resolve(null);
       return firstValueFrom(this.api.getTest(id));
     },
@@ -22,9 +22,9 @@ export class TestStore {
   // Global state for tests by athlete
   readonly selectedAthleteId = signal<string | null>(null);
 
-  readonly testsByAthleteResource = resource({
-    loader: () => {
-      const id = this.selectedAthleteId();
+  readonly testsByAthleteResource = resource<TestResponse[], string | null>({
+    params: () => this.selectedAthleteId(),
+    loader: ({ params: id }) => {
       if (!id) return Promise.resolve([]);
       return firstValueFrom(this.api.getTestsByAthlete(id));
     },

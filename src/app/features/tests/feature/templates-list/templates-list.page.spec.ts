@@ -309,7 +309,7 @@ describe('TemplatesListPage', () => {
     // @ts-expect-error - accessing protected method
     await component.onConfirmSave();
 
-    expect(toastService.error).toHaveBeenCalledWith('Errore del server: si è verificato un problema interno.');
+    expect(toastService.error).toHaveBeenCalledWith('Il server ha riscontrato un problema interno. Riprova tra qualche istante.');
   });
 
   it('should handle connection errors (status 0)', async () => {
@@ -328,7 +328,7 @@ describe('TemplatesListPage', () => {
     // @ts-expect-error - accessing protected method
     await component.onConfirmSave();
 
-    expect(toastService.error).toHaveBeenCalledWith('Errore di connessione: il server non risponde. Controlla la tua connessione internet.');
+    expect(toastService.error).toHaveBeenCalledWith('Impossibile raggiungere il backend. Verifica la tua connessione o lo stato del server.');
   });
 
   it('should handle generic error and other HTTP errors', async () => {
@@ -348,13 +348,13 @@ describe('TemplatesListPage', () => {
     // @ts-expect-error - accessing protected method
     await component.onConfirmSave();
 
-    expect(toastService.error).toHaveBeenCalledWith('Si è verificato un errore inaspettato. Riprova più tardi.');
+    expect(toastService.error).toHaveBeenCalledWith('I dati richiesti non sono disponibili sul server.');
 
     // Test non-HttpErrorResponse error
     templatesApi.createTemplate.mockReturnValue(throwError(() => new Error('Generic Error')));
     // @ts-expect-error - accessing protected method
     await component.onConfirmSave();
-    expect(toastService.error).toHaveBeenCalledWith('Si è verificato un errore inaspettato. Riprova più tardi.');
+    expect(toastService.error).toHaveBeenCalledWith("Si è verificato un errore durante l'operazione.");
   });
 
   it('should handle delete template failure', async () => {

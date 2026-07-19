@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AthleteEditPage } from './athlete-edit.page';
 import { provideRouter, Router, ActivatedRoute } from '@angular/router';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
-import { of, throwError } from 'rxjs';
+import { of, throwError, timer } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { Athlete } from '../../data-access/athlete.model';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -72,15 +73,15 @@ describe('AthleteEditPage', () => {
   });
 
   it('should handle API error when loading athlete details', async () => {
-    mockAthletesApi.getAthlete.mockReturnValue(throwError(() => new Error('API Error')));
+    mockAthletesApi.getAthlete.mockReturnValue(timer(0).pipe(switchMap(() => throwError(() => new Error('API Error')))));
     
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(component['athleteResource'].error()).toBeTruthy();
+    expect(component['error']).toBeTruthy();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.error-banner')).toBeTruthy();
+    expect(compiled.querySelector('.bg-error-bg')).toBeTruthy();
   });
 
   it('should show confirmation dialog on pre-submit if form is valid', async () => {

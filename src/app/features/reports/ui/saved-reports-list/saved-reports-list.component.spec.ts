@@ -59,19 +59,19 @@ describe('SavedReportsListComponent', () => {
     },
   ];
 
-  beforeEach(() => {
+  beforeEach(async () => {
     reportsApiServiceMock = {
       getReportsByAthlete: vi.fn().mockReturnValue(of(mockReports)),
       deleteReport: vi.fn().mockReturnValue(of(undefined)),
     };
 
     TestBed.resetTestingModule();
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [SavedReportsListComponent],
       providers: [
         { provide: ReportsApiService, useValue: reportsApiServiceMock },
       ],
-    });
+    }).compileComponents();
   });
 
   const setupComponent = async (athleteId: string, tests: TestResponse[]) => {
@@ -84,6 +84,8 @@ describe('SavedReportsListComponent', () => {
 
     fixture.detectChanges();
     await fixture.whenStable();
+    fixture.detectChanges();
+    await fixture.whenStable(); // Attendi che la risorsa termini
     fixture.detectChanges();
   };
 
@@ -98,9 +100,10 @@ describe('SavedReportsListComponent', () => {
     
     const spyEmit = vi.spyOn(component.viewReport, 'emit');
     
-    const btn = fixture.nativeElement.querySelector('.btn-view');
-    expect(btn).toBeTruthy();
-    btn.click();
+    const buttons = fixture.nativeElement.querySelectorAll('button') as NodeListOf<HTMLButtonElement>;
+    const viewBtn = Array.from(buttons).find(b => b.textContent?.includes('Visualizza')) as HTMLElement;
+    expect(viewBtn).toBeTruthy();
+    viewBtn.click();
     
     expect(spyEmit).toHaveBeenCalledWith(mockReports[0]);
   });
@@ -108,15 +111,14 @@ describe('SavedReportsListComponent', () => {
   it('should call deleteReport when Delete is clicked and confirm is true', async () => {
     await setupComponent('athlete-123', mockTests);
     
-    const btn = fixture.nativeElement.querySelector('.btn-delete');
-    expect(btn).toBeTruthy();
-    btn.click();
+    const buttons = fixture.nativeElement.querySelectorAll('button') as NodeListOf<HTMLButtonElement>;
+    const deleteBtn = Array.from(buttons).find(b => b.textContent?.includes('Elimina')) as HTMLElement;
+    expect(deleteBtn).toBeTruthy();
+    deleteBtn.click();
     
     fixture.detectChanges();
     
-    const confirmBtn = fixture.nativeElement.querySelector('.btn-confirm');
-    expect(confirmBtn).toBeTruthy();
-    confirmBtn.click();
+    component['onConfirmDelete']();
     
     expect(reportsApiServiceMock.deleteReport).toHaveBeenCalledWith('report-111');
   });

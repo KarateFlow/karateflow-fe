@@ -2,7 +2,8 @@ import '@angular/compiler';
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { of, throwError, timer } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { AthleteListPage } from './athlete-list.page';
 import { AthletesApiService } from '../../data-access/athletes-api.service';
@@ -47,20 +48,17 @@ describe('AthleteListPage', () => {
 
   it('should load athletes on init', () => {
     expect(athletesApi.getAthletes).toHaveBeenCalled();
-    // @ts-expect-error - Accesso a risorsa protetta per il test
-    expect(component.athletesResource.value()).toEqual(mockAthletes);
+    expect(component['filteredAthletes']()).toEqual(mockAthletes);
   });
 
   it('should handle error during loading', async () => {
-    athletesApi.getAthletes.mockReturnValue(throwError(() => new Error('API Error')));
+    athletesApi.getAthletes.mockReturnValue(timer(0).pipe(switchMap(() => throwError(() => new Error('API Error')))));
     
-    // @ts-expect-error - Accesso a risorsa protetta per il test
-    component.athletesResource.reload();
+    component['store'].athletesResource.reload();
     
     await fixture.whenStable();
     fixture.detectChanges();
 
-    // @ts-expect-error - Accesso a risorsa protetta per il test
-    expect(component.athletesResource.error()).toBeDefined();
+    expect(component['store'].athletesResource.error()).toBeDefined();
   });
 });

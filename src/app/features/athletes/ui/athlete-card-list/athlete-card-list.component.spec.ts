@@ -46,14 +46,14 @@ describe('AthleteCardListComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const cards = compiled.querySelectorAll('.athlete-card');
+    const cards = compiled.querySelectorAll('article');
     expect(cards.length).toBe(2);
 
-    expect(cards[0].querySelector('.athlete-name')?.textContent).toContain('Mario Rossi');
-    expect(cards[0].querySelector('.initials')?.textContent).toBe('MR');
+    expect(cards[0].querySelector('h3')?.textContent).toContain('Mario Rossi');
+    expect(cards[0].querySelector('.text-xl')?.textContent).toBe('MR');
 
-    expect(cards[1].querySelector('.athlete-name')?.textContent).toContain('Luigi Verdi');
-    expect(cards[1].querySelector('.initials')?.textContent).toBe('LV');
+    expect(cards[1].querySelector('h3')?.textContent).toContain('Luigi Verdi');
+    expect(cards[1].querySelector('.text-xl')?.textContent).toBe('LV');
   });
 
   it('should display empty state when athletes list is empty', () => {
@@ -61,10 +61,10 @@ describe('AthleteCardListComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const cards = compiled.querySelectorAll('.athlete-card');
+    const cards = compiled.querySelectorAll('article');
     expect(cards.length).toBe(0);
 
-    const emptyState = compiled.querySelector('.empty-state');
+    const emptyState = compiled.querySelector('.col-span-full');
     expect(emptyState).toBeTruthy();
     expect(emptyState?.textContent).toContain('Nessun atleta registrato');
   });
@@ -76,7 +76,7 @@ describe('AthleteCardListComponent', () => {
     let emittedAthlete: Athlete | undefined;
     component.view.subscribe((athlete) => (emittedAthlete = athlete));
 
-    const card = fixture.nativeElement.querySelector('.athlete-card');
+    const card = fixture.nativeElement.querySelector('article');
     card.click();
 
     expect(emittedAthlete).toEqual(mockAthletes[0]);
@@ -89,7 +89,7 @@ describe('AthleteCardListComponent', () => {
     let emittedAthlete: Athlete | undefined;
     component.view.subscribe((athlete) => (emittedAthlete = athlete));
 
-    const card = fixture.nativeElement.querySelector('.athlete-card') as HTMLElement;
+    const card = fixture.nativeElement.querySelector('article') as HTMLElement;
     
     // Enter key
     const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });

@@ -9,9 +9,9 @@ export class ReportsStore {
 
   private readonly currentAthleteId = signal<string | null>(null);
 
-  public readonly reportsResource = resource<ReportResponse[], unknown>({
-    loader: () => {
-      const athleteId = this.currentAthleteId();
+  public readonly reportsResource = resource<ReportResponse[], string | null>({
+    params: () => this.currentAthleteId(),
+    loader: ({ params: athleteId }) => {
       if (!athleteId) return Promise.resolve([]);
       return firstValueFrom(this.reportsApi.getReportsByAthlete(athleteId));
     },
