@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, resource, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
@@ -32,7 +33,7 @@ export function noFutureDateValidator(): ValidatorFn {
 @Component({
   selector: 'app-test-create',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, ExerciseFormRowComponent, ConfirmDialogComponent, UiInputComponent, UiButtonComponent, UiSelectComponent],
+  imports: [RouterLink, ReactiveFormsModule, NgClass, ExerciseFormRowComponent, ConfirmDialogComponent, UiInputComponent, UiButtonComponent, UiSelectComponent],
   templateUrl: './test-create.page.html',
   styleUrl: './test-create.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

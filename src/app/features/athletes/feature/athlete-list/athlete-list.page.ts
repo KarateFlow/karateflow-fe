@@ -1,13 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, signal, computed } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AthleteStore } from '../../data-access/athlete.store';
 import { AthleteCardListComponent } from '../../ui/athlete-card-list/athlete-card-list.component';
 import { Athlete } from '../../data-access/athlete.model';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
+import { UiButtonComponent } from '../../../../shared/ui/ui-button/ui-button.component';
 
 @Component({
   selector: 'app-athlete-list',
-  imports: [RouterLink, AthleteCardListComponent, EmptyStateComponent],
+  standalone: true,
+  imports: [AthleteCardListComponent, EmptyStateComponent, UiButtonComponent],
   templateUrl: './athlete-list.page.html',
   styleUrl: './athlete-list.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,5 +37,9 @@ export class AthleteListPage {
 
   protected onViewAthlete(athlete: Athlete): void {
     this.router.navigate(['/athletes', athlete.athleteId]);
+  }
+
+  protected onNewAthlete(): void {
+    this.router.navigate(['/athletes/new']);
   }
 }

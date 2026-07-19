@@ -18,6 +18,7 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
 export class SavedReportsListComponent {
   athleteId = input.required<string>();
   tests = input.required<TestResponse[]>();
+  autoOpenReportId = input<string | null>(null);
 
   viewReport = output<ReportResponse>();
 
@@ -27,6 +28,20 @@ export class SavedReportsListComponent {
   constructor() {
     effect(() => {
       this.reportsStore.loadReportsForAthlete(this.athleteId());
+    });
+    
+    // Effetto per l'apertura automatica del report quando i report sono caricati
+    effect(() => {
+      const reports = this.reportsStore.reportsResource.value();
+      const reportId = this.autoOpenReportId();
+      if (reports && reports.length > 0 && reportId) {
+        // Troviamo il report sia per reportId che per id per supportare eventuali mock backend
+        const report = reports.find(r => r.reportId === reportId || (r as any).id === reportId);
+        if (report) {
+          // Usiamo untracked o setTimeout per evitare error NG0100 (ExpressionChangedAfterItHasBeenCheckedError)
+          setTimeout(() => this.viewReport.emit(report), 0);
+        }
+      }
     });
   }
 

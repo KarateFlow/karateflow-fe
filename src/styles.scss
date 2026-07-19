@@ -3,5 +3,20 @@
 @tailwind utilities;
 
 @import './styles/variables';
-@import './styles/base';
 @import './styles/components';
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-bg-canvas);
+  color: var(--color-text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Fallback Classes in case Tailwind JIT misses them in Angular bindings */
+.bg-primary-aka { background-color: var(--color-primary-aka) !important; }
+.bg-success { background-color: var(--color-success) !important; }
+.bg-secondary-ao { background-color: var(--color-secondary-ao) !important; }

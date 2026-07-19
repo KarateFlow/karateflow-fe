@@ -1,300 +1,314 @@
-<div class="page-container">
-      <!-- HEADER CONDIZIONALE A SECONDA DELLO STATO -->
-      <header class="page-header">
-        @if (isViewingDetail() && !isEditing()) {
-          <app-ui-button variant="outline" (onClick)="closeDetail()">
-            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
-              <line x1="19" y1="12" x2="5" y2="12"></line>
-              <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-            Torna ai Template
+<div class="max-w-6xl mx-auto w-full py-6">
+  <!-- HEADER CONDIZIONALE A SECONDA DELLO STATO -->
+  <header class="mb-8 flex flex-col gap-4">
+    @if (isViewingDetail() && !isEditing()) {
+      <div class="self-start">
+        <app-ui-button variant="outline" (onClick)="closeDetail()">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Torna ai Template
+        </app-ui-button>
+      </div>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 class="text-3xl font-extrabold text-text-main m-0 mb-1">{{ selectedTemplate()?.name }}</h1>
+          @if (selectedTemplate()?.description) {
+            <p class="text-lg text-text-muted m-0">{{ selectedTemplate()?.description }}</p>
+          }
+        </div>
+        <div class="flex gap-3 w-full sm:w-auto">
+          <app-ui-button variant="danger" (onClick)="confirmDeleteCurrent()" class="flex-1 sm:flex-none">
+            Elimina
           </app-ui-button>
-          <div class="header-main">
-            <div class="title-section">
-              <h1>{{ selectedTemplate()?.name }}</h1>
-              @if (selectedTemplate()?.description) {
-                <p class="description">{{ selectedTemplate()?.description }}</p>
-              }
-            </div>
-            <div class="header-actions">
-              <app-ui-button variant="danger" (onClick)="confirmDeleteCurrent()">
-                Elimina
-              </app-ui-button>
-              <app-ui-button variant="primary" (onClick)="startEdit(selectedTemplate()!)">
-                Modifica
-              </app-ui-button>
-            </div>
-          </div>
-        } @else if (isEditing()) {
-          <app-ui-button variant="outline" (onClick)="cancel()">
-            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
-              <line x1="19" y1="12" x2="5" y2="12"></line>
-              <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-            Torna al Dettaglio
+          <app-ui-button variant="primary" (onClick)="startEdit(selectedTemplate()!)" class="flex-1 sm:flex-none">
+            Modifica
           </app-ui-button>
-          <div class="header-main">
-            <div class="title-section">
-              <h1>Modifica Template</h1>
-              <p>Aggiorna le informazioni e l'elenco degli esercizi del template.</p>
-            </div>
-          </div>
-        } @else if (isCreating()) {
-          <app-ui-button variant="outline" (onClick)="cancel()">
-            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
-              <line x1="19" y1="12" x2="5" y2="12"></line>
-              <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-            Torna ai Template
-          </app-ui-button>
-          <div class="header-main">
-            <div class="title-section">
-              <h1>Nuovo Template</h1>
-              <p>Inserisci i dettagli e gli esercizi per il nuovo template.</p>
-            </div>
-          </div>
-        } @else {
-          <!-- LISTA / GENERAL HEADER -->
-          <app-ui-button variant="outline" routerLink="/">
-            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
-              <line x1="19" y1="12" x2="5" y2="12"></line>
-              <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-            Torna alla Home
-          </app-ui-button>
-          <div class="header-main">
-            <div class="title-section">
-              <h1>Gestione Template di Test</h1>
-              <p>Configura modelli di esercizi predefiniti per velocizzare la registrazione delle sessioni.</p>
-            </div>
-            <app-ui-button variant="primary" (onClick)="startCreate()">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-              Nuovo Template
-            </app-ui-button>
-          </div>
-        }
-      </header>
+        </div>
+      </div>
+    } @else if (isEditing()) {
+      <div class="self-start">
+        <app-ui-button variant="outline" (onClick)="cancel()">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Torna al Dettaglio
+        </app-ui-button>
+      </div>
+      <div>
+        <h1 class="text-3xl font-extrabold text-text-main m-0 mb-1">Modifica Template</h1>
+        <p class="text-lg text-text-muted m-0">Aggiorna le informazioni e l'elenco degli esercizi del template.</p>
+      </div>
+    } @else if (isCreating()) {
+      <div class="self-start">
+        <app-ui-button variant="outline" (onClick)="cancel()">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Torna ai Template
+        </app-ui-button>
+      </div>
+      <div>
+        <h1 class="text-3xl font-extrabold text-text-main m-0 mb-1">Nuovo Template</h1>
+        <p class="text-lg text-text-muted m-0">Inserisci i dettagli e gli esercizi per il nuovo template.</p>
+      </div>
+    } @else {
+      <!-- LISTA / GENERAL HEADER -->
+      <div class="self-start">
+        <app-ui-button variant="outline" routerLink="/">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Torna alla Home
+        </app-ui-button>
+      </div>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 class="text-3xl font-extrabold text-text-main m-0 mb-1">Gestione Template di Test</h1>
+          <p class="text-lg text-text-muted m-0">Configura modelli di esercizi predefiniti per velocizzare la registrazione delle sessioni.</p>
+        </div>
+        <app-ui-button variant="primary" (onClick)="startCreate()" class="w-full sm:w-auto">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Nuovo Template
+        </app-ui-button>
+      </div>
+    }
+  </header>
 
-      @if (templatesResource.isLoading()) {
-        <div class="loading-state">
-          <div class="spinner"></div>
-          <p>Caricamento dei template in corso...</p>
-        </div>
-      } @else if (templatesResource.error()) {
-        <div class="error-state">
-          <strong>Errore nel caricamento</strong>
-          <p>Impossibile recuperare l'elenco dei template di test.</p>
-          <app-ui-button variant="primary" (onClick)="templatesResource.reload()">Riprova</app-ui-button>
-        </div>
+  @if (templatesResource.isLoading()) {
+    <div class="flex flex-col items-center py-16 gap-6 text-text-muted">
+      <div class="w-10 h-10 border-4 border-hover border-t-primary-aka rounded-full animate-spin"></div>
+      <p class="font-medium text-lg">Caricamento dei template in corso...</p>
+    </div>
+  } @else if (templatesResource.error()) {
+    <div class="bg-error-bg border border-error rounded-xl p-8 text-center text-error flex flex-col items-center gap-4">
+      <strong class="text-xl">Errore nel caricamento</strong>
+      <p class="font-medium">Impossibile recuperare l'elenco dei template di test.</p>
+      <app-ui-button variant="primary" (onClick)="templatesResource.reload()">Riprova</app-ui-button>
+    </div>
+  } @else {
+    @if (!isEditing() && !isCreating() && !isViewingDetail()) {
+      <!-- LISTA DEI TEMPLATE -->
+      @if ((templatesResource.value() ?? []).length === 0) {
+        <app-empty-state 
+          title="Nessun template configurato" 
+          message="Crea il tuo primo template di test per velocizzare l'inserimento dei dati degli atleti.">
+          <svg icon aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <app-ui-button actions variant="primary" (onClick)="startCreate()">Crea Template</app-ui-button>
+        </app-empty-state>
       } @else {
-        @if (!isEditing() && !isCreating() && !isViewingDetail()) {
-          <!-- LISTA DEI TEMPLATE -->
-          @if ((templatesResource.value() ?? []).length === 0) {
-            <app-empty-state 
-              title="Nessun template configurato" 
-              message="Crea il tuo primo template di test per velocizzare l'inserimento dei dati degli atleti.">
-              <svg icon xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
-                <polyline points="10 9 9 9 8 9"></polyline>
+        <section class="mb-4">
+          <div class="relative w-full max-w-sm">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
-              <app-ui-button actions variant="primary" (onClick)="startCreate()">Crea Template</app-ui-button>
-            </app-empty-state>
-          } @else {
-            <section class="list-actions">
-              <div class="search-container">
-                <span class="search-icon">
-                  <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                  </svg>
-                </span>
-                <input type="text" placeholder="Cerca template..." [value]="searchTerm()" (input)="onSearch($event)" class="search-input" />
+            </span>
+            <input type="text" placeholder="Cerca template..." [value]="searchTerm()" (input)="onSearch($event)" class="w-full pl-10 pr-4 py-2 border border-border rounded-xl bg-surface text-text-main placeholder-text-muted outline-none focus:border-primary-aka focus:ring-2 focus:ring-primary-aka/10 transition-colors" />
+          </div>
+        </section>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (template of filteredTemplates(); track template.id) {
+            <div 
+              class="surface-card p-6 cursor-pointer hover:-translate-y-1 hover:border-primary-aka hover:shadow-lg transition-all focus-ring outline-none flex flex-col gap-2" 
+              (click)="viewDetail(template)"
+              tabindex="0"
+              (keydown.enter)="viewDetail(template)"
+              (keydown.space)="viewDetail(template)"
+              role="button"
+            >
+              <div class="flex justify-between items-start gap-4 mb-2">
+                <h3 class="text-xl font-bold text-text-main m-0 leading-tight">{{ template.name }}</h3>
+                <span class="bg-hover text-text-muted text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap shrink-0">{{ template.exercises.length }} esercizi</span>
               </div>
-            </section>
-            <div class="templates-grid">
-              @for (template of filteredTemplates(); track template.id) {
-                <div 
-                  class="template-card" 
-                  (click)="viewDetail(template)"
-                  tabindex="0"
-                  (keydown.enter)="viewDetail(template)"
-                >
-                  <div class="card-header">
-                     <div class="card-title-section">
-                      <h3>{{ template.name }}</h3>
-                      <span class="badge">{{ template.exercises.length }} esercizi</span>
-                    </div>
-                    @if (template.description) {
-                      <p class="description">{{ template.description }}</p>
-                    }
-                  </div>
-                </div>
+              @if (template.description) {
+                <p class="text-sm text-text-muted m-0 line-clamp-2 leading-relaxed">{{ template.description }}</p>
               }
             </div>
           }
-        } @else if (isViewingDetail() && !isEditing()) {
-          <!-- DETTAGLIO TEMPLATE (READ-ONLY) -->
-          <section class="detail-exercises-section">
-            <h2>Esercizi Inclusi</h2>
-            <div class="exercises-detail-list">
-              @for (ex of selectedTemplate()?.exercises; track $index) {
-                <div class="exercise-detail-row">
-                  <div class="ex-info">
-                    <span class="ex-number">#{{ $index + 1 }}</span>
-                    <span class="ex-name">{{ ex.exerciseTitle }}</span>
-                  </div>
-                  <div class="ex-specs">
-                    <span class="spec-badge">Unità: {{ ex.unit.toLowerCase() }}</span>
-                    <span class="spec-badge trend" [class.higher]="ex.greaterIsBetter">
-                      {{ ex.greaterIsBetter ? 'Alto è meglio' : 'Basso è meglio' }}
-                    </span>
-                  </div>
-                </div>
-              }
-            </div>
-          </section>
-        } @else {
-          <!-- FORM DI CREAZIONE / MODIFICA -->
-          <form [formGroup]="templateForm" (ngSubmit)="onPreSubmitSave()" class="template-form">
-            <section class="form-section">
-              <div class="form-grid">
-                <app-ui-input
-                  id="name"
-                  type="text"
-                  formControlName="name"
-                  label="Nome Template"
-                  placeholder="Es. Test Fisico Iniziale, Screening..."
-                  [invalid]="isInvalid('name')"
-                  errorMessage="Il nome del template è obbligatorio"
-                  [fullWidth]="true"
-                ></app-ui-input>
-                
-                <div class="form-group full-width">
-                  <label for="description">Descrizione (Opzionale)</label>
-                  <textarea 
-                    id="description" 
-                    formControlName="description" 
-                    rows="2" 
-                    placeholder="Fornisci dettagli o indicazioni sull'utilizzo di questo template..."
-                  ></textarea>
-                </div>
-              </div>
-            </section>
-
-            <section class="exercises-section">
-              <div class="section-header">
-                <h2>Elenco Esercizi</h2>
-                <app-ui-button variant="secondary" (onClick)="addExercise()">
-                  + Aggiungi Esercizio
-                </app-ui-button>
-              </div>
-
-              @if (exercises.controls.length === 0) {
-                <div class="empty-exercises-state" [class.error]="exercises.touched && exercises.invalid">
-                  <p>Nessun esercizio inserito. Aggiungi almeno un esercizio al template per poterlo salvare.</p>
-                </div>
-              }
-
-              <div class="exercises-list">
-                @for (ctrl of exercises.controls; track ctrl; let i = $index) {
-                  <div [formGroup]="asFormGroup(ctrl)" class="exercise-row">
-                    <app-ui-input
-                      [id]="'title-'+i"
-                      type="text"
-                      formControlName="exerciseTitle"
-                      label="Nome Esercizio"
-                      placeholder="Es. Push-up, 100m sprint..."
-                      [invalid]="isControlInvalid(ctrl, 'exerciseTitle')"
-                      errorMessage="Obbligatorio"
-                    ></app-ui-input>
-                    
-                    <app-ui-select
-                      [id]="'unit-'+i"
-                      formControlName="unit"
-                      label="Unità"
-                    >
-                      @for (unit of units; track unit) {
-                        <option [value]="unit">{{ unit }}</option>
-                      }
-                    </app-ui-select>
-
-                    <div class="field toggle-field">
-                      <span class="label-span">Tendenza</span>
-                      <div class="toggle-container">
-                        <input type="checkbox" formControlName="greaterIsBetter" [id]="'gib-'+i" />
-                        <label [for]="'gib-'+i" class="toggle-label">
-                          {{ ctrl.get('greaterIsBetter')?.value ? 'Alto è meglio' : 'Basso è meglio' }}
-                        </label>
-                      </div>
-                    </div>
-
-                    <div class="actions">
-                      <app-ui-button variant="secondary" (onClick)="duplicateExercise(i)" title="Duplica esercizio">
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
-                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                        </svg>
-                      </app-ui-button>
-                      <app-ui-button variant="danger" (onClick)="removeExercise(i)" title="Rimuovi esercizio">
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
-                          <polyline points="3 6 5 6 21 6"></polyline>
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        </svg>
-                      </app-ui-button>
-                    </div>
-                  </div>
-                }
-              </div>
-              
-              @if (exercises.touched && exercises.hasError('minlength')) {
-                <div class="validation-error-banner">Inserire almeno un esercizio per poter salvare il template.</div>
-              }
-            </section>
-
-            <footer class="form-actions">
-              @if (isEditing()) {
-                <app-ui-button variant="danger" (onClick)="confirmDeleteCurrent()">
-                  Elimina Template
-                </app-ui-button>
-              }
-              <div class="right-actions">
-                <app-ui-button variant="outline" (onClick)="cancel()">
-                  Annulla
-                </app-ui-button>
-                <app-ui-button type="submit" variant="primary" [disabled]="isSaving()" [loading]="isSaving()" loadingText="Salvataggio...">
-                  Salva Template
-                </app-ui-button>
-              </div>
-            </footer>
-          </form>
-        }
+        </div>
       }
-    </div>
+    } @else if (isViewingDetail() && !isEditing()) {
+      <!-- DETTAGLIO TEMPLATE (READ-ONLY) -->
+      <section class="surface-card p-6 md:p-8 mt-6">
+        <h2 class="text-2xl font-extrabold text-text-main m-0 mb-6 pb-4 border-b border-border">Esercizi Inclusi</h2>
+        <div class="flex flex-col gap-4">
+          @for (ex of selectedTemplate()?.exercises; track $index) {
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 bg-bg-canvas border border-border rounded-xl gap-4">
+              <div class="flex items-center gap-4">
+                <span class="font-bold text-primary-aka bg-blue-50 px-2 py-1 rounded-md text-sm">#{{ $index + 1 }}</span>
+                <span class="font-bold text-text-main text-lg">{{ ex.exerciseTitle }}</span>
+              </div>
+              <div class="flex items-center gap-3 w-full sm:w-auto flex-wrap">
+                <span class="text-sm font-bold bg-border text-text-muted px-3 py-1 rounded-full">Unità: {{ ex.unit.toLowerCase() }}</span>
+                <span class="text-sm font-bold px-3 py-1 rounded-full" 
+                      [class.bg-success-bg]="ex.greaterIsBetter" 
+                      [class.text-success]="ex.greaterIsBetter"
+                      [class.bg-error-bg]="!ex.greaterIsBetter" 
+                      [class.text-error]="!ex.greaterIsBetter">
+                  {{ ex.greaterIsBetter ? 'Alto è meglio' : 'Basso è meglio' }}
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    } @else {
+      <!-- FORM DI CREAZIONE / MODIFICA -->
+      <form [formGroup]="templateForm" (ngSubmit)="onPreSubmitSave()" class="flex flex-col gap-8">
+        <section class="surface-card p-6 md:p-8">
+          <div class="flex flex-col gap-6">
+            <app-ui-input
+              id="name"
+              type="text"
+              formControlName="name"
+              label="Nome Template"
+              placeholder="Es. Test Fisico Iniziale, Screening..."
+              [invalid]="isInvalid('name')"
+              errorMessage="Il nome del template è obbligatorio"
+            ></app-ui-input>
+            
+            <div class="flex flex-col gap-1.5 w-full">
+              <label for="description" class="font-bold text-text-main text-sm">Descrizione (Opzionale)</label>
+              <textarea 
+                id="description" 
+                formControlName="description" 
+                rows="3" 
+                placeholder="Fornisci dettagli o indicazioni sull'utilizzo di questo template..."
+                class="w-full p-3 border border-border rounded-xl font-sans text-sm bg-surface text-text-main outline-none focus:border-primary-aka focus:ring-2 focus:ring-primary-aka/10 transition-colors"
+              ></textarea>
+            </div>
+          </div>
+        </section>
 
-    <!-- DIALOG CONFERMA ELIMINAZIONE TEMPLATE -->
-    <app-confirm-dialog
-      [isOpen]="showDeleteConfirm()"
-      title="Elimina Template"
-      message="Sei sicuro di voler eliminare definitivamente questo template di test? Questa operazione non può essere annullata."
-      confirmText="Sì, elimina"
-      cancelText="Annulla"
-      (confirmed)="onConfirmDelete()"
-      (cancelled)="showDeleteConfirm.set(false)"
-    />
+        <section class="pt-2">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <h2 class="text-2xl font-extrabold text-text-main m-0">Elenco Esercizi</h2>
+            <app-ui-button variant="secondary" (onClick)="addExercise()">
+              + Aggiungi Esercizio
+            </app-ui-button>
+          </div>
 
-    <!-- DIALOG CONFERMA SALVATAGGIO TEMPLATE -->
-    <app-confirm-dialog
-      [isOpen]="showSaveConfirm()"
-      title="Salva Template"
-      message="Vuoi procedere al salvataggio del template con le impostazioni attuali?"
-      confirmText="Sì, salva"
-      cancelText="Annulla"
-      (confirmed)="onConfirmSave()"
-      (cancelled)="showSaveConfirm.set(false)"
-    />
+          @if (exercises.controls.length === 0) {
+            <div class="text-center p-12 bg-bg-canvas border-2 border-dashed rounded-xl transition-colors" [ngClass]="exercises.touched && exercises.invalid ? 'border-error bg-error-bg text-error' : 'border-border text-text-muted'">
+              <p class="font-medium text-lg">Nessun esercizio inserito. Aggiungi almeno un esercizio al template per poterlo salvare.</p>
+            </div>
+          }
+
+          <div class="flex flex-col gap-2">
+            @for (ctrl of exercises.controls; track ctrl; let i = $index) {
+              <div [formGroup]="asFormGroup(ctrl)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 items-end p-4 bg-bg-canvas rounded-xl border border-border mb-3">
+                <div class="sm:col-span-2 md:col-span-5">
+                  <app-ui-input
+                    [id]="'title-'+i"
+                    type="text"
+                    formControlName="exerciseTitle"
+                    label="Nome Esercizio"
+                    placeholder="Es. Push-up, 100m sprint..."
+                    [invalid]="isControlInvalid(ctrl, 'exerciseTitle')"
+                    errorMessage="Obbligatorio"
+                  ></app-ui-input>
+                </div>
+                
+                <div class="md:col-span-3">
+                  <app-ui-select
+                    [id]="'unit-'+i"
+                    formControlName="unit"
+                    label="Unità"
+                  >
+                    @for (unit of units; track unit) {
+                      <option [value]="unit">{{ unit }}</option>
+                    }
+                  </app-ui-select>
+                </div>
+
+                <div class="sm:col-span-1 md:col-span-2 flex flex-col gap-1.5 pb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-text-muted">Tendenza</span>
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" formControlName="greaterIsBetter" [id]="'gib-'+i" class="w-4 h-4 text-primary-aka bg-surface border-border rounded focus:ring-primary-aka focus:ring-2 accent-primary-aka" />
+                    <label [for]="'gib-'+i" class="text-sm cursor-pointer text-text-main font-medium select-none">
+                      {{ ctrl.get('greaterIsBetter')?.value ? 'Alto è max' : 'Basso è max' }}
+                    </label>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-1 md:col-span-2 flex items-center justify-end md:justify-center gap-2 pb-1">
+                  <app-ui-button variant="secondary" (onClick)="duplicateExercise(i)" title="Duplica esercizio" class="flex-1 md:flex-none">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  </app-ui-button>
+                  <app-ui-button variant="danger" (onClick)="removeExercise(i)" title="Rimuovi esercizio" class="flex-1 md:flex-none">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                  </app-ui-button>
+                </div>
+              </div>
+            }
+          </div>
+          
+          @if (exercises.touched && exercises.hasError('minlength')) {
+            <div class="mt-4 p-4 bg-error-bg border border-error rounded-xl text-error font-semibold text-center">Inserire almeno un esercizio per poter salvare il template.</div>
+          }
+        </section>
+
+        <footer class="flex flex-col-reverse sm:flex-row justify-between items-center gap-4 py-6 border-t border-border mt-8">
+          @if (isEditing()) {
+            <app-ui-button variant="danger" (onClick)="confirmDeleteCurrent()" class="w-full sm:w-auto">
+              Elimina Template
+            </app-ui-button>
+          } @else {
+            <div></div>
+          }
+          <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <app-ui-button variant="outline" (onClick)="cancel()" class="w-full sm:w-auto flex justify-center">
+              Annulla
+            </app-ui-button>
+            <app-ui-button type="submit" variant="primary" [disabled]="isSaving()" [loading]="isSaving()" loadingText="Salvataggio..." class="w-full sm:w-auto flex justify-center">
+              Salva Template
+            </app-ui-button>
+          </div>
+        </footer>
+      </form>
+    }
+  }
+</div>
+
+<!-- DIALOG CONFERMA ELIMINAZIONE TEMPLATE -->
+<app-confirm-dialog
+  [isOpen]="showDeleteConfirm()"
+  title="Elimina Template"
+  message="Sei sicuro di voler eliminare definitivamente questo template di test? Questa operazione non può essere annullata."
+  confirmText="Sì, elimina"
+  cancelText="Annulla"
+  (confirmed)="onConfirmDelete()"
+  (cancelled)="showDeleteConfirm.set(false)"
+/>
+
+<!-- DIALOG CONFERMA SALVATAGGIO TEMPLATE -->
+<app-confirm-dialog
+  [isOpen]="showSaveConfirm()"
+  title="Salva Template"
+  message="Vuoi procedere al salvataggio del template con le impostazioni attuali?"
+  confirmText="Sì, salva"
+  cancelText="Annulla"
+  (confirmed)="onConfirmSave()"
+  (cancelled)="showSaveConfirm.set(false)"
+/>

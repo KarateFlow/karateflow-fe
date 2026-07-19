@@ -1,199 +1,235 @@
-<div class="page-container">
-      <header class="page-header">
-        <app-ui-button variant="outline" [routerLink]="['/athletes', athleteId()]">
-          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 0.5rem">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-          Torna al profilo
-        </app-ui-button>
+<div class="max-w-5xl mx-auto w-full py-6">
+  <header class="mb-8">
+    <a [routerLink]="['/athletes', athleteId()]" class="inline-flex items-center gap-2 text-text-muted hover:text-primary-aka font-bold px-3 py-2 -ml-3 rounded-xl transition-colors focus-ring outline-none">
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Torna al profilo
+    </a>
 
-        @if (athleteResource.value(); as athlete) {
-          <div class="athlete-info">
-            <h1>Dettaglio Sessione di Test</h1>
-            <p>Atleta: <strong>{{ athlete.firstName }} {{ athlete.lastName }}</strong></p>
+    @if (athleteResource.value(); as athlete) {
+      <div class="mt-4">
+        <h1 class="text-3xl font-extrabold text-text-main m-0 mb-1">Dettaglio Sessione di Test</h1>
+        <p class="text-lg text-text-muted m-0">Atleta: <strong class="text-text-main">{{ athlete.firstName }} {{ athlete.lastName }}</strong></p>
+      </div>
+    }
+  </header>
+
+  @if (testResource.isLoading()) {
+    <div class="flex flex-col items-center py-16 gap-6 text-text-muted">
+      <div class="w-10 h-10 border-4 border-hover border-t-primary-aka rounded-full animate-spin"></div>
+      <p class="font-medium text-lg">Caricamento dettagli sessione...</p>
+    </div>
+  } @else if (testResource.error()) {
+    <div class="bg-error-bg border border-error rounded-xl p-8 text-center text-error flex flex-col items-center gap-4">
+      <strong class="text-xl">Errore nel caricamento</strong>
+      <p class="font-medium">Impossibile recuperare i dettagli del test. Riprova più tardi.</p>
+      <app-ui-button variant="primary" (onClick)="testResource.reload()">Riprova</app-ui-button>
+    </div>
+  } @else if (testResource.value(); as test) {
+    @if (!isEditing()) {
+      <!-- VISTA READ-ONLY -->
+      <section class="surface-card p-6 md:p-8 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-bold text-text-muted uppercase tracking-wider">Data Esecuzione</span>
+            <p class="font-bold text-text-main text-lg m-0">{{ test.executionDate | date }}</p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-bold text-text-muted uppercase tracking-wider">Tipologia Sessione</span>
+            <p class="font-bold text-text-main text-lg m-0">{{ test.type || 'Sessione Standard' }}</p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-bold text-text-muted uppercase tracking-wider">Data Registrazione</span>
+            <p class="font-bold text-text-main text-lg m-0">{{ test.createdAt | date }}</p>
+          </div>
+        </div>
+
+        @if (test.coachNotes) {
+          <div class="pt-6 border-t border-border">
+            <span class="text-sm font-bold text-text-muted uppercase tracking-wider block mb-3">Note del Coach</span>
+            <div class="bg-bg-canvas border-l-4 border-secondary-ao p-5 rounded-r-xl text-text-main leading-relaxed">
+              {{ test.coachNotes }}
+            </div>
           </div>
         }
-      </header>
+      </section>
 
-      @if (testResource.isLoading()) {
-        <div class="loading-state">
-          <div class="spinner"></div>
-          <p>Caricamento dettagli sessione...</p>
+      <section class="mb-8">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <h2 class="text-2xl font-extrabold text-text-main m-0">Esercizi Svolti</h2>
+          <span class="bg-hover text-text-muted px-4 py-1.5 rounded-full text-sm font-semibold inline-flex items-center justify-center min-w-[2.5rem]">{{ test.exercises.length }} esercizi</span>
         </div>
-      } @else if (testResource.error()) {
-        <div class="error-banner">
-          <strong>Errore nel caricamento</strong>
-          <p>Impossibile recuperare i dettagli del test. Riprova più tardi.</p>
-          <app-ui-button variant="primary" (onClick)="testResource.reload()">Riprova</app-ui-button>
-        </div>
-      } @else if (testResource.value(); as test) {
-        @if (!isEditing()) {
-          <!-- VISTA READ-ONLY -->
-          <section class="session-info-card">
-            <div class="info-grid">
-              <div class="info-group">
-                <span class="label">Data Esecuzione</span>
-                <p>{{ test.executionDate | date }}</p>
-              </div>
-              <div class="info-group">
-                <span class="label">Tipologia Sessione</span>
-                <p>{{ test.type || 'Sessione Standard' }}</p>
-              </div>
-              <div class="info-group">
-                <span class="label">Data Registrazione</span>
-                <p>{{ test.createdAt | date }}</p>
-              </div>
-            </div>
 
-            @if (test.coachNotes) {
-              <div class="notes-section">
-                <span class="label">Note del Coach</span>
-                <div class="notes-content">
-                  {{ test.coachNotes }}
+        <div class="bg-surface rounded-xl border border-border overflow-hidden">
+          <table class="w-full text-left border-collapse text-sm hidden sm:table">
+            <thead>
+              <tr class="bg-bg-canvas text-xs uppercase tracking-wider text-text-muted border-b border-border">
+                <th class="p-3 font-semibold">Esercizio</th>
+                <th class="p-3 font-semibold text-right">Risultato</th>
+                <th class="p-3 font-semibold">Unità</th>
+                <th class="p-3 font-semibold">Tendenza</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (ex of test.exercises; track $index) {
+                <tr class="border-b border-border last:border-b-0">
+                  <td class="p-3 font-bold text-text-main max-w-[150px] truncate" [title]="ex.exerciseTitle">{{ ex.exerciseTitle }}</td>
+                  <td class="p-3 text-right font-extrabold text-primary-aka text-lg">{{ ex.result | number:'1.1-2' }}</td>
+                  <td class="p-3 font-semibold text-text-muted lowercase">{{ ex.unit }}</td>
+                  <td class="p-3">
+                    <span class="text-xs font-bold px-2 py-1 rounded-full" 
+                          [class.bg-success-bg]="ex.greaterIsBetter" 
+                          [class.text-success]="ex.greaterIsBetter"
+                          [class.bg-error-bg]="!ex.greaterIsBetter" 
+                          [class.text-error]="!ex.greaterIsBetter">
+                      {{ ex.greaterIsBetter ? 'Alto è meglio' : 'Basso è meglio' }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          <!-- Mobile View -->
+          <div class="sm:hidden flex flex-col p-4 gap-4">
+            @for (ex of test.exercises; track $index) {
+              <div class="flex flex-col gap-2 pb-4 border-b border-border last:border-b-0 last:pb-0">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-text-muted uppercase">Esercizio</span>
+                  <span class="font-bold text-text-main truncate max-w-[200px]" [title]="ex.exerciseTitle">{{ ex.exerciseTitle }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-text-muted uppercase">Risultato</span>
+                  <span class="font-extrabold text-primary-aka text-lg">{{ ex.result | number:'1.1-2' }} <span class="text-sm font-semibold text-text-muted lowercase ml-1">{{ ex.unit }}</span></span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-text-muted uppercase">Tendenza</span>
+                  <span class="text-xs font-bold px-2 py-1 rounded-full" 
+                          [class.bg-success-bg]="ex.greaterIsBetter" 
+                          [class.text-success]="ex.greaterIsBetter"
+                          [class.bg-error-bg]="!ex.greaterIsBetter" 
+                          [class.text-error]="!ex.greaterIsBetter">
+                      {{ ex.greaterIsBetter ? 'Alto è max' : 'Basso è max' }}
+                  </span>
                 </div>
               </div>
             }
-          </section>
+          </div>
+        </div>
+      </section>
 
-          <section class="exercises-section">
-            <div class="section-header">
-              <h2>Esercizi Svolti</h2>
-              <span class="count-badge">{{ test.exercises.length }} esercizi</span>
+      <footer class="flex flex-col-reverse sm:flex-row justify-end gap-4 py-6 border-t border-border mt-8">
+        <app-ui-button variant="danger" (onClick)="showDeleteConfirm.set(true)" class="w-full sm:w-auto flex justify-center">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+          Elimina Test
+        </app-ui-button>
+        <app-ui-button variant="secondary" (onClick)="startEdit(test)" class="w-full sm:w-auto flex justify-center">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          Modifica Test
+        </app-ui-button>
+      </footer>
+    } @else {
+      <!-- VISTA DI EDITING (FORM) -->
+      <form [formGroup]="testForm" (ngSubmit)="onPreSubmitSave()" class="flex flex-col gap-8">
+        <section class="surface-card p-6 md:p-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="flex flex-col gap-1.5">
+              <label for="executionDateReadOnly" class="font-bold text-text-main text-sm">Data Esecuzione (Non Modificabile)</label>
+              <input id="executionDateReadOnly" type="text" [value]="test.executionDate | date" disabled class="w-full p-3 border border-border rounded-xl font-sans text-sm bg-bg-canvas text-text-muted outline-none opacity-80 cursor-not-allowed" />
             </div>
+            
+            <app-ui-input
+              id="type"
+              type="text"
+              formControlName="type"
+              label="Tipologia Sessione"
+              placeholder="Es. Screening stagionale, Test Forza..."
+            ></app-ui-input>
+          </div>
 
-            <div class="exercises-table-container">
-              <table class="exercises-table">
-                <thead>
-                  <tr>
-                    <th>Esercizio</th>
-                    <th class="text-right">Risultato</th>
-                    <th>Unità</th>
-                    <th>Tendenza</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (ex of test.exercises; track $index) {
-                    <tr>
-                      <td class="font-bold" data-label="Esercizio"><span class="truncate-text">{{ ex.exerciseTitle }}</span></td>
-                      <td class="text-right result-val" data-label="Risultato">{{ ex.result | number:'1.1-2' }}</td>
-                      <td class="unit" data-label="Unità">{{ ex.unit.toLowerCase() }}</td>
-                      <td data-label="Tendenza">
-                        <span class="trend-tag" [class.higher]="ex.greaterIsBetter">
-                          {{ ex.greaterIsBetter ? 'Alto è meglio' : 'Basso è meglio' }}
-                        </span>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
+          <div class="flex flex-col w-full gap-1.5">
+            <label for="coachNotes" class="font-bold text-text-main text-sm">Note del Coach (Opzionali)</label>
+            <textarea 
+              id="coachNotes" 
+              formControlName="coachNotes" 
+              rows="3" 
+              placeholder="Annotazioni generali sulla sessione..."
+              class="w-full p-3 border border-border rounded-xl font-sans text-sm bg-surface text-text-main outline-none focus:border-primary-aka focus:ring-2 focus:ring-primary-aka/10 transition-colors"
+            ></textarea>
+          </div>
+        </section>
+
+        <section class="mb-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <h2 class="text-2xl font-extrabold text-text-main m-0">Modifica Esercizi</h2>
+            <app-ui-button variant="secondary" (onClick)="addExercise()">
+              + Aggiungi Esercizio
+            </app-ui-button>
+          </div>
+
+          @if (exercises.controls.length === 0) {
+            <div class="text-center p-12 bg-bg-canvas border-2 border-dashed rounded-xl transition-colors" [ngClass]="exercises.touched && exercises.invalid ? 'border-error bg-error-bg text-error' : 'border-border text-text-muted'">
+              <p class="font-medium text-lg">Nessun esercizio presente. Aggiungi almeno un esercizio per poter salvare.</p>
             </div>
-          </section>
+          }
 
-          <footer class="page-actions">
-            <app-ui-button variant="secondary" (onClick)="startEdit(test)">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-              </svg>
-              Modifica Test
-            </app-ui-button>
-            <app-ui-button variant="danger" (onClick)="showDeleteConfirm.set(true)">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                <line x1="10" y1="11" x2="10" y2="17"></line>
-                <line x1="14" y1="11" x2="14" y2="17"></line>
-              </svg>
-              Elimina Test
-            </app-ui-button>
-          </footer>
-        } @else {
-          <!-- VISTA DI EDITING (FORM) -->
-          <form [formGroup]="testForm" (ngSubmit)="onPreSubmitSave()" class="test-form">
-            <section class="session-details">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="executionDateReadOnly">Data Esecuzione (Non Modificabile)</label>
-                  <input id="executionDateReadOnly" type="text" [value]="test.executionDate | date" disabled class="input-disabled" style="background-color: var(--color-bg-canvas); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 0.625rem; width: 100%; color: var(--color-text-muted);" />
-                </div>
-                
-                <app-ui-input
-                  id="type"
-                  type="text"
-                  formControlName="type"
-                  label="Tipologia Sessione"
-                  placeholder="Es. Screening stagionale, Test Forza..."
-                ></app-ui-input>
-              </div>
+          <div class="flex flex-col gap-2">
+            @for (ctrl of exercises.controls; track ctrl; let i = $index) {
+              <app-exercise-form-row 
+                [formGroup]="asFormGroup(ctrl)" 
+                [index]="i"
+                (duplicate)="duplicateExercise(i)"
+                (remove)="removeExercise(i)"
+              />
+            }
+          </div>
+          
+          @if (exercises.touched && exercises.hasError('minlength')) {
+            <div class="mt-4 p-4 bg-error-bg border border-error rounded-xl text-error font-semibold text-center">Inserire almeno un esercizio per poter salvare la sessione.</div>
+          }
+        </section>
 
-              <div class="form-group full-width">
-                <label for="coachNotes">Note del Coach (Opzionali)</label>
-                <textarea id="coachNotes" formControlName="coachNotes" rows="2" placeholder="Annotazioni generali sulla sessione..."></textarea>
-              </div>
-            </section>
+        <footer class="flex flex-col-reverse sm:flex-row justify-end gap-4 py-6 border-t border-border mt-8">
+          <app-ui-button variant="outline" (onClick)="cancelEdit()" class="w-full sm:w-auto flex justify-center">
+            Annulla
+          </app-ui-button>
+          <app-ui-button type="submit" variant="primary" [disabled]="isSaving()" [loading]="isSaving()" loadingText="Salvataggio..." class="w-full sm:w-auto flex justify-center">
+            Salva Modifiche
+          </app-ui-button>
+        </footer>
+      </form>
+    }
+  }
+</div>
 
-            <section class="exercises-section">
-              <div class="section-header">
-                <h2>Modifica Esercizi</h2>
-                <app-ui-button variant="secondary" (onClick)="addExercise()">
-                  + Aggiungi Esercizio
-                </app-ui-button>
-              </div>
+<!-- DIALOG CONFERMA SALVATAGGIO MODIFICHE -->
+<app-confirm-dialog
+  [isOpen]="showSaveConfirm()"
+  title="Salva Modifiche"
+  message="Stai per salvare le modifiche apportate a questa sessione di test. Confermi che i dati inseriti sono corretti?"
+  confirmText="Sì, salva"
+  cancelText="Rivedi"
+  (confirmed)="onConfirmSave()"
+  (cancelled)="showSaveConfirm.set(false)"
+/>
 
-              @if (exercises.controls.length === 0) {
-                <div class="empty-state" [class.error]="exercises.touched && exercises.invalid">
-                  <p>Nessun esercizio presente. Aggiungi almeno un esercizio per poter salvare.</p>
-                </div>
-              }
-
-              <div class="exercises-list">
-                @for (ctrl of exercises.controls; track ctrl; let i = $index) {
-                  <app-exercise-form-row 
-                    [formGroup]="asFormGroup(ctrl)" 
-                    [index]="i"
-                    (duplicate)="duplicateExercise(i)"
-                    (remove)="removeExercise(i)"
-                  />
-                }
-              </div>
-              
-              @if (exercises.touched && exercises.hasError('minlength')) {
-                <div class="error-banner">Inserire almeno un esercizio per poter salvare la sessione.</div>
-              }
-            </section>
-
-            <footer class="form-actions">
-              <app-ui-button variant="outline" (onClick)="cancelEdit()">
-                Annulla
-              </app-ui-button>
-              <app-ui-button type="submit" variant="primary" [disabled]="isSaving()" [loading]="isSaving()" loadingText="Salvataggio...">
-                Salva Modifiche
-              </app-ui-button>
-            </footer>
-          </form>
-        }
-      }
-    </div>
-
-    <!-- DIALOG CONFERMA SALVATAGGIO MODIFICHE -->
-    <app-confirm-dialog
-      [isOpen]="showSaveConfirm()"
-      title="Salva Modifiche"
-      message="Stai per salvare le modifiche apportate a questa sessione di test. Confermi che i dati inseriti sono corretti?"
-      confirmText="Sì, salva"
-      cancelText="Rivedi"
-      (confirmed)="onConfirmSave()"
-      (cancelled)="showSaveConfirm.set(false)"
-    />
-
-    <!-- DIALOG CONFERMA CANCELLAZIONE TEST -->
-    <app-confirm-dialog
-      [isOpen]="showDeleteConfirm()"
-      title="Elimina Sessione"
-      message="Sei sicuro di voler eliminare definitivamente questa sessione di test? L'operazione non è reversibile."
-      confirmText="Sì, elimina"
-      cancelText="Annulla"
-      (confirmed)="onConfirmDelete()"
-      (cancelled)="showDeleteConfirm.set(false)"
-    />
+<!-- DIALOG CONFERMA CANCELLAZIONE TEST -->
+<app-confirm-dialog
+  [isOpen]="showDeleteConfirm()"
+  title="Elimina Sessione"
+  message="Sei sicuro di voler eliminare definitivamente questa sessione di test? L'operazione non è reversibile."
+  confirmText="Sì, elimina"
+  cancelText="Annulla"
+  (confirmed)="onConfirmDelete()"
+  (cancelled)="showDeleteConfirm.set(false)"
+/>

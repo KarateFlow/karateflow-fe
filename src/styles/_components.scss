@@ -1,25 +1,45 @@
-/* Global Interactive Cards (Athlete Card Style) */
-.overall-card, .table-container, .trend-select-card, .template-card, .test-card, .session-detail, .exercise-form-row, .chart-navigation, .report-card {
+/* Global Interactive Surfaces */
+.surface-card {
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius-xl);
 }
 
-.overall-card:hover, .table-container:hover, .trend-select-card:hover, .template-card:hover, .test-card:hover, .session-detail:hover, .exercise-form-row:hover, .clickable-row:hover:not(.disabled-row), .chart-navigation:hover, .report-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
-  border-color: var(--color-primary-aka) !important;
+/* Interactive list rows (replacing the identical card grids) */
+.clickable-row {
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius-md);
+  cursor: pointer;
 }
 
-/* Specific buttons with border */
-.btn-secondary, .btn-cancel, .btn-pdf-export, .btn-back-to-list {
-  border: 1px solid var(--color-border);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.clickable-row:hover:not(.disabled-row), .hover-item:hover, .hover-item:focus-within {
+  background-color: var(--color-surface-hover);
 }
 
-.btn-secondary:hover, .btn-cancel:hover, .btn-pdf-export:hover, .btn-delete:hover, .btn-back-to-list:hover {
-  border-color: var(--color-primary-aka);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+/* Utilities for a11y & focus */
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  box-shadow: var(--shadow-focus);
+}
+
+/* Base button */
+.btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm, 0.5rem);
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  cursor: pointer;
+}
+.btn-base:focus-visible {
+  box-shadow: var(--shadow-focus);
 }
 
 /* Global Search Bar Styles */
@@ -51,17 +71,18 @@ input[type="text"].search-input {
   padding: 0.75rem 1rem 0.75rem 2.75rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  background-color: var(--color-surface);
+  background-color: var(--color-bg-canvas);
   color: var(--color-text-main);
   font-size: 0.95rem;
   font-family: inherit;
-  transition: all 0.2s;
+  transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
 }
 
-input[type="text"].search-input:focus {
-  outline: none;
+input[type="text"].search-input:focus,
+input[type="text"].search-input:focus-visible {
   border-color: var(--color-primary-aka);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  box-shadow: var(--shadow-focus);
 }
 
 @media (max-width: 640px) {

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, resource, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe, NgClass } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { AthletesApiService } from '../../../athletes/data-access/athletes-api.service';
 import { TestStore } from '../../data-access/test.store';
@@ -16,7 +16,7 @@ import { UiButtonComponent } from '../../../../shared/ui/ui-button/ui-button.com
 @Component({
   selector: 'app-test-detail',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, DatePipe, DecimalPipe, ExerciseFormRowComponent, ConfirmDialogComponent, UiInputComponent, UiButtonComponent],
+  imports: [DatePipe, DecimalPipe, RouterLink, NgClass, ReactiveFormsModule, ConfirmDialogComponent, ExerciseFormRowComponent, UiButtonComponent, UiInputComponent],
   templateUrl: './test-detail.page.html',
   styleUrl: './test-detail.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

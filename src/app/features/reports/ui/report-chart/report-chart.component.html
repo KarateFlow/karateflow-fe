@@ -1,32 +1,32 @@
-<div class="chart-container">
+<div class="p-6 relative">
       @if (chartType() === 'bar') {
         <!-- Grouped Bar Chart for A vs B Comparison -->
-        <div class="bar-chart-layout">
-          <div class="bar-wrapper">
-            <div class="bar-col">
-              <div class="bar-track">
-                <div class="bar-fill value-a" [style.height.%]="barHeightA()">
-                  <span class="bar-tooltip">{{ resultA() | number:'1.0-2' }}{{ unit() }}</span>
+        <div class="grid grid-cols-1 sm:grid-cols-[2fr_1fr] gap-6 sm:gap-8 items-center min-h-[220px]">
+          <div class="flex justify-around h-[200px] gap-6 pt-8">
+            <div class="flex flex-col items-center flex-1 h-full">
+              <div class="bg-hover w-10 h-[130px] rounded-xl relative overflow-visible mb-2">
+                <div class="w-full absolute bottom-0 rounded-xl transition-all duration-700 ease-out flex justify-center bg-gradient-to-t from-blue-600 to-blue-500 shadow-[0_4px_6px_-1px_rgba(37,99,235,0.2)]" [style.height.%]="barHeightA()">
+                  <span class="absolute -top-8 bg-text-main text-bg-canvas px-2 py-1 rounded-xl text-xs font-bold whitespace-nowrap shadow-sm opacity-90">{{ resultA() | number:'1.0-2' }}{{ unit() }}</span>
                 </div>
               </div>
-              <span class="bar-label font-mono text-xs">Test A</span>
-              <span class="bar-date text-xs text-muted">{{ dateA() | date }}</span>
+              <span class="font-bold text-text-main font-mono text-xs">Test A</span>
+              <span class="text-xs text-text-muted">{{ dateA() | date }}</span>
             </div>
 
-            <div class="bar-col">
-              <div class="bar-track">
-                <div class="bar-fill value-b" [style.height.%]="barHeightB()">
-                  <span class="bar-tooltip">{{ resultB() | number:'1.0-2' }}{{ unit() }}</span>
+            <div class="flex flex-col items-center flex-1 h-full">
+              <div class="bg-hover w-10 h-[130px] rounded-xl relative overflow-visible mb-2">
+                <div class="w-full absolute bottom-0 rounded-xl transition-all duration-700 ease-out flex justify-center bg-gradient-to-t from-sky-500 to-sky-400 shadow-[0_4px_6px_-1px_rgba(14,165,233,0.2)]" [style.height.%]="barHeightB()">
+                  <span class="absolute -top-8 bg-text-main text-bg-canvas px-2 py-1 rounded-xl text-xs font-bold whitespace-nowrap shadow-sm opacity-90">{{ resultB() | number:'1.0-2' }}{{ unit() }}</span>
                 </div>
               </div>
-              <span class="bar-label font-mono text-xs">Test B</span>
-              <span class="bar-date text-xs text-muted">{{ dateB() | date }}</span>
+              <span class="font-bold text-text-main font-mono text-xs">Test B</span>
+              <span class="text-xs text-text-muted">{{ dateB() | date }}</span>
             </div>
           </div>
           
-          <div class="delta-summary">
-            <span class="text-xs text-muted uppercase tracking-wider font-bold">Variazione</span>
-            <div class="delta-val" [class.positive]="isPositiveChange()" [class.negative]="!isPositiveChange()">
+          <div class="flex flex-col items-center justify-center p-4 sm:p-6 bg-bg-canvas rounded-xl border border-border text-center">
+            <span class="text-xs text-text-muted uppercase tracking-wider font-bold">Variazione</span>
+            <div class="text-2xl sm:text-3xl font-extrabold my-2" [class.text-success]="isPositiveChange()" [class.text-error]="!isPositiveChange()">
               {{ deltaValFormatted() }}
             </div>
           </div>
@@ -34,36 +34,36 @@
       } @else {
         <!-- SVG Line Chart for Trend -->
         @if (linePoints().length === 0) {
-          <div class="empty-chart">Nessun dato per tracciare il grafico</div>
+          <div class="h-[180px] flex items-center justify-center text-text-muted italic">Nessun dato per tracciare il grafico</div>
         } @else {
-          <div class="svg-wrapper">
-            <svg viewBox="0 0 500 240" class="trend-svg" width="100%" height="100%">
+          <div class="relative w-full h-[200px]">
+            <svg viewBox="0 0 500 240" class="overflow-visible" width="100%" height="100%">
               <!-- Grid Lines -->
               @for (yVal of gridYLines(); track $index) {
-                <line x1="40" [attr.y1]="yVal.y" x2="480" [attr.y2]="yVal.y" class="grid-line" />
-                <text x="35" [attr.y]="yVal.y + 4" class="y-axis-label">{{ yVal.value | number:'1.0-1' }}</text>
+                <line x1="40" [attr.y1]="yVal.y" x2="480" [attr.y2]="yVal.y" class="stroke-hover stroke-[1]" />
+                <text x="35" [attr.y]="yVal.y + 4" class="text-[8px] fill-text-muted font-semibold" text-anchor="end">{{ yVal.value | number:'1.0-1' }}</text>
               }
 
               <!-- The Line Path -->
-              <path [attr.d]="svgPath()" fill="none" class="chart-path" stroke-width="3" stroke-linecap="round" />
+              <path [attr.d]="svgPath()" fill="none" class="stroke-primary-aka stroke-[3] drop-shadow-[0_4px_6px_rgba(37,99,235,0.2)]" stroke-linecap="round" stroke-linejoin="round" />
               <!-- Area under line -->
-              <path [attr.d]="svgAreaPath()" class="chart-area-fill" />
+              <path [attr.d]="svgAreaPath()" class="opacity-10 pointer-events-none" fill="url(#gradient-fill)" />
 
               <!-- Data Points and Interactive Hover Zones -->
               @for (pt of svgPoints(); track $index) {
-                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="5" class="chart-point" />
-                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="14" class="chart-point-trigger">
+                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="5" class="fill-surface stroke-primary-aka stroke-[3] transition-all duration-200 ease-in-out hover:r-8 hover:stroke-secondary-ao" />
+                <circle [attr.cx]="pt.x" [attr.cy]="pt.y" r="14" class="fill-transparent cursor-pointer" (mouseover)="pt.hover = true" (mouseout)="pt.hover = false">
                   <title>{{ pt.label }} ({{ pt.date | date }})</title>
                 </circle>
               }
             </svg>
 
             <!-- X Axis Labels (Dates) -->
-            <div class="x-axis-labels">
+            <div class="absolute -bottom-5 left-[40px] right-[20px] h-5 flex">
               @for (pt of svgPoints(); track $index) {
-                <div class="x-label-item" [style.left.%]="pt.leftPct">
-                  <span class="x-date">{{ pt.date | date }}</span>
-                  <span class="x-val">{{ pt.value | number:'1.0-1' }}</span>
+                <div class="absolute -translate-x-1/2 flex flex-col items-center text-center" [style.left.%]="pt.leftPct">
+                  <span class="text-[9px] font-bold text-text-main">{{ pt.date | date }}</span>
+                  <span class="text-[8px] text-text-muted font-semibold">{{ pt.value | number:'1.0-1' }}</span>
                 </div>
               }
             </div>

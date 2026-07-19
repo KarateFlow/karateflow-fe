@@ -1,88 +1,83 @@
-<form [formGroup]="athleteForm" (ngSubmit)="onSubmit()" class="athlete-form">
-      <div class="avatar-section">
-        <label for="avatarUpload" class="avatar-upload-label">
-          @if (avatarPreview()) {
-            <img [src]="avatarPreview()" alt="Avatar Preview" class="avatar-image" />
-            <div class="hover-overlay">
-              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                <circle cx="12" cy="13" r="4"></circle>
-              </svg>
-            </div>
-          } @else {
-            <div class="avatar-placeholder">
-              <span class="initials">{{ getInitials() }}</span>
-              <div class="hover-overlay">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                  <circle cx="12" cy="13" r="4"></circle>
-                </svg>
-              </div>
-            </div>
-          }
-          <input type="file" id="avatarUpload" accept="image/*" class="hidden-input" (change)="onFileSelected($event)" />
-        </label>
-        <div class="avatar-hint">
-          <p class="font-bold">Foto Profilo</p>
-          <p class="text-sm">Clicca per caricare un'immagine. (Anteprima locale)</p>
+<form [formGroup]="athleteForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6 surface-card p-6 md:p-8">
+  <div class="flex items-center gap-6 mb-2 border-b border-border pb-6">
+    <label for="avatarUpload" class="relative inline-block cursor-pointer rounded-full overflow-hidden w-24 h-24 border-2 border-dashed border-border hover:border-primary-aka transition-colors focus-ring outline-none shrink-0 group" tabindex="0" (keydown.enter)="avatarUpload.click()" (keydown.space)="avatarUpload.click()">
+      @if (avatarPreview()) {
+        <img [src]="avatarPreview()" alt="Avatar Preview" class="w-full h-full object-cover" />
+      } @else {
+        <div class="w-full h-full bg-surface flex items-center justify-center text-primary-aka font-extrabold text-2xl shadow-inner">
+          <span class="uppercase">{{ getInitials() }}</span>
         </div>
+      }
+      <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+          <circle cx="12" cy="13" r="4"></circle>
+        </svg>
       </div>
+      <input #avatarUpload type="file" id="avatarUpload" accept="image/*" class="hidden" (change)="onFileSelected($event)" tabindex="-1" />
+    </label>
+    <div>
+      <p class="font-bold text-lg text-text-main m-0">Foto Profilo</p>
+      <p class="text-sm text-text-muted mt-1">Clicca per caricare un'immagine. (Anteprima locale)</p>
+    </div>
+  </div>
 
-      <div class="form-grid">
-        <app-ui-input
-          formControlName="firstName"
-          id="firstName"
-          label="Nome"
-          placeholder="Es. Gichin"
-          [invalid]="isInvalid('firstName')"
-          errorMessage="Il nome è obbligatorio"
-        />
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <app-ui-input
+      formControlName="firstName"
+      id="firstName"
+      label="Nome"
+      placeholder="Es. Gichin"
+      [invalid]="isInvalid('firstName')"
+      errorMessage="Il nome è obbligatorio"
+    />
 
-        <app-ui-input
-          formControlName="lastName"
-          id="lastName"
-          label="Cognome"
-          placeholder="Es. Funakoshi"
-          [invalid]="isInvalid('lastName')"
-          errorMessage="Il cognome è obbligatorio"
-        />
+    <app-ui-input
+      formControlName="lastName"
+      id="lastName"
+      label="Cognome"
+      placeholder="Es. Funakoshi"
+      [invalid]="isInvalid('lastName')"
+      errorMessage="Il cognome è obbligatorio"
+    />
 
-        <app-ui-input
-          formControlName="birthDate"
-          id="birthDate"
-          type="date"
-          label="Data di Nascita"
-          [invalid]="isInvalid('birthDate')"
-          errorMessage="La data di nascita è obbligatoria"
-        />
+    <app-ui-input
+      formControlName="birthDate"
+      id="birthDate"
+      type="date"
+      label="Data di Nascita"
+      [invalid]="isInvalid('birthDate')"
+      errorMessage="La data di nascita è obbligatoria"
+    />
 
-        <app-ui-input
-          formControlName="referenceContact"
-          id="referenceContact"
-          label="Contatto di Riferimento (Opzionale)"
-          placeholder="Es. Genitore, Email o Telefono"
-        />
-      </div>
+    <app-ui-input
+      formControlName="referenceContact"
+      id="referenceContact"
+      label="Contatto di Riferimento (Opzionale)"
+      placeholder="Es. Genitore, Email o Telefono"
+    />
+  </div>
 
-      <div class="form-group full-width">
-        <label for="medicalNotes">Note Mediche (Opzionale)</label>
-        <textarea
-          id="medicalNotes"
-          formControlName="medicalNotes"
-          rows="3"
-          placeholder="Es. Allergie, infortuni pregressi..."
-        ></textarea>
-      </div>
+  <div class="flex flex-col w-full gap-1">
+    <label for="medicalNotes" class="font-bold text-text-main text-sm">Note Mediche (Opzionale)</label>
+    <textarea
+      id="medicalNotes"
+      formControlName="medicalNotes"
+      rows="3"
+      placeholder="Es. Allergie, infortuni pregressi..."
+      class="w-full p-3 border border-border rounded-xl font-sans text-sm bg-surface text-text-main outline-none focus:border-primary-aka focus:ring-2 focus:ring-primary-aka/10 transition-colors"
+    ></textarea>
+  </div>
 
-      <div class="form-actions">
-        <app-ui-button 
-          type="submit" 
-          variant="primary"
-          [disabled]="athleteForm.invalid || isSubmitting()"
-          [loading]="isSubmitting()"
-          loadingText="Caricamento..."
-        >
-          Registra Atleta
-        </app-ui-button>
-      </div>
-    </form>
+  <div class="flex justify-end mt-4">
+    <app-ui-button 
+      type="submit" 
+      variant="primary"
+      [disabled]="athleteForm.invalid || isSubmitting()"
+      [loading]="isSubmitting()"
+      loadingText="Caricamento..."
+    >
+      Registra Atleta
+    </app-ui-button>
+  </div>
+</form>

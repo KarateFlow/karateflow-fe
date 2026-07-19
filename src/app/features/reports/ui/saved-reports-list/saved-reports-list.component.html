@@ -1,7 +1,7 @@
-<div class="saved-reports-container">
-      <div class="header-row">
-        <h2 class="section-title">Storico Report Salvati</h2>
-        <button type="button" class="btn-refresh" (click)="reportsResource.reload()">
+<div class="mt-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-extrabold text-text-main m-0">Storico Report Salvati</h2>
+        <button type="button" class="bg-surface border border-border text-text-main flex items-center gap-2 font-bold text-sm cursor-pointer px-4 py-2 rounded-xl transition-all shadow-sm hover:bg-bg-canvas hover:border-primary-aka hover:text-primary-aka focus-ring" (click)="reportsResource.reload()">
           <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
             <polyline points="23 4 23 10 17 10"></polyline>
             <polyline points="1 20 1 14 7 14"></polyline>
@@ -12,70 +12,70 @@
       </div>
 
       @if (reportsResource.isLoading()) {
-        <div class="loading-state">
-          <div class="spinner"></div>
+        <div class="flex flex-col items-center py-16 gap-6 text-text-muted">
+          <div class="w-10 h-10 border-[3px] border-surface-hover border-t-primary-aka rounded-full animate-spin"></div>
           <p>Caricamento report salvati...</p>
         </div>
       } @else if (reportsResource.error()) {
-        <div class="error-banner">
-          <strong>Errore nel caricamento</strong>
-          <p>Impossibile recuperare i report salvati. Riprova più tardi.</p>
-          <button (click)="reportsResource.reload()" class="btn-retry">Riprova</button>
+        <div class="bg-error-bg border border-error p-8 rounded-xl text-center text-error">
+          <strong class="block mb-2 text-lg">Errore nel caricamento</strong>
+          <p class="mb-4">Impossibile recuperare i report salvati. Riprova più tardi.</p>
+          <button (click)="reportsResource.reload()" class="bg-surface border border-error px-6 py-2 rounded-xl font-bold text-error cursor-pointer hover:bg-error-bg focus-ring">Riprova</button>
         </div>
       } @else if (reportsResource.value(); as reports) {
         @if (reports.length === 0) {
-          <div class="empty-state">
-            <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="1.5" fill="none">
+          <div class="bg-surface border-2 border-dashed border-border rounded-xl p-12 text-center text-text-muted flex flex-col items-center gap-4">
+            <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="1.5" fill="none" class="text-slate-400">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
               <polyline points="14 2 14 8 20 8"></polyline>
               <line x1="16" y1="13" x2="8" y2="13"></line>
               <line x1="16" y1="17" x2="8" y2="17"></line>
               <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
-            <p>Nessun report salvato per questo atleta. Genera un report e clicca su "Salva Report" per inserirlo nello storico.</p>
+            <p class="max-w-[450px] m-0 leading-relaxed text-[0.95rem]">Nessun report salvato per questo atleta. Genera un report e clicca su "Salva Report" per inserirlo nello storico.</p>
           </div>
         } @else {
-          <div class="reports-grid">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             @for (report of reports; track report.reportId) {
-              <div class="report-card">
-                <div class="card-header">
-                  <span class="report-badge">
+              <div class="bg-surface rounded-xl shadow-sm p-5 border border-border flex flex-col justify-between transition-all hover:-translate-y-0.5 hover:shadow-md">
+                <div class="flex justify-between items-center mb-4">
+                  <span class="bg-blue-50 text-blue-800 border border-blue-200 px-2 py-1 rounded-xl text-xs font-bold uppercase tracking-wider">
                     {{ report.payload.analysisType === 'COMPARISON' ? 'Confronto A vs B' : 'Trend Temporale' }}
                   </span>
-                  <span class="card-date">{{ report.createdAt | date }}</span>
+                  <span class="text-xs text-text-muted font-bold">{{ report.createdAt | date }}</span>
                 </div>
                 
-                <div class="card-body">
+                <div class="mb-5 flex-grow">
                   @if (report.payload.analysisType === 'COMPARISON') {
-                    <div class="report-details">
-                      <div class="detail-item">
-                        <span class="label">Test Baseline (A)</span>
-                        <strong>{{ getTestDateFormatted(report.payload.testIdA) }}</strong>
+                    <div class="bg-bg-canvas p-3.5 rounded-xl flex flex-col gap-2">
+                      <div class="flex flex-col gap-0.5">
+                        <span class="text-[0.65rem] font-bold uppercase tracking-widest text-text-muted">Test Baseline (A)</span>
+                        <strong class="text-sm text-text-main">{{ getTestDateFormatted(report.payload.testIdA) }}</strong>
                       </div>
-                      <div class="detail-item">
-                        <span class="label">Test Confronto (B)</span>
-                        <strong>{{ getTestDateFormatted(report.payload.testIdB) }}</strong>
+                      <div class="flex flex-col gap-0.5">
+                        <span class="text-[0.65rem] font-bold uppercase tracking-widest text-text-muted">Test Confronto (B)</span>
+                        <strong class="text-sm text-text-main">{{ getTestDateFormatted(report.payload.testIdB) }}</strong>
                       </div>
                     </div>
                   } @else {
-                    <div class="report-details">
-                      <div class="detail-item">
-                        <span class="label">Periodo di Analisi</span>
-                        <strong>{{ getTrendPeriod(report) }}</strong>
+                    <div class="bg-bg-canvas p-3.5 rounded-xl flex flex-col gap-2">
+                      <div class="flex flex-col gap-0.5">
+                        <span class="text-[0.65rem] font-bold uppercase tracking-widest text-text-muted">Periodo di Analisi</span>
+                        <strong class="text-sm text-text-main">{{ getTrendPeriod(report) }}</strong>
                       </div>
                     </div>
                   }
                 </div>
 
-                <div class="card-actions">
-                  <button type="button" class="btn-action btn-view" (click)="viewReport.emit(report)">
+                <div class="flex gap-3 border-t border-border pt-4">
+                  <button type="button" class="flex-1 border-none inline-flex items-center justify-center gap-1.5 p-2 rounded-xl text-[0.825rem] font-bold cursor-pointer transition-colors bg-hover text-primary-aka hover:bg-primary-aka hover:text-white focus-ring" (click)="viewReport.emit(report)">
                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
                       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                       <circle cx="12" cy="12" r="3"></circle>
                     </svg>
                     Visualizza
                   </button>
-                  <button type="button" class="btn-action btn-delete" (click)="requestDelete(report.reportId)">
+                  <button type="button" class="flex-1 bg-transparent border border-error text-error inline-flex items-center justify-center gap-1.5 p-2 rounded-xl text-[0.825rem] font-bold cursor-pointer transition-all hover:bg-error hover:text-white hover:-translate-y-px focus-ring" (click)="requestDelete(report.reportId)">
                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
                       <polyline points="3 6 5 6 21 6"></polyline>
                       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>

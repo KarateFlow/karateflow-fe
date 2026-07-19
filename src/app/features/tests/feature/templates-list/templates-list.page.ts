@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal, computed, OnDestroy
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgClass } from '@angular/common';
 import { TemplateStore } from '../../data-access/template.store';
 import { CreateTestTemplateRequest, MeasurementUnit, TestTemplateResponse, UpdateTestTemplateRequest } from '../../data-access/test.model';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -15,7 +16,7 @@ import { UiSelectComponent } from '../../../../shared/ui/ui-select/ui-select.com
 @Component({
   selector: 'app-templates-list',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, ConfirmDialogComponent, EmptyStateComponent, UiInputComponent, UiButtonComponent, UiSelectComponent],
+  imports: [RouterLink, ReactiveFormsModule, NgClass, ConfirmDialogComponent, EmptyStateComponent, UiButtonComponent, UiInputComponent, UiSelectComponent],
   templateUrl: './templates-list.page.html',
   styleUrl: './templates-list.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

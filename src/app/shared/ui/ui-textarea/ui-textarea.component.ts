@@ -1,14 +1,15 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-ui-textarea',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgClass],
   template: `
-    <div class="form-group" [class.full-width]="fullWidth">
+    <div class="flex flex-col gap-1.5" [class.w-full]="fullWidth">
       @if (label) {
-        <label [for]="id">{{ label }}</label>
+        <label [for]="id" class="font-bold text-text-main text-sm">{{ label }}</label>
       }
       <textarea
         [id]="id"
@@ -17,11 +18,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@a
         (blur)="onTouchedFn()"
         [disabled]="disabled"
         [placeholder]="placeholder"
-        [class.invalid]="invalid"
         [rows]="rows"
+        class="w-full p-3 border rounded-xl font-sans text-sm outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        [ngClass]="invalid ? 'border-error text-error placeholder-error focus:ring-error/20 focus:border-error bg-error-bg' : 'border-border text-text-main bg-surface focus:border-primary-aka focus:ring-2 focus:ring-primary-aka/10'"
       ></textarea>
       @if (invalid && errorMessage) {
-        <span class="error-msg">{{ errorMessage }}</span>
+        <span class="text-xs font-semibold text-error">{{ errorMessage }}</span>
       }
     </div>
   `,

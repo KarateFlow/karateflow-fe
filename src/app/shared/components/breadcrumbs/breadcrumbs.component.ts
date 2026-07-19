@@ -16,13 +16,13 @@ import { Breadcrumb, BreadcrumbService } from './breadcrumb.service';
           <li class="flex items-center">
             @if (!last) {
               @if (crumb.url) {
-                <a [routerLink]="crumb.url" (click)="onCrumbClick($event, crumb)" class="hover:text-primary-aka transition-colors">{{ crumb.label }}</a>
+                <a [routerLink]="crumb.url" (click)="onCrumbClick($event, crumb)" class="hover:text-primary-aka transition-colors focus-ring rounded-sm outline-none">{{ crumb.label }}</a>
               } @else if (crumb.action) {
-                <a href="javascript:void(0)" (click)="onCrumbClick($event, crumb)" class="hover:text-primary-aka transition-colors">{{ crumb.label }}</a>
+                <a href="javascript:void(0)" (click)="onCrumbClick($event, crumb)" class="hover:text-primary-aka transition-colors focus-ring rounded-sm outline-none">{{ crumb.label }}</a>
               } @else {
                 <span class="text-text-muted">{{ crumb.label }}</span>
               }
-              <svg class="w-4 h-4 mx-2 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              <svg aria-hidden="true" class="w-4 h-4 mx-2 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             } @else {
               <span class="text-text-main font-medium" aria-current="page">{{ crumb.label }}</span>
             }

@@ -6,6 +6,16 @@ export interface ChartDataPoint {
   result: number;
 }
 
+export interface TrendLinePoint {
+  x: number;
+  y: number;
+  value: number;
+  date: Date;
+  label: string;
+  leftPct: number;
+  hover?: boolean;
+}
+
 @Component({
   selector: 'app-report-chart',
   standalone: true,
@@ -105,7 +115,7 @@ export class ReportChartComponent {
     return lines;
   });
 
-  protected readonly svgPoints = computed(() => {
+  protected readonly svgPoints = computed<TrendLinePoint[]>(() => {
     const pts = this.linePoints();
     const { minVal, maxVal } = this.lineLimits();
     if (pts.length === 0) return [];
@@ -124,7 +134,8 @@ export class ReportChartComponent {
         value: pt.result,
         date: pt.date,
         label: `${pt.result}`,
-        leftPct: numPoints > 1 ? (i / (numPoints - 1)) * 100 : 50
+        leftPct: numPoints > 1 ? (i / (numPoints - 1)) * 100 : 50,
+        hover: false
       };
     });
   });

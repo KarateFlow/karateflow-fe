@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output, signal } from '@angular/core';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe, NgClass } from '@angular/common';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { FormsModule } from '@angular/forms';
 import { TestResponse } from '../../../tests/data-access/test.model';
@@ -17,7 +17,7 @@ import { UiButtonComponent } from '../../../../shared/ui/ui-button/ui-button.com
 @Component({
   selector: 'app-report-dashboard',
   standalone: true,
-  imports: [DatePipe, DecimalPipe, FormsModule, ReportChartComponent, UiInputComponent, UiSelectComponent, UiButtonComponent],
+  imports: [DatePipe, DecimalPipe, NgClass, FormsModule, ReportChartComponent, UiInputComponent, UiSelectComponent, UiButtonComponent],
   templateUrl: './report-dashboard.component.html',
   styleUrl: './report-dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

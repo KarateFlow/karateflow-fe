@@ -1,18 +1,18 @@
-<div class="widget-card">
-  <div class="widget-header">
-    <div class="icon-wrapper" [class]="iconBgClass">
+<div class="bg-surface rounded-xl border border-border shadow-sm p-6 flex flex-col gap-5 transition-all hover:-translate-y-0.5 hover:shadow-md h-full">
+  <div class="flex items-center gap-4">
+    <div class="w-12 h-12 rounded-xl flex items-center justify-center text-white" [ngClass]="iconBgClass">
       <ng-content></ng-content>
     </div>
-    <h3>{{ title }}</h3>
+    <h3 class="m-0 text-lg font-bold text-text-main">{{ title }}</h3>
   </div>
-  <div class="widget-body">
-    <span class="stat-value">{{ value }}</span>
+  <div class="flex flex-col gap-1">
+    <span class="text-4xl font-extrabold text-text-main leading-none">{{ value }}</span>
   </div>
-  <div class="widget-footer">
+  <div class="mt-auto pt-4 border-t border-border">
     @if (footerLink) {
-      <a [routerLink]="footerLink" class="quick-link">{{ footerText }} &rarr;</a>
+      <a [routerLink]="footerLink" class="text-primary-aka font-bold text-sm inline-flex items-center no-underline transition-colors hover:text-blue-700 hover:underline focus-ring">{{ footerText }} &rarr;</a>
     } @else if (footerText) {
-      <span class="quick-link text-muted pointer-events-none" style="text-decoration: none; cursor: default;">{{ footerText }} &rarr;</span>
+      <span class="text-primary-aka font-bold text-sm inline-flex items-center no-underline opacity-50 cursor-default">{{ footerText }} &rarr;</span>
     }
   </div>
 </div>
