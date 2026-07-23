@@ -48,14 +48,13 @@ jobs:
           fi
 
       - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v3
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: http://sonarqube.local
-        with:
-          projectBaseDir: .
-          args: >
-            -Dsonar.projectKey=karateflow-fe
-            -Dsonar.typescript.tsconfigPaths=tsconfig.sonar.json
-            -Dsonar.qualitygate.wait=true
+        run: |
+          npx sonar-scanner \
+            -Dsonar.host.url=http://sonarqube.local \
+            -Dsonar.token=${SONAR_TOKEN} \
+            -Dsonar.projectKey=karateflow-fe \
+            -Dsonar.typescript.tsconfigPaths=tsconfig.sonar.json \
+            -Dsonar.qualitygate.wait=true \
             -Dsonar.javascript.lcov.reportPaths=coverage/karateflow-fe/lcov.info
