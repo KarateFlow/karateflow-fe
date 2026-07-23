@@ -1,0 +1,60 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test-analyze:
+    name: Build, Test & SonarQube Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Connessione alla VPN Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
+      - name: Mappa Ingress SonarQube
+        run: echo "${{ secrets.RASPBERRY_TAILSCALE_IP }} sonarqube.local" | sudo tee -a /etc/hosts
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test & Coverage
+        run: |
+          if grep -q '"@vitest/coverage-v8"' package.json; then
+              npm run test -- --no-watch --coverage
+          else
+              npm run test -- --no-watch
+          fi
+
+      - name: SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          npx sonar-scanner \
+            -Dsonar.host.url=http://sonarqube.local \
+            -Dsonar.token=${SONAR_TOKEN} \
+            -Dsonar.projectKey=karateflow-fe \
+            -Dsonar.typescript.tsconfigPaths=tsconfig.sonar.json \
+            -Dsonar.qualitygate.wait=true \
+            -Dsonar.javascript.lcov.reportPaths=coverage/karateflow-fe/lcov.info

@@ -1,3 +1,4 @@
+process.env.TS_NODE_COMPILER_OPTIONS = '{"module":"commonjs"}';
 module.exports = {
   default: {
     paths: ['e2e/features/**/*.feature'],
