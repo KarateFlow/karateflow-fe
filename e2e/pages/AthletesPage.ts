@@ -17,11 +17,11 @@ export class AthletesPage {
     // Mappatura esatta basata su athlete-list.page.html
     this.newAthleteButton = page.getByRole('button', { name: /nuovo atleta/i });
     
-    // Mappatura esatta basata su athlete-form.component.html
-    this.nameInput = page.getByLabel(/^nome$/i);
-    this.surnameInput = page.getByLabel(/^cognome$/i);
-    this.birthDateInput = page.getByLabel(/data di nascita/i);
-    this.referenceContactInput = page.getByLabel(/contatto di riferimento/i);
+    // Mappatura usando gli ID degli input per aggirare il bug delle label nei Web Components Angular
+    this.nameInput = page.locator('input#firstName');
+    this.surnameInput = page.locator('input#lastName');
+    this.birthDateInput = page.locator('input#birthDate');
+    this.referenceContactInput = page.locator('input#referenceContact');
     
     this.submitButton = page.getByRole('button', { name: /registra atleta/i });
   }

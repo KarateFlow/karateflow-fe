@@ -15,11 +15,11 @@ export class TestsPage {
   constructor(page: Page) {
     this.page = page;
     
-    // Mappatura esatta basata su test-create.page.html
-    this.templateSelect = page.getByLabel(/seleziona template/i);
-    this.typeInput = page.getByLabel(/tipologia sessione/i);
-    this.dateInput = page.getByLabel(/data esecuzione/i);
-    this.coachNotesInput = page.getByLabel(/note del coach/i);
+    // Mappatura esatta basata su test-create.page.html usando gli ID
+    this.templateSelect = page.locator('select#templateSelect');
+    this.typeInput = page.locator('input#type');
+    this.dateInput = page.locator('input#executionDate');
+    this.coachNotesInput = page.locator('textarea#coachNotes');
     
     this.addExerciseButton = page.getByRole('button', { name: /\+ aggiungi esercizio/i });
     this.saveSessionButton = page.getByRole('button', { name: /salva sessione/i });
@@ -35,6 +35,9 @@ export class TestsPage {
   
   async addExercise() {
     await this.addExerciseButton.click();
+    // Compila i campi obbligatori per sbloccare la validazione del form
+    await this.page.locator('input[placeholder="Titolo"]').last().fill('Test Esercizio');
+    await this.page.locator('input[placeholder="0.00"]').last().fill('100');
   }
 
   async submitNewTest() {
